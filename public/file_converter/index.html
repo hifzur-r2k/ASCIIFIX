@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AsciiFix File Converter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+  <div class="top-bar">
+    <span class="logo">AsciiFix</span>
+    <div class="nav">
+      <a href="#">Home</a>
+      <a href="#">Tools</a>
+      <a href="#">About</a>
+      <a class="login" href="#">Login/Signup</a>
+    </div>
+  </div>
+
+  <div class="file-converter-header">
+    <button disabled aria-disabled="true">FILE CONVERTER</button>
+  </div>
+  <div class="sub-desc">
+    Convert images, text, Word docs and more to PDF and other formats &ndash; right here, wireframe simple.
+  </div>
+  
+  <div class="converters-grid">
+    <!-- Image to PDF -->
+    <div class="convert-card" id="img2pdf">
+      <div class="convert-title">Image to PDF</div>
+      <div class="convert-icons"><span>🖼️</span> <span style="font-size:1.9rem;">➡️</span> <span>📕</span></div>
+      <div class="upload-area" tabindex="0">
+        Drag & Drop or <label class="choose-btn" tabindex="-1">Choose File
+          <input type="file" accept="image/png,image/jpeg,image/jpg"/>
+        </label>
+        <div class="file-name-display" style="display:none;"></div>
+      </div>
+      <div class="accepted">Accepted: PNG, JPG, JPEG</div>
+      <button class="convert-btn" disabled>Convert to PDF</button>
+      <button class="download-btn" disabled>Download PDF</button>
+    </div>
+    <!-- Text to PDF -->
+    <div class="convert-card" id="txt2pdf">
+      <div class="convert-title">Text to PDF</div>
+      <div class="convert-icons"><span>📄</span> <span style="font-size:1.9rem;">➡️</span> <span>📕</span></div>
+      <textarea class="text-upload-box" placeholder="Paste text or upload .txt file"></textarea>
+      <div class="upload-area" tabindex="0" style="height:50px;">
+        <label class="choose-btn" tabindex="-1">Upload .txt
+          <input type="file" accept=".txt,text/plain" style="height:50px"/>
+        </label>
+        <div class="file-name-display" style="display:none;"></div>
+      </div>
+      <div class="accepted">Accepted: TXT, .text</div>
+      <button class="convert-btn" disabled>Convert to PDF</button>
+      <button class="download-btn" disabled>Download PDF</button>
+    </div>
+    <!-- Word to PDF -->
+    <div class="convert-card" id="doc2pdf">
+      <div class="convert-title">Word to PDF</div>
+      <div class="convert-icons"><span>🟦</span> <span style="font-size:1.9rem;">➡️</span> <span>📕</span></div>
+      <div class="upload-area" tabindex="0">
+        Drag & Drop or <label class="choose-btn" tabindex="-1">Choose File
+          <input type="file" accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
+        </label>
+        <div class="file-name-display" style="display:none;"></div>
+      </div>
+      <div class="accepted">Accepted: DOCX, DOC</div>
+      <button class="convert-btn" disabled>Convert to PDF</button>
+      <button class="download-btn" disabled>Download PDF</button>
+    </div>
+    <!-- Excel to PDF -->
+    <div class="convert-card" id="xls2pdf">
+      <div class="convert-title">Excel to PDF</div>
+      <div class="convert-icons"><span>🟩</span> <span style="font-size:1.9rem;">➡️</span> <span>📕</span></div>
+      <div class="upload-area" tabindex="0">
+        Drag & Drop or <label class="choose-btn" tabindex="-1">Choose File
+          <input type="file" accept=".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
+        </label>
+        <div class="file-name-display" style="display:none;"></div>
+      </div>
+      <div class="accepted">Accepted: XLSX, XLSM</div>
+      <button class="convert-btn" disabled>Convert to PDF</button>
+      <button class="download-btn" disabled>Download PDF</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 AsciiFix | Minimal Wireframe UI
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
