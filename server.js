@@ -1,5 +1,7 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const fileConverterRoutes = require('./src/file_converter/fileConverter.routes');
 
 const app = express();
@@ -13,21 +15,21 @@ app.use('/', express.static(path.join(__dirname, 'public')));
 
 // Serve static frontend per tool (example)
 app.use('/file_converter', express.static(path.join(__dirname, 'public/file_converter')));
+app.use('/image_converter', express.static(path.join(__dirname, 'public/image_converter')));
 
 // Mount File Converter API routes
 app.use('/convert', fileConverterRoutes);
 
-const fs = require('fs');
-const path = require('path');
+// Mount Image Converter API routes
+const imageConverterRoutes = require('./src/image_converter/fileConverter.routes');
+app.use('/image-convert', imageConverterRoutes);
 
+// Create necessary directories
 const UPLOAD_DIR = path.join(__dirname, 'uploads');
 const LOGS_DIR = path.join(__dirname, 'logs');
 
 if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 if (!fs.existsSync(LOGS_DIR)) fs.mkdirSync(LOGS_DIR, { recursive: true });
-
-
-// Add your other tools' routers similarly...
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
