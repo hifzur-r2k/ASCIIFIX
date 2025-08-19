@@ -29,6 +29,16 @@ exports.imageToImage = async (req, res) => {
         return res.status(400).json({ error: 'Target format not specified.' });
     }
 
+    // Validate supported output formats
+    const supportedOutputFormats = ['jpg', 'png', 'webp', 'tiff'];
+    if (!supportedOutputFormats.includes(targetFormat)) {
+        return res.status(400).json({
+            error: 'Unsupported output format',
+            supportedFormats: supportedOutputFormats
+        });
+    }
+
+
     try {
         console.log('🖼️ Converting:', req.file.originalname);
         console.log('🖼️ From format:', inputExtension);

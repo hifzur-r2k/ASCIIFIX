@@ -31,13 +31,14 @@ const imageFileFilter = (req, file, cb) => {
   console.log('🔍 Image file filter triggered for:', file.originalname);
   console.log('🔍 File mimetype:', file.mimetype);
 
-  const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.webp', '.heic'];
-  const allowedMimetypes = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/tiff', 'image/webp', 'image/heic'];
+  const allowedExtensions = ['.jpg', '.jpeg', '.png', '.bmp', '.tiff', '.webp', '.heic'];
+  const allowedMimetypes = ['image/jpeg', 'image/png', 'image/bmp', 'image/tiff', 'image/webp', 'image/heic'];
+
 
   const fileExtension = path.extname(file.originalname).toLowerCase();
-  
-  if (allowedExtensions.includes(fileExtension) && 
-      allowedMimetypes.some(mime => file.mimetype.includes(mime))) {
+
+  if (allowedExtensions.includes(fileExtension) &&
+    allowedMimetypes.some(mime => file.mimetype.includes(mime))) {
     console.log('✅ Image file type validation passed');
     cb(null, true);
   } else {
@@ -49,7 +50,7 @@ const imageFileFilter = (req, file, cb) => {
 // Single image upload configuration
 const singleImageUpload = multer({
   storage: storage,
-  limits: { 
+  limits: {
     fileSize: 20 * 1024 * 1024, // 20MB limit
     files: 1
   },
@@ -59,11 +60,11 @@ const singleImageUpload = multer({
 // Enhanced upload handler with better error handling
 const handleImageUpload = (req, res, next) => {
   console.log('📁 Image upload route hit');
-  
+
   singleImageUpload(req, res, (err) => {
     if (err) {
       console.log('❌ Upload error:', err.message);
-      
+
       // Enhanced error responses
       if (err instanceof multer.MulterError) {
         if (err.code === 'LIMIT_FILE_SIZE') {
@@ -74,27 +75,27 @@ const handleImageUpload = (req, res, next) => {
           });
         }
       }
-      
+
       return res.status(400).json({
         error: err.message,
         details: 'Please check your image file type and size'
       });
     }
-    
+
     if (!req.file) {
       return res.status(400).json({
         error: 'No image file provided',
         details: 'Please select an image file to convert'
       });
     }
-    
+
     console.log('📁 Image file after upload:', req.file);
     next();
   });
 };
 
 // MAIN CONVERSION ROUTE
-router.post('/convert', 
+router.post('/convert',
   handleImageUpload,
   fileConverterController.imageToImage
 );
@@ -129,7 +130,7 @@ router.use((req, res) => {
 // Global error handler for this router
 router.use((err, req, res, next) => {
   console.log('❌ Image converter router error:', err.message);
-  
+
   // Multer-specific errors
   if (err instanceof multer.MulterError) {
     return res.status(400).json({
@@ -138,7 +139,7 @@ router.use((err, req, res, next) => {
       code: err.code
     });
   }
-  
+
   // Generic errors
   res.status(500).json({
     error: 'Internal server error',

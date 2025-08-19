@@ -2,7 +2,7 @@ class ImageConverter {
     constructor() {
         this.uploadedFiles = [];
         this.convertedFile = null;
-        this.supportedFormats = ['jpg', 'png', 'webp', 'gif', 'tiff', 'heic', 'bmp'];
+        this.supportedFormats = ['jpg', 'png', 'webp', 'tiff'];
         this.isBatchMode = false;
         this.maxFiles = 10;
 

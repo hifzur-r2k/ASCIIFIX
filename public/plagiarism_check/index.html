@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plagiarism Checker - AsciiFix</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Header Navigation Box -->
+    <div class="header-nav-box">
+        <div class="nav-left-section">
+            <div class="logo-section">
+                <div class="logo-circle">A</div>
+                <span class="logo-text">ASCIIFIX</span>
+            </div>
+            <div class="nav-menu">
+                <a href="../index.html">Home</a>
+                <a href="#">Tools</a>
+                <a href="#">About</a>
+            </div>
+        </div>
+        <div class="vertical-separator"></div>
+        <div class="nav-right-section">
+            <span>Login/Signup</span>
+        </div>
+    </div>
+
+    <!-- Title Box -->
+    <div class="title-container-box">
+        <h1>PLAGIARISM CHECKER</h1>
+    </div>
+    <p class="subtitle">Checks for duplicate content all over the web</p>
+    <!-- Feature Pills -->
+    <div class="feature-pills-container">
+        <div class="feature-pills">
+            <span class="pill">✓ Checks 10B+ sources</span>
+            <span class="pill">✓ Multiple languages</span>
+            <span class="pill">✓ Instant results</span>
+        </div>
+    </div>
+
+    <!-- Main Dashed Container -->
+    <div class="main-dashed-container">
+        <!-- Left Section -->
+        <div class="left-content-section">
+            <!-- Input Methods Tabs -->
+            <div class="input-methods-section">
+                <div class="method-tabs">
+                    <button class="tab active" data-method="text">Paste Text</button>
+                    <button class="tab" data-method="file">Upload File</button>
+                    <button class="tab" data-method="url">Enter URL</button>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area-container">
+                <!-- Text Input -->
+                <div class="input-method active" id="text-input">
+                    <textarea id="textArea" placeholder="Enter your text here and click on Check Plagiarism"></textarea>
+                    <div class="word-counter">
+                        <span id="wordCount">0</span> / 25,000 words
+                        <span id="charCount">0 characters</span>
+                    </div>
+                </div>
+
+                <!-- File Upload -->
+                <div class="input-method" id="file-input">
+                    <div class="upload-drop-area" id="fileUploadArea">
+                        <p>Drag & Drop or <span class="choose-file-button">Choose File</span></p>
+                        <input type="file" id="fileInput" accept=".txt,.doc,.docx,.pdf" style="display: none;">
+                        <p class="accepted-text">Accepted: TXT, DOC, DOCX, PDF</p>
+                    </div>
+                </div>
+
+                <!-- URL Input -->
+                <div class="input-method" id="url-input">
+                    <div class="url-input-container">
+                        <input type="url" id="urlInput" placeholder="https://example.com/article-to-check">
+                        <button id="fetchUrlBtn" class="fetch-url-btn">Fetch Content</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="buttons-section">
+                <div class="check-button-box">
+                    <button id="checkPlagiarismBtn">Check Plagiarism</button>
+                </div>
+                <div class="clear-button-box">
+                    <button id="clearBtn">Clear</button>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-container" id="progressContainer" style="display: none;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p class="progress-text" id="progressText">Analyzing content...</p>
+            </div>
+        </div>
+
+        <!-- Right Section -->
+        <div class="right-content-section">
+            <!-- Results Dashboard -->
+            <div class="results-section">
+                <div class="results-header">Analysis Results</div>
+                <div class="results-content" id="resultsContent">
+                    <div class="no-results">
+                        <p>Results will appear here after checking</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Usage Stats -->
+    <div class="usage-stats-container">
+        <div class="usage-stats">
+            <span>Free: 1,000 words/day remaining | <strong>Upgrade for unlimited checks</strong></span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-section">
+        <p>© 2025 AsciiFix | Advanced Content Analysis Tools</p>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-box">
+            <div class="loading-spinner"></div>
+            <p>Checking for plagiarism...</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Converter - AsciiFix</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <!-- Header Navigation Box -->
     <div class="header-nav-box">
         <div class="nav-left-section">
             <div class="logo-section">
                 <div class="logo-circle">A</div>
-                <span class="logo-text">AsciiFix</span>
+                <span class="logo-text">ASCIIFIX</span>
             </div>
             <div class="nav-menu">
                 <a href="../index.html">Home</a>
@@ -38,8 +40,10 @@
             <!-- Upload Area -->
             <div class="upload-drop-area" id="uploadArea">
                 <p>Drag & Drop or <span class="choose-file-button" id="chooseFileBtn">Choose File</span></p>
-                <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.webp,.gif,.tiff,.heic,.bmp" multiple style="display: none;">
-                <p class="accepted-text">Accepted: JPG, PNG, WEBP, GIF, TIFF, HEIC, BMP</p>
+                <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.webp,.tiff,.heic,.bmp" multiple
+                    style="display: none;">
+                <p class="accepted-text">Upload: JPG, PNG, WEBP, TIFF, HEIC, BMP → Convert to: JPG, PNG, WEBP, TIFF</p>
+
             </div>
 
             <!-- Convert To Section -->
@@ -98,4 +102,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
