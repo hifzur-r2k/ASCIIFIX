@@ -6,27 +6,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plagiarism Checker - AsciiFix</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
-    <!-- Header Navigation Box -->
-    <div class="header-nav-box">
-        <div class="nav-left-section">
-            <div class="logo-section">
-                <div class="logo-circle">A</div>
-                <span class="logo-text">ASCIIFIX</span>
-            </div>
-            <div class="nav-menu">
-                <a href="../index.html">Home</a>
-                <a href="#">Tools</a>
-                <a href="#">About</a>
-            </div>
-        </div>
-        <div class="vertical-separator"></div>
-        <div class="nav-right-section">
+    <!-- Mobile-First Header -->
+    <header class="mobile-header">
+        <!-- Hamburger Menu (Left Side) -->
+        <button class="hamburger-btn" id="hamburgerBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <a href="../index.html" class="brand-name">
+            <img src="../images/ASCIIFIX-Tool-LOGO.png" alt="ASCIIFIX Logo" class="logo-image">
+        </a>
+
+
+        <!-- Desktop Menu (Hidden on Mobile) -->
+        <nav class="desktop-menu">
+            <a href="../index.html">Home</a>
+            <a href="#">Tools</a>
+            <a href="#">About</a>
+            <span class="separator">|</span>
             <span>Login/Signup</span>
-        </div>
-    </div>
+        </nav>
+
+        <!-- Mobile Menu (Hidden by Default) -->
+        <nav class="mobile-menu" id="mobileMenu">
+            <a href="../index.html">Home</a>
+            <a href="#">Tools</a>
+            <a href="#">About</a>
+            <a href="#">Login/Signup</a>
+        </nav>
+    </header>
 
     <!-- Title Box -->
     <div class="title-container-box">
@@ -87,10 +101,11 @@
             <!-- Action Buttons -->
             <div class="buttons-section">
                 <div class="check-button-box">
-                    <button id="checkPlagiarismBtn">Check Plagiarism</button>
+                    <button id="checkPlagiarismBtn" class="modern-btn">Check Plagiarism</button>
+
                 </div>
                 <div class="clear-button-box">
-                    <button id="clearBtn">Clear</button>
+                    <button id="clearBtn" class="modern-btn-secondary">Clear</button>
                 </div>
             </div>
 
@@ -112,7 +127,9 @@
                     <div class="no-results">
                         <p>Results will appear here after checking</p>
                     </div>
+                    <canvas id="plagiarismChart" style="display: none; max-height: 200px;"></canvas>
                 </div>
+
             </div>
         </div>
     </div>
@@ -133,8 +150,10 @@
     <div class="loading-overlay" id="loadingOverlay" style="display: none;">
         <div class="loading-box">
             <div class="loading-spinner"></div>
-            <p>Checking for plagiarism...</p>
+            <p id="loadingMessage">Checking for plagiarism...</p>
+            <small id="loadingTip" style="color: #666; margin-top: 10px;"></small>
         </div>
+
     </div>
 
     <script src="script.js"></script>

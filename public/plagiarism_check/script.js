@@ -300,38 +300,15 @@ class PlagiarismChecker {
                 // Get fresh reference and properly extract the file
                 const fileInput = document.getElementById('fileInput');
 
-                // Debug logging
-                console.log('File input:', fileInput);
-                console.log('Files array:', fileInput?.files);
-                console.log('First file:', fileInput?.files?.[0]); // ← FIXED LINE
-
                 if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
                     alert('Please select a file to check for plagiarism');
                     return;
                 }
 
                 const selectedFile = fileInput.files[0]; // Get the actual File object
-
-                // More debug logging
-                console.log('Selected file details:', {
-                    name: selectedFile.name,
-                    size: selectedFile.size,
-                    type: selectedFile.type,
-                    constructor: selectedFile.constructor.name
-                });
-
                 // Append the actual File object, not the FileList
                 formData.append('file', selectedFile, selectedFile.name);
-
-                // Verify FormData contents
-                console.log('FormData contents:');
-                for (let pair of formData.entries()) {
-                    console.log(pair[0] + ':', pair[1]);
-                }
                 break;
-
-
-
 
             case 'url':
                 const url = this.urlInput.value.trim();
@@ -352,37 +329,62 @@ class PlagiarismChecker {
         this.showProgress(true);
         this.loadingOverlay.style.display = 'flex';
 
-        // Update progress steps for real processing
+        // Calculate dynamic timing based on content size
+        let wordCount = 0;
+        switch (this.currentMethod) {
+            case 'text':
+                wordCount = this.textArea.value.trim().split(/\s+/).filter(word => word.length > 0).length;
+                break;
+            case 'file':
+            case 'url':
+                const words = this.currentContent.trim().split(/\s+/).filter(word => word.length > 0);
+                wordCount = this.currentContent.trim() === '' ? 0 : words.length;
+                break;
+        }
+
+        // 🔥 ADD THESE LINES HERE 🔥
+        const expectedMinutes = Math.ceil(this.calculateExpectedTime(wordCount) / 60);
+        document.getElementById('loadingMessage').textContent = `Analyzing ${wordCount} words...`;
+        document.getElementById('loadingTip').textContent = `Estimated time: ${expectedMinutes} minute${expectedMinutes > 1 ? 's' : ''}. Please wait.`;
+
+        const expectedTimeSeconds = this.calculateExpectedTime(wordCount);
+        const stepDuration = expectedTimeSeconds / 6;
+
         const progressSteps = [
-            'Initializing analysis...',
-            'Extracting text content...',
-            'Processing language patterns...',
-            'Searching for potential matches...',
-            'Calculating similarity scores...',
-            'Generating detailed report...'
+            { text: 'Initializing analysis...', percent: 5 },
+            { text: 'Extracting key phrases...', percent: 15 },
+            { text: 'Searching web sources...', percent: 40 },
+            { text: 'Analyzing similarities...', percent: 70 },
+            { text: 'Comparing with sources...', percent: 85 },
+            { text: 'Finalizing report...', percent: 95 }
         ];
 
         let currentStep = 0;
+        let startTime = Date.now();
+
         const progressInterval = setInterval(() => {
             if (currentStep < progressSteps.length) {
-                this.progressText.textContent = progressSteps[currentStep];
-                this.progressFill.style.width = `${((currentStep + 1) / progressSteps.length) * 100}%`;
+                const step = progressSteps[currentStep];
+                const elapsedSeconds = currentStep * stepDuration;
+                const remainingSeconds = Math.max(0, expectedTimeSeconds - elapsedSeconds);
+                const remainingMinutes = Math.ceil(remainingSeconds / 60);
+
+                this.progressText.textContent = `${step.text} (${remainingMinutes} min remaining)`;
+                this.progressFill.style.width = `${step.percent}%`;
                 currentStep++;
             }
-        }, 800);
+        }, stepDuration * 1000);
 
         try {
-            // Debug: Log what we're sending
-            console.log('Sending request with method:', this.currentMethod);
-            for (let pair of formData.entries()) {
-                console.log(pair + ': ' + pair[2]);
-
-            }
 
             // Real API call to backend
             const response = await fetch('/api/plagiarism/check', {
                 method: 'POST',
-                body: formData
+                body: formData,
+                signal: AbortSignal.timeout(300000),
+                headers: {
+                    'Connection': 'keep-alive'
+                }
             });
 
             const result = await response.json();
@@ -392,190 +394,327 @@ class PlagiarismChecker {
             this.progressText.textContent = 'Analysis complete!';
 
             if (result.success) {
-                await new Promise(resolve => setTimeout(resolve, 500)); // Brief pause
+                await new Promise(resolve => setTimeout(resolve, 500));
                 this.displayResults(result.results);
+                this.hideLoadingOverlay();
             } else {
                 console.error('Backend error:', result.error);
                 alert(result.error || 'Error checking plagiarism');
+                this.hideLoadingOverlay();
             }
 
         } catch (error) {
+            // Stop progress animation
             clearInterval(progressInterval);
             console.error('Plagiarism check error:', error);
-            alert('Network error. Please check your connection and try again.');
-        } finally {
-            this.isChecking = false;
-            this.updateCheckButtonState(true);
-            this.showProgress(false);
-            this.loadingOverlay.style.display = 'none';
+
+            // Better error messages based on error type
+            if (error.name === 'TimeoutError') {
+                this.showNotification('Analysis is taking longer than expected. Please wait and try again in a few minutes.', 'info');
+            } else if (error.message && error.message.includes('fetch')) {
+                this.showNotification('Connection lost. Your analysis may still be processing. Try refreshing in 2-3 minutes.', 'warning');
+            } else {
+                this.showNotification('Network error occurred. Please try again.', 'error');
+            }
+            this.hideLoadingOverlay();
         }
+
+        // Reset UI state (moved from finally block)
+        this.isChecking = false;
+        this.updateCheckButtonState(true);
+        this.showProgress(false);
+        this.loadingOverlay.style.display = 'none';
     }
 
-    displayResults(results) {
-        const riskColor = results.plagiarismPercentage > 30 ? '#ff0000' :
-            results.plagiarismPercentage > 15 ? '#ff8800' : '#00aa00';
-        const uniqueColor = results.uniquePercentage >= 80 ? '#00aa00' :
-            results.uniquePercentage >= 60 ? '#ff8800' : '#ff0000';
+calculateExpectedTime(wordCount) {
+    // Based on your timing data
+    let expectedSeconds;
+    if (wordCount <= 250) expectedSeconds = 65;
+    else if (wordCount <= 500) expectedSeconds = 100;
+    else if (wordCount <= 750) expectedSeconds = 220;
+    else if (wordCount <= 1000) expectedSeconds = 350;
+    else expectedSeconds = Math.min(wordCount * 0.35, 600); // Max 10 minutes
 
-        const dashboard = `
-        <div class="results-dashboard">
-            <div class="plagiarism-score">
-                <div class="score-circle" style="color: ${uniqueColor}; border-color: ${uniqueColor}">
-                    ${results.uniquePercentage}%
-                </div>
-                <span>Original Content</span>
-                <div class="risk-indicator" style="color: ${riskColor}; font-size: 12px; margin-top: 5px;">
-                    Risk: ${results.summary?.risk || 'Unknown'}
-                </div>
+    return expectedSeconds;
+}
+
+displayResults(results) {
+    const riskColor = results.plagiarismPercentage > 30 ? '#ff4444' :
+        results.plagiarismPercentage > 15 ? '#ff8800' : '#00aa00';
+    const uniqueColor = results.uniquePercentage >= 80 ? '#00aa00' :
+        results.uniquePercentage >= 60 ? '#ff8800' : '#ff4444';
+
+    // Create the chart
+    this.createPlagiarismChart(results.uniquePercentage, results.plagiarismPercentage);
+
+    const dashboard = `
+        <div class="modern-results-dashboard">
+            <div class="results-header-modern">
+                <h3>Analysis Complete</h3>
+                <div class="analysis-time">Completed in ${Math.round(results.analysis?.processingTimeMs / 1000) || 0}s</div>
             </div>
             
-            <div class="results-breakdown">
-                <div class="result-item">
-                    <span class="percentage" style="color: ${riskColor}">${results.plagiarismPercentage}%</span>
-                    <span class="label">Potentially Plagiarized</span>
+            <div class="score-summary">
+                <div class="score-card original">
+                    <div class="score-number" style="color: ${uniqueColor}">${results.uniquePercentage}%</div>
+                    <div class="score-label">Original</div>
                 </div>
-                <div class="result-item">
-                    <span class="percentage" style="color: ${uniqueColor}">${results.uniquePercentage}%</span>
-                    <span class="label">Original Content</span>
-                </div>
-                <div class="result-item">
-                    <span class="percentage">${results.sourcesFound}</span>
-                    <span class="label">Similar Sources</span>
-                </div>
-                <div class="result-item">
-                    <span class="percentage">${results.wordsChecked.toLocaleString()}</span>
-                    <span class="label">Words Analyzed</span>
+                <div class="score-card plagiarized">
+                    <div class="score-number" style="color: ${riskColor}">${results.plagiarismPercentage}%</div>
+                    <div class="score-label">Similar</div>
                 </div>
             </div>
 
-            ${results.matches && results.matches.length > 0 ? `
-                <div class="source-matches">
-                    <h4>Potential Matches Found:</h4>
-                    ${results.matches.slice(0, 3).map(match => `
-                        <div class="match-item">
-                            <div class="match-header">
-                                <strong>${match.title}</strong>
-                                <span class="similarity-badge" style="color: ${match.similarity > 30 ? '#ff0000' : match.similarity > 15 ? '#ff8800' : '#00aa00'}">
-                                    ${match.similarity}% similar
-                                </span>
-                            </div>
-                            <div class="match-snippet">${match.snippet}</div>
-                            <a href="${match.url}" target="_blank" class="match-url">View Source →</a>
-                        </div>
-                    `).join('')}
+            <div class="chart-container">
+                <canvas id="plagiarismChart"></canvas>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">${results.sourcesFound}</span>
+                    <span class="stat-label">Sources Found</span>
                 </div>
-            ` : '<div class="no-matches">No significant matches found</div>'}
-
-            ${results.summary?.recommendation ? `
-                <div class="recommendation">
-                    <strong>Recommendation:</strong> ${results.summary.recommendation}
+                <div class="stat-item">
+                    <span class="stat-number">${results.wordsChecked.toLocaleString()}</span>
+                    <span class="stat-label">Words Analyzed</span>
                 </div>
-            ` : ''}
-
-            <div class="action-buttons">
-                <button class="action-btn" onclick="plagiarismChecker.exportReport()">Export Report</button>
-                <button class="action-btn" onclick="plagiarismChecker.viewSources()">View All Sources</button>
-                <button class="action-btn" onclick="plagiarismChecker.getSuggestions()">Get Suggestions</button>
+                <div class="stat-item">
+                    <span class="stat-number">${results.analysis?.searchesPerformed || 0}</span>
+                    <span class="stat-label">Searches</span>
+                </div>
             </div>
 
-            <div class="analysis-details">
-                <small>
-                    Analysis completed in ${results.analysis?.processingTimeMs || 0}ms | 
-                    ${results.analysis?.chunks || 1} text chunks processed
-                </small>
-            </div>
+            ${this.createMatchesList(results.matches)}
+            ${this.createRecommendation(results.summary?.recommendation, riskColor)}
         </div>
     `;
 
-        this.resultsContent.innerHTML = dashboard;
+    this.resultsContent.innerHTML = dashboard;
+    this.createPlagiarismChart(results.uniquePercentage, results.plagiarismPercentage);
+    this.lastResults = results;
+}
+// ADD THIS NEW METHOD TO YOUR PlagiarismChecker CLASS
+hideLoadingOverlay() {
+    console.log('🔄 Hiding loading overlay...');
+    this.loadingOverlay.style.display = 'none';
+    this.isChecking = false;
+    this.updateCheckButtonState(true);
+    this.showProgress(false);
+}
 
-        // Store results for export functionality
-        this.lastResults = results;
+createMatchesList(matches) {
+    if (!matches || matches.length === 0) {
+        return '<div class="no-matches-modern">✅ No significant matches found</div>';
     }
 
+    return `
+        <div class="matches-section">
+            <h4>📚 Similar Sources Found</h4>
+            <div class="matches-list">
+                ${matches.slice(0, 3).map(match => `
+                    <div class="match-card">
+                        <div class="match-similarity">${match.similarity}%</div>
+                        <div class="match-details">
+                            <div class="match-title">${match.title}</div>
+                            <a href="${match.url}" target="_blank" class="match-url">
+                                ${match.source || match.url} →
+                            </a>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+}
 
-    showProgress(show) {
-        if (show) {
-            this.progressContainer.style.display = 'block';
-            this.progressFill.style.width = '0%';
-        } else {
-            this.progressContainer.style.display = 'none';
-        }
+
+createRecommendation(recommendation, color) {
+    if (!recommendation) return '';
+
+    return `
+        <div class="recommendation-card" style="border-left: 4px solid ${color}">
+            <div class="recommendation-title">💡 Recommendation</div>
+            <div class="recommendation-text">${recommendation}</div>
+        </div>
+    `;
+}
+
+
+createPlagiarismChart(originalPercent, plagiarizedPercent) {
+    const canvas = document.getElementById('plagiarismChart');
+    const ctx = canvas.getContext('2d');
+
+    // Destroy existing chart if it exists
+    if (this.chart) {
+        this.chart.destroy();
     }
 
-    clearContent() {
-        switch (this.currentMethod) {
-            case 'text':
-                this.textArea.value = '';
-                break;
-            case 'file':
-                // Clear file input value to prevent change event issues
-                this.fileInput.value = '';
-                this.currentContent = '';
-
-                // Reset upload area without destroying file input
-                const uploadArea = this.uploadArea;
-                uploadArea.style.borderColor = '#cccccc';
-                uploadArea.style.backgroundColor = '#fafafa';
-
-                const existingText = uploadArea.querySelector('p');
-                if (existingText) {
-                    existingText.innerHTML = 'Drag & Drop or <span class="choose-file-button">Choose File</span>';
+    this.chart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Original Content', 'Potentially Plagiarized'],
+            datasets: [{
+                data: [originalPercent, plagiarizedPercent],
+                backgroundColor: [
+                    '#00aa00',  // Green for original
+                    '#ff4444'   // Red for plagiarized
+                ],
+                borderWidth: 0,
+                cutout: '70%'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 20,
+                        font: {
+                            size: 12
+                        }
+                    }
                 }
-                break;
-
-
-            case 'url':
-                this.urlInput.value = '';
-                this.currentContent = '';
-                break;
+            }
         }
+    });
 
-        // Clear results
-        this.resultsContent.innerHTML = '<div class="no-results"><p>Results will appear here after checking</p></div>';
+    canvas.style.display = 'block';
+}
+
+showProgress(show) {
+    if (show) {
+        this.progressContainer.style.display = 'block';
+        this.progressFill.style.width = '0%';
+    } else {
+        this.progressContainer.style.display = 'none';
+    }
+}
+
+clearContent() {
+    switch (this.currentMethod) {
+        case 'text':
+            this.textArea.value = '';
+            break;
+        case 'file':
+            // Clear file input value to prevent change event issues
+            this.fileInput.value = '';
+            this.currentContent = '';
+
+            // Reset upload area without destroying file input
+            const uploadArea = this.uploadArea;
+            uploadArea.style.borderColor = '#cccccc';
+            uploadArea.style.backgroundColor = '#fafafa';
+
+            const existingText = uploadArea.querySelector('p');
+            if (existingText) {
+                existingText.innerHTML = 'Drag & Drop or <span class="choose-file-button">Choose File</span>';
+            }
+            break;
+
+
+        case 'url':
+            this.urlInput.value = '';
+            this.currentContent = '';
+            break;
+    }
+
+    // Clear results
+    this.resultsContent.innerHTML = '<div class="no-results"><p>Results will appear here after checking</p></div>';
+    this.updateWordCount();
+}
+showNotification(message, type = 'info') {
+    // Remove existing notifications
+    const existing = document.querySelector('.notification');
+    if (existing) existing.remove();
+
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <span>${message}</span>
+            <button onclick="this.parentElement.parentElement.remove()">×</button>
+        </div>
+    `;
+
+    document.body.appendChild(notification);
+
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
+}
+// Action button functions (placeholders for future implementation)
+exportReport() {
+    alert('Export functionality coming soon! This will generate a detailed PDF report.');
+}
+
+viewSources() {
+    alert('View Sources functionality coming soon! This will show detailed source matches.');
+}
+
+getSuggestions() {
+    alert('Get Suggestions functionality coming soon! This will provide rewriting suggestions.');
+}
+// Method to read text files only
+readTextFile(file) {
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+        this.currentContent = e.target.result;
         this.updateWordCount();
-    }
+    };
 
-    // Action button functions (placeholders for future implementation)
-    exportReport() {
-        alert('Export functionality coming soon! This will generate a detailed PDF report.');
-    }
+    reader.onerror = () => {
+        alert('Error reading file. Please try again.');
+    };
 
-    viewSources() {
-        alert('View Sources functionality coming soon! This will show detailed source matches.');
-    }
+    reader.readAsText(file);
+}
 
-    getSuggestions() {
-        alert('Get Suggestions functionality coming soon! This will provide rewriting suggestions.');
-    }
-    // Method to read text files only
-    readTextFile(file) {
-        const reader = new FileReader();
-
-        reader.onload = (e) => {
-            this.currentContent = e.target.result;
-            this.updateWordCount();
-        };
-
-        reader.onerror = () => {
-            alert('Error reading file. Please try again.');
-        };
-
-        reader.readAsText(file);
-    }
-
-    // Method to estimate word count for binary files
-    estimateWordCount(file) {
-        // Rough estimation: 1KB ≈ 150-200 words for documents
-        const estimatedWords = Math.floor(file.size / 6); // Conservative estimate
-        this.currentContent = `[File contains approximately ${estimatedWords.toLocaleString()} words]`;
-        this.updateWordCount();
-    }
+// Method to estimate word count for binary files
+estimateWordCount(file) {
+    const estimatedWords = Math.floor(file.size / 6); // Conservative estimate
+    this.currentContent = `[File contains approximately ${estimatedWords.toLocaleString()} words]`;
+    this.updateWordCount();
+}
 
 }
 
-// Initialize the plagiarism checker when the page loads
+// Initialize everything when page loads
 let plagiarismChecker;
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize main checker
     plagiarismChecker = new PlagiarismChecker();
+
+    // Initialize mobile menu
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    if (hamburgerBtn && mobileMenu) {
+        hamburgerBtn.addEventListener('click', () => {
+            hamburgerBtn.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        });
+
+        // Close menu when clicking on a link
+        mobileMenu.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A') {
+                hamburgerBtn.classList.remove('active');
+                mobileMenu.classList.remove('active');
+            }
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!hamburgerBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+                hamburgerBtn.classList.remove('active');
+                mobileMenu.classList.remove('active');
+            }
+        });
+    }
 });
+
