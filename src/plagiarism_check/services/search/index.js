@@ -1,32 +1,57 @@
-const SemanticScholarSearcher = require('./semanticScholarSearcher');
-const ArxivSearcher = require('./arxivSearcher');
-const PubMedSearcher = require('./pubmedSearcher');
+const OpenAlexSearcher = require('./openAlexSearcher');         // 🆕 FREE Semantic Scholar replacement
+const DoajSearcher = require('./doajSearcher');                 // 🆕 FREE CORE replacement  
+const EuropePmcSearcher = require('./europePmcSearcher');        // 🆕 FREE medical/academic
+const ArxivSearcher = require('./arxivSearcher');               // ✅ Already free
+const PubMedSearcher = require('./pubmedSearcher');             // ✅ Already free
 
 class SearchOrchestrator {
     constructor() {
         this.academicProviders = {
-            'semantic-scholar': new SemanticScholarSearcher(),
+            'openalex': new OpenAlexSearcher(),           
+            'doaj': new DoajSearcher(),                  
+            'europe-pmc': new EuropePmcSearcher(),       
             'arxiv': new ArxivSearcher(),
             'pubmed': new PubMedSearcher()
         };
         
+        // 🆕 NEW: Provider priorities optimized for economics + general academic
+        this.providerWeights = {
+            'openalex': 50,
+            'doaj': 25,
+            'europe-pmc': 15,
+            'arxiv': 7,
+            'pubmed': 3
+        };
+        
         this.providerNames = Object.keys(this.academicProviders);
-        console.log(`🎓 Initialized ${this.providerNames.length} academic providers: ${this.providerNames.join(', ')}`);
+        console.log(`🎓 Initialized ${this.providerNames.length} FREE academic providers: ${this.providerNames.join(', ')}`);
+        console.log(`🆓 ALL PROVIDERS ARE COMPLETELY FREE - NO API KEYS NEEDED!`);
     }
 
-    getRandomAcademicProvider() {
-        const randomIndex = Math.floor(Math.random() * this.providerNames.length);
-        return this.providerNames[randomIndex];
+    // Weighted provider selection (favors economics-strong sources)
+    getWeightedAcademicProvider() {
+        const totalWeight = Object.values(this.providerWeights).reduce((sum, weight) => sum + weight, 0);
+        let random = Math.random() * totalWeight;
+        
+        for (const [provider, weight] of Object.entries(this.providerWeights)) {
+            random -= weight;
+            if (random <= 0) {
+                console.log(`🎯 Selected FREE academic provider: ${provider} (weight: ${weight})`);
+                return provider;
+            }
+        }
+        
+        return 'openalex'; // Fallback to best provider
     }
 
     async searchAcademicSources(phrase, maxRetries = 3) {
-        console.log(`🎓 Academic search for: "${phrase}"`);
+        console.log(`🎓 FREE academic search for: "${phrase}"`);
         
         const query = `"${phrase}"`;
 
         for (let attempt = 1; attempt <= maxRetries; attempt++) {
             try {
-                const providerName = this.getRandomAcademicProvider();
+                const providerName = this.getWeightedAcademicProvider();
                 const provider = this.academicProviders[providerName];
 
                 if (!provider) {
@@ -37,7 +62,7 @@ class SearchOrchestrator {
                 const results = await provider.search(query, 6);
                 
                 if (results && results.length > 0) {
-                    console.log(`✅ Academic: ${providerName} found ${results.length} results`);
+                    console.log(`✅ FREE Academic: ${providerName} found ${results.length} results`);
                     return results;
                 }
 
@@ -47,8 +72,32 @@ class SearchOrchestrator {
             }
         }
 
-        console.log(`⚠️ All academic search attempts failed for "${phrase}"`);
+        console.log(`⚠️ All FREE academic search attempts failed for "${phrase}"`);
         return [];
+    }
+
+    // Test all providers
+    async testAllProviders() {
+        console.log(`🧪 Testing all FREE academic providers...`);
+        
+        const testQueries = [
+            'machine learning economics',
+            'supply demand theory',
+            'inflation monetary policy'
+        ];
+
+        for (const [name, provider] of Object.entries(this.academicProviders)) {
+            try {
+                console.log(`🧪 Testing ${name}...`);
+                const results = await provider.search(testQueries[0], 3);
+                console.log(`✅ ${name}: ${results.length} results`);
+            } catch (error) {
+                console.log(`❌ ${name}: ${error.message}`);
+            }
+            
+            // Wait 1 second between tests
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
     }
 
     getProviderStats() {
@@ -56,14 +105,17 @@ class SearchOrchestrator {
         for (const [name, provider] of Object.entries(this.academicProviders)) {
             stats[name] = {
                 requestCount: provider.requestCount,
-                lastRequestTime: provider.lastRequestTime
+                lastRequestTime: provider.lastRequestTime,
+                weight: this.providerWeights[name],
+                apiKeyRequired: false, // 🆕 All are free!
+                restrictions: 'None - Completely free for commercial use'
             };
         }
         return stats;
     }
 
     // Method to test a specific provider
-    async testProvider(providerName, testQuery = "machine learning") {
+    async testProvider(providerName, testQuery = "machine learning economics") {
         const provider = this.academicProviders[providerName];
         if (!provider) {
             console.log(`❌ Provider ${providerName} not found`);

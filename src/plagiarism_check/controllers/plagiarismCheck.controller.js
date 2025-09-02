@@ -34,14 +34,18 @@ const urlCache = new NodeCache({
 });
 
 // Phrase-level cache for better performance
-const phraseCache = new NodeCache({ stdTTL: 86400 }); // 24 hour phrase cache
-// Load all 5 Google API keys
+const phraseCache = new NodeCache({ stdTTL: 86400 });
 const googleApiKeys = [
     process.env.GOOGLE_API_KEY,
     process.env.GOOGLE_API_KEY_2,
     process.env.GOOGLE_API_KEY_3,
     process.env.GOOGLE_API_KEY_4,
-    process.env.GOOGLE_API_KEY_5
+    process.env.GOOGLE_API_KEY_5,
+    process.env.GOOGLE_API_KEY_6,
+    process.env.GOOGLE_API_KEY_7,
+    process.env.GOOGLE_API_KEY_8,
+    process.env.GOOGLE_API_KEY_9,
+    process.env.GOOGLE_API_KEY_10
 ].filter(key => key && key.length > 0);
 
 // Load all 4 Brave API keys
@@ -74,6 +78,234 @@ braveApiKeys.forEach(key => {
 });
 
 console.log(`🔑 Initialized ${googleApiKeys.length} Google + ${braveApiKeys.length} Brave API keys`);
+
+// ------------------- ENHANCED RETRY HELPERS -------------------
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function parseRetryAfterMs(retryAfterHeader) {
+    if (!retryAfterHeader) return null;
+    const sec = parseInt(retryAfterHeader, 10);
+    if (!Number.isNaN(sec)) return sec * 1000;
+    const t = Date.parse(retryAfterHeader);
+    if (!Number.isNaN(t)) return Math.max(0, t - Date.now());
+    return null;
+}
+
+// Decide whether error is transient and worth retrying
+function isTransientError(err) {
+    const status = err?.response?.status;
+    if (status === 429 || status === 502 || status === 503 || status === 504) return true;
+    if (err.code === 'ECONNRESET' || err.code === 'ETIMEDOUT' || err.code === 'ENOTFOUND' || err.code === 'ECONNABORTED') return true;
+    return false;
+}
+
+// Decide whether error indicates invalid key / auth problem (don't retry)
+function isAuthOrBadRequest(err) {
+    const status = err?.response?.status;
+    return status === 401 || status === 403 || status === 400;
+}
+function retireApiKey(apiInfo) {
+    if (apiInfo && apiInfo.key) {
+        markKeyQuotaExceeded(apiInfo.key);
+        console.log(`🚫 Retired API key: ${apiInfo.key.substring(0, 8)}...`);
+    }
+}
+// ------------------ CONFIG ------------------
+const AGG_CONFIG = {
+    SHORT_CIRCUIT_SHINGLE_THRESHOLD: 0.70,
+    SHORT_CIRCUIT_SINGLE_SOURCE_SIM: 0.70,
+    MAX_REPORT: 100,
+    MIN_REPORT: 5,
+    TOP_SOURCES_COUNT: 8,
+    TOP_SOURCES_DECAY: 0.7
+};
+// Main aggregation
+function calculateCompetitiveAggregation(matches, coveredWords, totalWords) {
+    console.log('🎯 Calculating competitive aggregation for optimal reporting...');
+    if (!matches || matches.length === 0) {
+        return { finalScore: 0, confidence: 'NONE', method: 'no_matches', breakdown: {} };
+    }
+
+    totalWords = Math.max(1, totalWords || 1);
+    coveredWords = Math.max(0, coveredWords || 0);
+
+    const coveragePercent = (coveredWords / totalWords) * 100;
+    const maxSimilarity = Math.max(...matches.map(m => (m.similarity || 0)));
+    const authorityWeightedMax = calculateAuthorityWeightedMax(matches);
+    const topSourcesScore = calculateTopSourcesAggregation(matches);
+
+    // SHORT-CIRCUIT: near exact copy by shingle coverage or single-source similarity
+    if (coveragePercent >= AGG_CONFIG.SHORT_CIRCUIT_SHINGLE_THRESHOLD * 100 ||
+        maxSimilarity >= AGG_CONFIG.SHORT_CIRCUIT_SINGLE_SOURCE_SIM * 100) {
+
+        const boost = Math.max(maxSimilarity, coveragePercent, authorityWeightedMax, topSourcesScore);
+        const shortCircuitScore = Math.min(AGG_CONFIG.MAX_REPORT, Math.round(Math.max(boost, 90)));
+
+        console.log(`🔔 Short-circuit triggered: direct/near-exact copy -> ${shortCircuitScore}%`);
+        console.log(`   Trigger: Coverage=${Math.round(coveragePercent)}% or MaxSim=${Math.round(maxSimilarity)}%`);
+
+        return {
+            finalScore: shortCircuitScore,
+            confidence: 'VERY_HIGH',
+            method: 'short_circuit_direct_copy',
+            breakdown: { coverage: Math.round(coveragePercent), maxSimilarity: Math.round(maxSimilarity), authorityWeightedMax: Math.round(authorityWeightedMax), topSources: Math.round(topSourcesScore) }
+        };
+    }
+
+    // More nuanced options for mixed / multi-source cases
+    const contentProfile = analyzeContentForAggregation(matches, coveragePercent, maxSimilarity);
+    let finalScore = 0;
+    let method = 'conservative_accurate';
+    let confidence = 'LOW';
+
+    if (contentProfile.type === 'DIRECT_COPY_DETECTED') {
+        finalScore = Math.max(
+            maxSimilarity,
+            authorityWeightedMax,
+            topSourcesScore,
+            coveragePercent * 0.95
+        );
+        method = 'maximum_similarity';
+        confidence = finalScore >= 85 ? 'VERY_HIGH' : finalScore >= 65 ? 'HIGH' : 'MEDIUM';
+
+    } else if (contentProfile.type === 'MULTIPLE_SOURCE_COPYING') {
+        finalScore = Math.max(
+            topSourcesScore,
+            (maxSimilarity + coveragePercent) / 2,
+            calculateConfidenceAdjustedScore(matches, coveragePercent)
+        );
+        method = 'multi_source_enhanced';
+        confidence = finalScore >= 75 ? 'HIGH' : finalScore >= 45 ? 'MEDIUM' : 'LOW';
+
+    } else {
+        // Paraphrase / mixed content: keep conservative but slightly boost maxSimilarity
+        finalScore = Math.max(coveragePercent, maxSimilarity * 0.9, authorityWeightedMax * 0.9);
+        method = 'conservative_accurate';
+        confidence = finalScore >= 60 ? 'MEDIUM' : 'LOW';
+    }
+
+    // final sanitization & clamp
+    finalScore = Math.round(Math.max(AGG_CONFIG.MIN_REPORT, Math.min(AGG_CONFIG.MAX_REPORT, finalScore)));
+
+    console.log(`🎯 Aggregation complete: ${finalScore}% (${method}, ${confidence} confidence)`);
+    console.log(`   Coverage: ${Math.round(coveragePercent)}%, Max similarity: ${Math.round(maxSimilarity)}%, Top sources: ${Math.round(topSourcesScore)}%`);
+
+    return {
+        finalScore,
+        confidence,
+        method,
+        breakdown: {
+            coverage: Math.round(coveragePercent),
+            maxSimilarity: Math.round(maxSimilarity),
+            authorityWeighted: Math.round(authorityWeightedMax),
+            topSources: Math.round(topSourcesScore),
+            confidenceAdjusted: Math.round(calculateConfidenceAdjustedScore(matches, coveragePercent))
+        }
+    };
+}
+
+// ---------- HELPER FUNCTIONS ----------
+function calculateAuthorityWeightedMax(matches) {
+    if (!matches || matches.length === 0) return 0;
+
+    let bestWeighted = 0;
+    for (const match of matches) {
+        const sim = match.similarity || 0;
+        const authority = calculateSourceAuthority(match.url) || 0.4;
+        const weighted = sim * (1 + (authority - 0.4) * 0.5);
+        if (weighted > bestWeighted) bestWeighted = weighted;
+    }
+    return Math.min(bestWeighted, 98);
+}
+
+function calculateTopSourcesAggregation(matches) {
+    if (!matches || matches.length === 0) return 0;
+
+    const ranked = matches
+        .map(m => ({ ...m, rankScore: (m.similarity || 0) * (calculateSourceAuthority(m.url) || 0.4) }))
+        .sort((a, b) => b.rankScore - a.rankScore)
+        .slice(0, AGG_CONFIG.TOP_SOURCES_COUNT);
+
+    let total = 0;
+    let weight = 1;
+    for (let i = 0; i < ranked.length; i++) {
+        const sim = ranked[i].similarity || 0;
+        total += sim * weight;
+        weight *= AGG_CONFIG.TOP_SOURCES_DECAY;
+    }
+
+    const weightSum = (1 - Math.pow(AGG_CONFIG.TOP_SOURCES_DECAY, ranked.length)) / (1 - AGG_CONFIG.TOP_SOURCES_DECAY);
+    const normalized = weightSum > 0 ? (total / weightSum) : total;
+    return Math.min(normalized, 98);
+}
+
+function calculateConfidenceAdjustedScore(matches, coveragePercent) {
+    const highConfidenceMatches = matches.filter(m => m.similarity > 70);
+    const mediumConfidenceMatches = matches.filter(m => m.similarity > 40 && m.similarity <= 70);
+
+    if (highConfidenceMatches.length >= 2) {
+        const avgHighConfidence = highConfidenceMatches.reduce((sum, m) => sum + m.similarity, 0) / highConfidenceMatches.length;
+        return Math.max(avgHighConfidence, coveragePercent * 1.2);
+    }
+
+    if (highConfidenceMatches.length === 1 && mediumConfidenceMatches.length >= 2) {
+        return Math.max(highConfidenceMatches[0].similarity, coveragePercent * 1.1);
+    }
+
+    return coveragePercent;
+}
+
+function analyzeContentForAggregation(matches, coveragePercent, maxSimilarity) {
+    const highMatches = matches.filter(m => m.similarity > 70).length;
+    const mediumMatches = matches.filter(m => m.similarity > 40 && m.similarity <= 70).length;
+    const authorityMatches = matches.filter(m => (calculateSourceAuthority(m.url) || 0.4) > 0.7).length;
+
+    // Add to your analyzeContentForAggregation function
+    if (maxSimilarity >= 70 && highMatches >= 1) {
+        return { type: 'DIRECT_COPY_DETECTED', confidence: 'HIGH' };
+    }
+    if (maxSimilarity >= 60 && highMatches >= 2) {
+        return { type: 'MULTIPLE_DIRECT_COPIES', confidence: 'VERY_HIGH' };
+    }
+    ;
+    if (highMatches >= 2 || (highMatches >= 1 && mediumMatches >= 2)) return { type: 'MULTIPLE_SOURCE_COPYING', confidence: 'MEDIUM' };
+    if (authorityMatches >= 2 && maxSimilarity > 50) return { type: 'AUTHORITATIVE_SOURCE_COPYING', confidence: 'MEDIUM' };
+
+    return { type: 'MIXED_OR_ORIGINAL', confidence: 'LOW' };
+}
+
+// Enhanced source authority calculation
+function calculateSourceAuthority(url) {
+    if (!url) return 0.4;
+
+    const domain = url.toLowerCase();
+
+    // High authority (academic/government)
+    if (domain.includes('.edu') || domain.includes('.gov') ||
+        domain.includes('wikipedia.org') || domain.includes('arxiv.org') ||
+        domain.includes('nature.com') || domain.includes('science.org')) {
+        return 0.9;
+    }
+
+    // Medium-high authority (research/professional)
+    if (domain.includes('.org') || domain.includes('researchgate') ||
+        domain.includes('academia.edu') || domain.includes('jstor.org') ||
+        domain.includes('britannica.com')) {
+        return 0.7;
+    }
+
+    // Medium authority (established sources)
+    if (domain.includes('reuters.com') || domain.includes('bbc.com') ||
+        domain.includes('springer.com') || domain.includes('.ac.')) {
+        return 0.6;
+    }
+
+    // Default authority
+    return 0.4;
+}
+
 
 // MULTI-PROVIDER SMART KEY SELECTION
 function getSmartApiKey() {
@@ -224,7 +456,7 @@ const rateLimitStore = new Map();
 
 // API quota tracking with auto-reset (UPDATED)
 const quotaTracker = {
-    google: { used: 0, limit: 400, resetTime: Date.now() + 24 * 60 * 60 * 1000 }, // 4 keys × 100 each
+    google: { used: 0, limit: 1000, resetTime: Date.now() + 24 * 60 * 60 * 1000 },
     arxiv: { used: 0, limit: 1000, resetTime: Date.now() + 24 * 60 * 60 * 1000 },
     crossref: { used: 0, limit: 50, resetTime: Date.now() + 24 * 60 * 60 * 1000 }
 };
@@ -843,7 +1075,7 @@ class EnterpriseWebSearcher {
         }
     }
 
-    async fallbackSearch(query, maxResults = 4) { // INCREASED from 3 to 4
+    async fallbackSearch(query, maxResults = 4) {
         console.log('🔄 Using enhanced fallback search mode');
         const domains = ['wikipedia.org', 'britannica.com', 'archive.org', 'scholar.google.com'];
         return domains.slice(0, maxResults).map((domain, index) => ({
@@ -859,13 +1091,13 @@ class EnterpriseWebSearcher {
         // High-value domains get more time
         if (domain.includes('.edu') || domain.includes('.gov') ||
             domain.includes('wikipedia') || domain.includes('pubmed')) {
-            return 8000; // 8 seconds for important sources
+            return 8000;
         }
 
         // Medium-value domains  
         if (domain.includes('.org') || domain.includes('nature.com') ||
             domain.includes('sciencedirect.com')) {
-            return 6000; // 6 seconds
+            return 6000;
         }
 
         // Low-value domains get minimal time
@@ -1124,7 +1356,7 @@ class IntelligentSearchEngine {
             }
         }
 
-        console.log(`   ❌ No citation detected for: "${phrase.substring(0, 20)}..."`);
+        console.log(`    No citation detected for: "${phrase.substring(0, 20)}..."`);
         return false;
     }
 
@@ -1137,16 +1369,22 @@ class IntelligentSearchEngine {
         }
     }
 
-    // MULTI-PROVIDER INTELLIGENT SEARCH
+    // 🆕 ENHANCED: Multi-provider intelligent search with superior retry logic
     async intelligentMultiKeySearch(phrase) {
         console.log(`🔍 Multi-provider search for: "${phrase}"`);
 
         const query = `"${phrase}"`;
-        const maxRetries = 3;
+        const maxRetries = 5; // Increased from 3
+        const baseDelay = 1000; // 1s base
+        const maxDelay = 30000; // cap delay at 30s
 
         for (let attempt = 1; attempt <= maxRetries; attempt++) {
             try {
+                // Acquire a (smart) API key for this attempt
                 const apiInfo = getSmartApiKey();
+                if (!apiInfo) throw new Error('No API key available');
+
+                console.log(`🎯 Attempt ${attempt}/${maxRetries} using ${apiInfo.provider} Key`);
 
                 if (apiInfo.provider === 'google') {
                     const results = await this.webSearcher.searchGoogle(query, 6);
@@ -1158,7 +1396,7 @@ class IntelligentSearchEngine {
                     const cooldownUntil = braveCooldown.get(apiInfo.key) || 0;
                     if (Date.now() < cooldownUntil) {
                         console.log(`🧊 Brave key in cooldown, skipping...`);
-                        continue; // Skip to next attempt
+                        continue; // Skip to next attempt with different key
                     }
 
                     const braveSearcher = new BraveSearcher();
@@ -1173,10 +1411,50 @@ class IntelligentSearchEngine {
             } catch (error) {
                 console.log(`❌ Search attempt ${attempt} failed: ${error.message}`);
 
-                // Mark key as exhausted if quota error
-                if (error.message.includes('quota') || error.message.includes('rate limit')) {
-                    // Handle quota exceeded for the specific key
+                // If it's an auth / bad request error, don't retry with this key
+                if (isAuthOrBadRequest(error)) {
+                    console.warn(`🔒 API key error (non-retriable). Retiring key: ${error.response?.config?.headers?.['X-Subscription-Token']?.substring(0, 8) || 'unknown'}...`);
+                    // Mark the key as quota exceeded so rotation avoids it
+                    try {
+                        const apiInfo = getSmartApiKey();
+                        markKeyQuotaExceeded(apiInfo.key);
+                    } catch (e) { /* ignore */ }
+                    throw error; // bubble up
+                }
+
+                // If error is transient, we may retry
+                if (isTransientError(error) && attempt < maxRetries) {
+                    const retryAfterHeader = error?.response?.headers?.['retry-after'];
+                    let delayMs = parseRetryAfterMs(retryAfterHeader);
+
+                    if (delayMs == null) {
+                        delayMs = Math.min(baseDelay * Math.pow(2, attempt - 1), maxDelay);
+                    }
+
+                    const jitter = Math.floor(Math.random() * Math.min(1000, Math.floor(delayMs * 0.2)));
+                    const finalDelay = delayMs + jitter;
+
+                    console.log(`⏳ Attempt ${attempt} failed (transient). Waiting ${finalDelay}ms before retry ${attempt + 1}...`, {
+                        errMessage: error.message,
+                        status: error?.response?.status
+                    });
+
+                    if (error?.response?.status === 429) {
+                        try {
+                            const apiInfo = getSmartApiKey();
+                            braveCooldown.set(apiInfo.key, Date.now() + finalDelay);
+                        } catch (e) { /* ignore */ }
+                    }
+
+                    await sleep(finalDelay);
                     continue;
+
+                }
+
+                // Not retryable or out of retries: throw
+                console.warn(`❌ Search failed (attempt ${attempt}):`, error.message);
+                if (attempt === maxRetries) {
+                    throw error;
                 }
             }
         }
@@ -1475,7 +1753,109 @@ class IntelligentSearchEngine {
 
         return groups; // Map(representative -> [phrases...])
     }
+    async buildFrequencyMapOptimized(searchResults, opts = {}) {
+        const maxInspect = opts.maxInspect || 12;
+        const phrasesPerSource = opts.phrasesPerSource || 20;
+        const batchSize = opts.batchSize || 3;
+        const minSuccessfulSources = opts.minSources || 4;
+        const frequencyThresholdBase = typeof opts.frequencyBase === 'number' ? opts.frequencyBase : 0.25;
+        const minPhraseWords = opts.minPhraseWords || 3;
 
+        if (!searchResults || searchResults.length === 0) return new Set();
+
+        console.log(`📊 Building optimized frequency map from ${searchResults.length} sources...`);
+
+        // Prioritize sources by authority and trim
+        const prioritized = searchResults
+            .map(r => ({ ...r, authority: this.calculateSourceAuthority(r.url) || 0.4 }))
+            .sort((a, b) => b.authority - a.authority)
+            .slice(0, maxInspect);
+
+        // fetch pages in small batches (uses fetchLimit if available)
+        const phraseFrequency = new Map(); // phrase -> weighted count
+        let totalAuthority = 0;
+        let successfulSources = 0;
+
+        for (let i = 0; i < prioritized.length; i += batchSize) {
+            const batch = prioritized.slice(i, i + batchSize);
+
+            const fetchPromises = batch.map(src => (typeof fetchLimit === 'function'
+                ? fetchLimit(async () => {
+                    try {
+                        const content = await this.webSearcher.fetchPageContentOptimized(src.url);
+                        return { src, content };
+                    } catch (err) {
+                        console.log(`⚠️ Fetch fail for freq analysis: ${src.url} — ${err.message}`);
+                        return null;
+                    }
+                })
+                : (async () => {
+                    try {
+                        const content = await this.webSearcher.fetchPageContentOptimized(src.url);
+                        return { src, content };
+                    } catch (err) {
+                        console.log(`⚠️ Fetch fail for freq analysis: ${src.url} — ${err.message}`);
+                        return null;
+                    }
+                })()
+            ));
+
+            const settled = await Promise.all(fetchPromises);
+            for (const item of settled) {
+                if (!item || !item.content || item.content.length < 200) continue;
+                const srcAuthority = item.src.authority || 0.4;
+                successfulSources++;
+                totalAuthority += srcAuthority;
+
+                const phrases = this.extractPhrasesFromContentOptimized(item.content, phrasesPerSource);
+                for (const rawPhrase of phrases) {
+                    const phrase = rawPhrase.toLowerCase().trim();
+                    phraseFrequency.set(phrase, (phraseFrequency.get(phrase) || 0) + srcAuthority);
+                }
+            }
+        }
+
+        if (successfulSources < minSuccessfulSources) {
+            console.log(`ℹ️ Only ${successfulSources} sources processed — skipping frequency analysis`);
+            return new Set();
+        }
+
+        // Semantic grouping of phrase keys
+        const allPhrases = Array.from(phraseFrequency.keys());
+        const semanticGroups = this.groupSemanticPhrases(allPhrases, { minWords: minPhraseWords, threshold: 0.55 });
+
+        // Aggregate counts by group representative
+        const aggregatedCounts = new Map(); // rep -> weightedCount
+        const phraseToRep = new Map();
+        for (const [rep, group] of semanticGroups.entries()) {
+            for (const p of group) phraseToRep.set(p, rep);
+        }
+        for (const [phrase, count] of phraseFrequency.entries()) {
+            const rep = phraseToRep.get(phrase) || phrase;
+            aggregatedCounts.set(rep, (aggregatedCounts.get(rep) || 0) + count);
+        }
+
+        // Now determine common phrases with dynamic thresholds
+        const commonPhrases = new Set();
+        for (const [rep, weightedCount] of aggregatedCounts.entries()) {
+            // Normalize by totalAuthority (weighted fraction)
+            const freq = totalAuthority > 0 ? (weightedCount / totalAuthority) : 0;
+            const wordCount = rep.split(/\s+/).length;
+
+            // dynamic threshold rules
+            let threshold = frequencyThresholdBase;
+            if (/\b(research|study|analysis|data|results)\b/i.test(rep)) threshold = 0.35;
+            if (wordCount >= 4) threshold = Math.min(threshold, 0.20);
+
+            if (freq >= threshold && wordCount >= minPhraseWords) {
+                commonPhrases.add(rep);
+                console.log(`   📈 Common phrase detected: "${rep}" (weighted ${Math.round(freq * 100)}%)`);
+            }
+        }
+
+        console.log(`📊 Optimized frequency analysis complete: ${commonPhrases.size} common phrases`);
+        return commonPhrases;
+    }
 }
 // Add this new function for second-pass analysis
 async function performSecondPassAnalysis(inputText, initialResults, webSearcher, textSimilarity, deepSemanticAnalyzer) {
@@ -1722,7 +2102,7 @@ const checkPlagiarism = async (req, res) => {
             });
         }
 
-        console.log('🚀 Starting TURBO 4-key intelligent plagiarism analysis...');
+        console.log('🚀 Starting TURBO 10-key intelligent plagiarism analysis...');
 
         // DYNAMIC PHRASE CALCULATION BASED ON CONTENT LENGTH
         let targetPhraseCount;
@@ -1785,7 +2165,6 @@ const checkPlagiarism = async (req, res) => {
 
         console.log(`⚡ Processing ${keyPhrases.length} deduplicated phrases (saved ${combinedPhrases.length - deduplicatedPhrases.length} redundant searches)...`);
 
-        // TURBO intelligent search with 4-key rotation
         const tSearch = stage('search+fetch');
         tSearch.start();
         const searchResults = await
@@ -1825,14 +2204,22 @@ const checkPlagiarism = async (req, res) => {
                 if (!a.isLikelyOriginal && b.isLikelyOriginal) return 1;
                 return b.similarity - a.similarity;
             })
-            .slice(0, 20); // Top 20 matches
+            .slice(0, 20);
 
         /* ── Phase-1  final score ───────────────────────────── */
         const coveredWords = covered.filter(Boolean).length;
         const coveragePercent = Math.round((coveredWords / tokens.length) * 100);
         const bestHit = Math.max(...allMatches.map(m => m.similarity), 0);
 
-        const plagiarismPercentage = Math.max(coveragePercent, bestHit);   // use higher
+        // 🆕 ENHANCED: Use your superior competitive aggregation
+        const enhancedPlagiarismScore = calculateCompetitiveAggregation(allMatches, coveredWords, tokens.length);
+        const plagiarismPercentage = enhancedPlagiarismScore.finalScore;
+
+        console.log(`📊 Aggregation Details: ${enhancedPlagiarismScore.method} method used`);
+        console.log(`   Final Score: ${plagiarismPercentage}% (Confidence: ${enhancedPlagiarismScore.confidence})`);
+        console.log(`   Breakdown: Coverage=${enhancedPlagiarismScore.breakdown?.coverage}%, Max=${enhancedPlagiarismScore.breakdown?.maxSimilarity}%, Authority=${enhancedPlagiarismScore.breakdown?.authorityWeighted}%`);
+
+
         console.log(`📏 Coverage ${coveragePercent}%  |  Top-hit ${bestHit}%`);
 
 
@@ -1842,7 +2229,6 @@ const checkPlagiarism = async (req, res) => {
 
         // Enhanced results object with all optimizations
         const results = {
-            // Core metrics
             plagiarismPercentage,
             uniquePercentage,
             sourcesFound: allMatches.length,
@@ -1867,10 +2253,17 @@ const checkPlagiarism = async (req, res) => {
                 sourceDetails,
                 timestamp: new Date().toISOString(),
                 processingTimeMs: Date.now() - startTime,
-                searchesPerformed: keyPhrases.length * 1, // Only 1 search per phrase now
+                aggregationDetails: {
+                    method: enhancedPlagiarismScore.method,
+                    confidence: enhancedPlagiarismScore.confidence,
+                    breakdown: enhancedPlagiarismScore.breakdown,
+                    shortCircuitTriggered: enhancedPlagiarismScore.method === 'short_circuit_direct_copy'
+                },
+                searchesPerformed: keyPhrases.length * 1,
                 realWebCheck: webSearcher.hasGoogleAPI,
                 parallelSearches: keyPhrases.length,
-                totalWebsitesSearched: Math.min(keyPhrases.length * 10, 100), // REDUCED estimate
+                totalWebsitesSearched: Math.min(keyPhrases.length * 10, 100),
+
 
                 // Source breakdown
                 sourcesBreakdown: {
@@ -1887,7 +2280,7 @@ const checkPlagiarism = async (req, res) => {
                 sourceDetection: true,
                 ultraAggressiveMode: true,
                 synchronizedProcessing: true,
-                turboMode: true, // NEW
+                turboMode: true,
                 algorithmCount: 8,
                 cacheHitRate: Math.round((cache.getStats().hits / Math.max(cache.getStats().hits + cache.getStats().misses, 1)) * 100),
 
@@ -1895,7 +2288,7 @@ const checkPlagiarism = async (req, res) => {
                 quotaStatus: {
                     google: {
                         used: quotaTracker.google?.used || 0,
-                        remaining: Math.max((quotaTracker.google?.limit || 400) - (quotaTracker.google?.used || 0), 0)
+                        remaining: Math.max((quotaTracker.google?.limit || 1000) - (quotaTracker.google?.used || 0), 0)
                     },
                     totalKeys: googleApiKeys.length
                 }
@@ -1945,13 +2338,13 @@ const checkPlagiarism = async (req, res) => {
                 accuracyScore: Math.min(85 + (allMatches.length) + (keyPhrases.length) + (allMatches.filter(m => m.isLikelyOriginal).length * 2), 97),
 
                 features: [
-                    '🔑 4-Key Google API rotation system',
+                    ' 10-Key Google API rotation system',
                     '⚡ TURBO intelligent similarity detection',
                     `${keyPhrases.length}-phrase optimized extraction`,
                     'Original source detection & prioritization',
                     `${new Set(allMatches.map(m => m.source)).size} unique source types`,
                     '8-algorithm similarity analysis with source scoring',
-                    webSearcher.hasGoogleAPI ? '4-Key real-time Google search' : 'Enhanced fallback search',
+                    webSearcher.hasGoogleAPI ? '10-Key real-time Google search' : 'Enhanced fallback search',
                     allMatches.filter(m => m.matchType === 'academic').length > 0 ? 'Academic database integration' : null,
                     allMatches.filter(m => m.isLikelyOriginal).length > 0 ? 'Original source identification' : null,
                     'Smart key rotation & quota management',
@@ -1980,7 +2373,7 @@ const checkPlagiarism = async (req, res) => {
 
         // FINAL COMPLETION LOG BEFORE RESPONSE
         console.log(`✅ ALL PROCESSING COMPLETE - Sending response now`);
-        console.log(`🚀 TURBO 4-key analysis complete: ${plagiarismPercentage}% plagiarized, ${allMatches.length} sources found (${allMatches.filter(m => m.isLikelyOriginal).length} originals) in ${Date.now() - startTime}ms`);
+        console.log(`🚀 TURBO 10-key analysis complete: ${plagiarismPercentage}% plagiarized, ${allMatches.length} sources found (${allMatches.filter(m => m.isLikelyOriginal).length} originals) in ${Date.now() - startTime}ms`);
 
         res.json({
             success: true,
@@ -2006,11 +2399,11 @@ const getStatus = async (req, res) => {
 
     res.json({
         success: true,
-        service: 'ASCIIFIX TURBO 4-Key Plagiarism Checker',
+        service: 'ASCIIFIX TURBO 10-Key Plagiarism Checker',
         version: '8.0.0-turbo-multikey',
         status: 'operational',
         features: [
-            '🔑 4-Key Google API rotation system',
+            '🔑 10-Key Google API rotation system',
             '⚡ TURBO intelligent parallel processing',
             '🎯 Smart key usage balancing',
             '🚀 Enhanced reliability & throughput',
@@ -2055,7 +2448,7 @@ const getStatus = async (req, res) => {
             maxFileSize: '10MB',
             maxTextLength: '25,000 words',
             turboCompliant: true,
-            websiteSearchCapacity: '100+ per check (4-key optimized)'
+            websiteSearchCapacity: '100+ per check (10-key optimized)'
         }
     });
 };
