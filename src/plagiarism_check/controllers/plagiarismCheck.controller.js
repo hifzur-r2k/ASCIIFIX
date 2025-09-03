@@ -15,6 +15,7 @@ const fuzz = require('fuzzball');
 const leven = require('fast-levenshtein');
 const { diceCoefficient } = require('dice-coefficient');
 const { google } = require('googleapis');
+// const MiniSearch = require('minisearch');
 const pLimit = require('p-limit');
 const searchLimit = pLimit(6);
 const fetchLimit = pLimit(10);
@@ -185,8 +186,13 @@ function calculateCompetitiveAggregation(matches, coveredWords, totalWords) {
         method = 'conservative_accurate';
         confidence = finalScore >= 60 ? 'MEDIUM' : 'LOW';
     }
+    if (maxSimilarity >= 40 && matches.some(m => m.priorityScore > 0.7)) {
+        const boost = Math.min(maxSimilarity * 1.6, 95);
+        console.log(`🎯 High-confidence source boost: ${maxSimilarity}% → ${boost}%`);
+        finalScore = Math.max(finalScore, boost);
+    }
 
-    // final sanitization & clamp
+
     finalScore = Math.round(Math.max(AGG_CONFIG.MIN_REPORT, Math.min(AGG_CONFIG.MAX_REPORT, finalScore)));
 
     console.log(`🎯 Aggregation complete: ${finalScore}% (${method}, ${confidence} confidence)`);
@@ -306,19 +312,28 @@ function calculateSourceAuthority(url) {
     return 0.4;
 }
 
-
 // MULTI-PROVIDER SMART KEY SELECTION
+// MULTI-PROVIDER SMART KEY SELECTION (Enhanced with Academic Sources)
 function getSmartApiKey() {
-    const useGoogle = Math.random() < 0.6;
+    const rand = Math.random();
 
-    if (useGoogle && googleApiKeys.length > 0) {
+    if (rand < 0.35 && googleApiKeys.length > 0) {
         return getSmartGoogleKey();
-    } else if (braveApiKeys.length > 0) {
+    }
+    else if (rand < 0.60 && braveApiKeys.length > 0) {
         return getSmartBraveKey();
-    } else if (googleApiKeys.length > 0) {
-        return getSmartGoogleKey();
-    } else {
-        throw new Error('No API keys available');
+    }
+    else if (rand < 0.75) {
+        return { key: 'arxiv-free', provider: 'arxiv' };
+    }
+    else if (rand < 0.85) {
+        return { key: 'crossref-free', provider: 'crossref' };
+    }
+    else if (rand < 0.95) {
+        return { key: 'pubmed-free', provider: 'pubmed' };
+    }
+    else {
+        return { key: 'archive-free', provider: 'archive' };
     }
 }
 
@@ -412,8 +427,8 @@ function getKeyRotationStats() {
 // Monitor API key usage
 function logApiKeyUsage(stage = 'start') {
     console.log(`📊 API KEY USAGE STATS (${stage}):`);
-    console.log(`Total Keys: ${googleApiKeys.length + braveApiKeys.length}`);
-    console.log(`Google Keys: ${googleApiKeys.length} | Brave Keys: ${braveApiKeys.length}`);
+    console.log(`Total Keys: ${googleApiKeys.length + braveApiKeys.length + 4}`);
+    console.log(`Google Keys: ${googleApiKeys.length} | Brave Keys: ${braveApiKeys.length} | Academic Sources: 4`);
 
     // Log Google API key stats
     if (googleApiKeys.length > 0) {
@@ -884,7 +899,6 @@ class EnterpriseWebSearcher {
             console.warn('⚠️ Google API credentials not found. Using fallback mode.');
         }
 
-        // ENHANCED RATE LIMITING PROPERTIES
         this.requestCount = 0;
         this.lastRequestTime = 0;
         this.minInterval = 800;
@@ -943,7 +957,6 @@ class EnterpriseWebSearcher {
 
     // MULTI-KEY GOOGLE SEARCH (UPDATED)
     async searchGoogle(query, maxResults = 6) {
-        // INTELLIGENT RATE LIMITING
         const now = Date.now();
         const timeSinceLastRequest = now - this.lastRequestTime;
 
@@ -973,7 +986,6 @@ class EnterpriseWebSearcher {
 
         for (let attempt = 1; attempt <= maxRetries; attempt++) {
             try {
-                // Force Google provider selection
                 let apiInfo;
                 let attempts = 0;
                 do {
@@ -1018,11 +1030,9 @@ class EnterpriseWebSearcher {
 
                 // Handle quota exceeded errors
                 if (error.message.includes('Quota exceeded') || error.message.includes('Rate limit')) {
-                    // Mark key as exhausted and continue to next attempt
+
                     continue;
                 }
-
-                // For other errors, don't retry
                 break;
             }
         }
@@ -1071,6 +1081,185 @@ class EnterpriseWebSearcher {
 
         } catch (error) {
             console.error('❌ Wikipedia search error:', error.message);
+            return [];
+        }
+    }
+    // ArXiv Academic Papers Search
+    async searchArXiv(query, maxResults = 6) {
+        try {
+            console.log(`📚 ArXiv searching: "${query}"`);
+
+            const searchUrl = `http://export.arxiv.org/api/query?search_query=all:${encodeURIComponent(query)}&start=0&max_results=${maxResults}`;
+
+            const response = await axios.get(searchUrl, {
+                timeout: 10000,
+                headers: {
+                    'User-Agent': this.getRandomUserAgent()
+                }
+            });
+
+            // Parse ArXiv XML response
+            const xmlData = response.data;
+            const entries = [];
+
+            // Simple XML parsing for entries
+            const entryMatches = xmlData.match(/<entry>([\s\S]*?)<\/entry>/g);
+
+            if (entryMatches) {
+                for (let i = 0; i < Math.min(entryMatches.length, maxResults); i++) {
+                    const entry = entryMatches[i];
+
+                    const titleMatch = entry.match(/<title>([\s\S]*?)<\/title>/);
+                    const idMatch = entry.match(/<id>([\s\S]*?)<\/id>/);
+                    const summaryMatch = entry.match(/<summary>([\s\S]*?)<\/summary>/);
+
+                    if (titleMatch && idMatch) {
+                        entries.push({
+                            title: titleMatch[1].replace(/\n/g, ' ').trim(),
+                            url: idMatch[1].trim(),
+                            snippet: summaryMatch ? summaryMatch[1].replace(/\n/g, ' ').trim().substring(0, 200) + '...' : 'Academic paper from ArXiv',
+                            displayLink: 'arxiv.org',
+                            source: 'ArXiv'
+                        });
+                    }
+                }
+            }
+
+            console.log(`📚 ArXiv found ${entries.length} results`);
+            return entries;
+
+        } catch (error) {
+            console.error('❌ ArXiv search error:', error.message);
+            return [];
+        }
+    }
+
+    // PubMed Medical/Life Sciences Search
+    async searchPubMed(query, maxResults = 6) {
+        try {
+            console.log(`🧬 PubMed searching: "${query}"`);
+
+            // Step 1: Search for IDs
+            const searchUrl = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${encodeURIComponent(query)}&retmax=${maxResults}&retmode=json`;
+
+            const searchResponse = await axios.get(searchUrl, {
+                timeout: 10000,
+                headers: {
+                    'User-Agent': this.getRandomUserAgent()
+                }
+            });
+
+            const idList = searchResponse.data.esearchresult.idlist;
+
+            if (!idList || idList.length === 0) {
+                return [];
+            }
+
+            // Step 2: Get summaries for the IDs
+            const summaryUrl = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=${idList.join(',')}&retmode=json`;
+
+            const summaryResponse = await axios.get(summaryUrl, {
+                timeout: 10000
+            });
+
+            const results = [];
+            const summaries = summaryResponse.data.result;
+
+            for (const id of idList) {
+                if (summaries[id]) {
+                    const paper = summaries[id];
+                    results.push({
+                        title: paper.title || `PubMed Article ${id}`,
+                        url: `https://pubmed.ncbi.nlm.nih.gov/${id}/`,
+                        snippet: (paper.authors && paper.authors[0] ? `By ${paper.authors[0].name}. ` : '') +
+                            `Published ${paper.pubdate || 'N/A'}. Medical/scientific research paper.`,
+                        displayLink: 'pubmed.ncbi.nlm.nih.gov',
+                        source: 'PubMed'
+                    });
+                }
+            }
+
+            console.log(`🧬 PubMed found ${results.length} results`);
+            return results;
+
+        } catch (error) {
+            console.error('❌ PubMed search error:', error.message);
+            return [];
+        }
+    }
+
+    // CrossRef Academic Citations Search
+    async searchCrossRef(query, maxResults = 6) {
+        try {
+            console.log(`🔗 CrossRef searching: "${query}"`);
+
+            const searchUrl = `https://api.crossref.org/works?query=${encodeURIComponent(query)}&rows=${maxResults}&select=title,URL,abstract,author,published-print`;
+
+            const response = await axios.get(searchUrl, {
+                timeout: 12000,
+                headers: {
+                    'User-Agent': this.getRandomUserAgent()
+                }
+            });
+
+            const items = response.data.message.items || [];
+            const results = [];
+
+            for (const item of items.slice(0, maxResults)) {
+                const title = Array.isArray(item.title) ? item.title[0] : (item.title || 'Untitled Academic Work');
+                const authors = item.author && item.author[0] ? `${item.author[0].given} ${item.author[0].family}` : 'Unknown Author';
+                const year = item['published-print'] && item['published-print']['date-parts'] ? item['published-print']['date-parts'][0][0] : 'N/A';
+
+                results.push({
+                    title: title,
+                    url: item.URL || `https://doi.org/${item.DOI}`,
+                    snippet: `By ${authors} (${year}). ${item.abstract ? item.abstract.substring(0, 150) + '...' : 'Academic publication with peer citations.'}`,
+                    displayLink: 'crossref.org',
+                    source: 'CrossRef'
+                });
+            }
+
+            console.log(`🔗 CrossRef found ${results.length} results`);
+            return results;
+
+        } catch (error) {
+            console.error('❌ CrossRef search error:', error.message);
+            return [];
+        }
+    }
+
+    // Internet Archive Historical Documents Search  
+    async searchInternetArchive(query, maxResults = 6) {
+        try {
+            console.log(`📜 Internet Archive searching: "${query}"`);
+
+            const searchUrl = `https://archive.org/advancedsearch.php?q=${encodeURIComponent(query)}&fl[]=identifier,title,description,creator,date&rows=${maxResults}&page=1&output=json`;
+
+            const response = await axios.get(searchUrl, {
+                timeout: 12000,
+                headers: {
+                    'User-Agent': this.getRandomUserAgent()
+                }
+            });
+
+            const docs = response.data.response.docs || [];
+            const results = [];
+
+            for (const doc of docs.slice(0, maxResults)) {
+                results.push({
+                    title: doc.title || 'Untitled Archive Item',
+                    url: `https://archive.org/details/${doc.identifier}`,
+                    snippet: `${doc.description ? doc.description.substring(0, 150) + '...' : 'Historical document or media from Internet Archive.'} ${doc.creator ? `Created by ${doc.creator}.` : ''} ${doc.date ? `Date: ${doc.date}` : ''}`,
+                    displayLink: 'archive.org',
+                    source: 'Internet Archive'
+                });
+            }
+
+            console.log(`📜 Internet Archive found ${results.length} results`);
+            return results;
+
+        } catch (error) {
+            console.error('❌ Internet Archive search error:', error.message);
             return [];
         }
     }
@@ -1374,13 +1563,13 @@ class IntelligentSearchEngine {
         console.log(`🔍 Multi-provider search for: "${phrase}"`);
 
         const query = `"${phrase}"`;
-        const maxRetries = 5; // Increased from 3
-        const baseDelay = 1000; // 1s base
-        const maxDelay = 30000; // cap delay at 30s
+        const maxRetries = 5;
+        const baseDelay = 1000;
+        const maxDelay = 30000;
 
         for (let attempt = 1; attempt <= maxRetries; attempt++) {
             try {
-                // Acquire a (smart) API key for this attempt
+
                 const apiInfo = getSmartApiKey();
                 if (!apiInfo) throw new Error('No API key available');
 
@@ -1396,9 +1585,8 @@ class IntelligentSearchEngine {
                     const cooldownUntil = braveCooldown.get(apiInfo.key) || 0;
                     if (Date.now() < cooldownUntil) {
                         console.log(`🧊 Brave key in cooldown, skipping...`);
-                        continue; // Skip to next attempt with different key
+                        continue;
                     }
-
                     const braveSearcher = new BraveSearcher();
                     const results = await braveSearcher.searchBraveWithBackoff(query, 6, apiInfo.key);
 
@@ -1406,20 +1594,43 @@ class IntelligentSearchEngine {
                         console.log(`✅ Brave found ${results.length} results`);
                         return results;
                     }
-                }
+                } else if (apiInfo.provider === 'arxiv') {
+                    const results = await this.webSearcher.searchArXiv(query, 6);
+                    if (results && results.length > 0) {
+                        console.log(`✅ ArXiv found ${results.length} results`);
+                        return results;
+                    }
 
+                } else if (apiInfo.provider === 'pubmed') {
+                    const results = await this.webSearcher.searchPubMed(query, 6);
+                    if (results && results.length > 0) {
+                        console.log(`✅ PubMed found ${results.length} results`);
+                        return results;
+                    }
+
+                } else if (apiInfo.provider === 'crossref') {
+                    const results = await this.webSearcher.searchCrossRef(query, 6);
+                    if (results && results.length > 0) {
+                        console.log(`✅ CrossRef found ${results.length} results`);
+                        return results;
+                    }
+
+                } else if (apiInfo.provider === 'archive') {
+                    const results = await this.webSearcher.searchInternetArchive(query, 6);
+                    if (results && results.length > 0) {
+                        console.log(`✅ Internet Archive found ${results.length} results`);
+                        return results;
+                    }
+                }
             } catch (error) {
                 console.log(`❌ Search attempt ${attempt} failed: ${error.message}`);
-
-                // If it's an auth / bad request error, don't retry with this key
                 if (isAuthOrBadRequest(error)) {
                     console.warn(`🔒 API key error (non-retriable). Retiring key: ${error.response?.config?.headers?.['X-Subscription-Token']?.substring(0, 8) || 'unknown'}...`);
-                    // Mark the key as quota exceeded so rotation avoids it
                     try {
                         const apiInfo = getSmartApiKey();
                         markKeyQuotaExceeded(apiInfo.key);
                     } catch (e) { /* ignore */ }
-                    throw error; // bubble up
+                    throw error;
                 }
 
                 // If error is transient, we may retry
@@ -1983,19 +2194,12 @@ async function performTurboParallelSearch(keyPhrases, inputText, webSearcher, te
     console.log(`✅ PARALLEL COMPLETE: ${flatResults.length} results from ${totalSuccessfulFetches} fetches in ${Date.now() - startTime}ms`);
     return flatResults;
 }
-// Add this new function before checkPlagiarism
 function scorePhraseValue(phrase) {
     let score = 0;
-
-    // Academic terms get higher priority
     if (phrase.match(/\b(research|study|analysis|method|theory|data|results|conclusion)\b/i)) {
         score += 10;
     }
-
-    // Unique technical terms
     if (phrase.match(/\b[a-z]{8,}\b/i)) score += 5;
-
-    // Proper nouns (names, places)
     if (phrase.match(/^[A-Z][a-z]+/)) score += 5;
 
     return score;
@@ -2174,7 +2378,7 @@ const checkPlagiarism = async (req, res) => {
 
 
         // TURBO SEARCH COVERAGE
-        console.log('\n🔍 TURBO 4-KEY SEARCH COVERAGE:');
+        console.log('\n🔍 TURBO 10-KEY SEARCH COVERAGE:');
         console.log(`Key phrases analyzed: ${keyPhrases.length}`);
         console.log(`Total sources found: ${searchResults.length}`);
         console.log(`Successful web fetches: ${searchResults.filter(r => r.fetchedSuccessfully).length}`);
@@ -2413,11 +2617,21 @@ const getStatus = async (req, res) => {
             '🛡️ Intelligent quota management',
             '🔄 Enhanced caching system',
             '✅ Perfect processing synchronization',
+            '📚 ArXiv academic paper integration',
+            '🧬 PubMed medical research access',
+            '🔗 CrossRef citation database',
+            '📜 Internet Archive historical documents',
             '90-95% accuracy rate (Multi-key optimized)'
         ],
         dataSources: {
             google: googleApiKeys.length > 0,
             googleKeys: googleApiKeys.length,
+            brave: braveApiKeys.length > 0,
+            braveKeys: braveApiKeys.length,
+            arxiv: true,
+            pubmed: true,
+            crossref: true,
+            internetArchive: true,
             wikipedia: true,
             intelligentSearch: true,
             originalDetection: true,
@@ -2425,6 +2639,7 @@ const getStatus = async (req, res) => {
             turboMode: true,
             multiKeyRotation: true
         },
+
         keyRotation: keyStats,
         performance: {
             cacheHits: cacheStats.hits,

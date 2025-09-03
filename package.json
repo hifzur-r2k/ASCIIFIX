@@ -25,6 +25,7 @@
     "jsdom": "^26.1.0",
     "leven": "^4.0.0",
     "mammoth": "^1.10.0",
+    "minisearch": "^7.1.2",
     "multer": "^2.0.2",
     "natural": "^8.1.0",
     "node-cache": "^5.1.2",
