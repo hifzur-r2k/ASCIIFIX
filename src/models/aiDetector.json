@@ -1,0 +1,15 @@
+{
+  "weights": {
+    "avgWordLength": 2.901827018903658,
+    "avgSentenceLength": -1,
+    "uniqueWordRatio": 0.27752601433999413,
+    "formalWords": 2.2577319587628866,
+    "casualWords": -0.08247422680412371,
+    "personalPronouns": -2.1030927835051547,
+    "contractions": -0.12371134020618557,
+    "exclamations": 0,
+    "grammarScore": -0.2394043528064146
+  },
+  "bias": 0,
+  "threshold": 0.5
+}

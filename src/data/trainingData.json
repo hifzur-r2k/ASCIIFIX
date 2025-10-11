@@ -1,0 +1,2554 @@
+[
+  {
+    "id": "9182037",
+    "text": "Criminal law defines offenses and prescribes punishments to maintain social order. It distinguishes between felonies, misdemeanors, and infractions. Courts interpret statutes and ensure due process. Criminal law deters wrongdoing, protects victims, and upholds justice, though it must balance enforcement with human rights.,AI,High,signalsNeutral phrasing, structured flow, legal framing,explanationThe clear and generalized  reflects AI authorship.",
+    "label": "",
+    "confidence": "",
+    "signals": "",
+    "explanation": ""
+  },
+  {
+    "id": "5092830",
+    "text": "Climate change results from rising greenhouse gas emissions due to human activity. Impacts include extreme weather, sea-level rise, and biodiversity loss. Mitigation requires reducing emissions, adopting renewable energy, and conservation. Adaptation strategies build resilience in vulnerable regions. Climate action combines science, policy, and global cooperation.,AI,High,signalsCause-effect framing, neutral tone, structured reasoning,explanationThe balanced and fact-driven delivery is characteristic of AI writing.",
+    "label": "",
+    "confidence": "",
+    "signals": "",
+    "explanation": ""
+  },
+  {
+    "id": "7830192",
+    "text": "Contract law governs agreements between parties. Valid contracts require offer",
+    "label": "acceptance",
+    "confidence": "consideration",
+    "signals": "and intention. Breach of contract leads to remedies like damages or specific performance. Contract law supports trust",
+    "explanation": "commerce"
+  },
+  {
+    "id": "2093817",
+    "text": "intelligence transforms industries through automation, prediction, and personalization. Applications span healthcare, finance, education, and communication. Benefits include efficiency and innovation, but challenges involve ethics, bias, and employment. Responsible governance ensures AI development aligns with human values and social good.",
+    "label": "AI",
+    "confidence": "High",
+    "signals": "signalsExpository style",
+    "explanation": "structured flow"
+  },
+  {
+    "id": "5810923",
+    "text": "Corporate social responsibility integrates ethical practices into business strategies. Companies adopt CSR to address environment",
+    "label": "labor",
+    "confidence": "and community concerns. Strong CSR enhances reputation",
+    "signals": "trust",
+    "explanation": "and long-term performance. Superficial CSR risks being seen as greenwashing. Genuine responsibility creates shared value for business and society."
+  },
+  {
+    "id": "7039181",
+    "text": "Human rights law protects dignity and freedoms globally. Instruments like the Universal Declaration of Human Rights set standards for equality",
+    "label": "liberty",
+    "confidence": "and justice. Enforcement relies on national systems and international bodies. Despite violations",
+    "signals": "human rights law guides accountability and supports advocacy for fairness.",
+    "explanation": "AI"
+  },
+  {
+    "id": "8291038",
+    "text": "Business cycles reflect fluctuations in economic activity over time. Phases include expansion",
+    "label": "peak",
+    "confidence": "contraction",
+    "signals": "and recovery. Indicators like GDP",
+    "explanation": "employment"
+  },
+  {
+    "id": "5039189",
+    "text": "International relations analyze interactions between states",
+    "label": "organizations",
+    "confidence": "and non-state actors. Theories like realism",
+    "signals": "liberalism",
+    "explanation": "and constructivism explain cooperation and conflict. Diplomacy"
+  },
+  {
+    "id": "2901837",
+    "text": "Taxation funds public services and redistributes resources. Systems include progressive",
+    "label": "regressive",
+    "confidence": "and proportional taxes. Effective taxation balances efficiency",
+    "signals": "equity",
+    "explanation": "and compliance. Poor tax policies risk evasion"
+  },
+  {
+    "id": "7481920",
+    "text": "Philosophy examines fundamental questions about knowledge",
+    "label": "reality",
+    "confidence": "and ethics. Branches include metaphysics",
+    "signals": "epistemology",
+    "explanation": "logic"
+  },
+  {
+    "id": "9102837",
+    "text": "International trade connects economies through exchange of goods",
+    "label": "services",
+    "confidence": "and capital. It enhances efficiency",
+    "signals": "access",
+    "explanation": "and growth by leveraging comparative advantage. Institutions like the World Trade Organization regulate trade rules and resolve disputes. While trade fosters prosperity"
+  },
+  {
+    "id": "5802910",
+    "text": "Anthropology studies human cultures",
+    "label": "societies",
+    "confidence": "and evolution. It combines archaeology",
+    "signals": "linguistics",
+    "explanation": "and social anthropology. Research uncovers traditions"
+  },
+  {
+    "id": "7928102",
+    "text": "Education empowers individuals and societies by developing knowledge",
+    "label": "skils",
+    "confidence": "and values. Systems vary globally but share goals of learning",
+    "signals": "equity",
+    "explanation": "and innovation. Modern education incorporates technology"
+  },
+  {
+    "id": "3820192",
+    "text": "Healthcare systems provide services that maintain and restore health. They involve prevention",
+    "label": "treatment",
+    "confidence": "and rehabilitation. Public and private models coexist worldwide. Challenges include access",
+    "signals": "affordability",
+    "explanation": "and quality. Strong healthcare improves well-being"
+  },
+  {
+    "id": "1092837",
+    "text": "Microeconomics analyzes decisions of individuals and firms. It studies demand",
+    "label": "supply",
+    "confidence": "pricing",
+    "signals": "and resource allocation. Microeconomic theory explains how markets function and how policies affect behavior. Insights guide competition",
+    "explanation": "consumer welfare"
+  },
+  {
+    "id": "4820193",
+    "text": "Environmental science integrates biology",
+    "label": "chemistry",
+    "confidence": "and geology to study ecosystems. It examines pollution",
+    "signals": "resource use",
+    "explanation": "and climate impacts. Research guides conservation"
+  },
+  {
+    "id": "3982102",
+    "text": "Innovation drives economic growth and social progress. It involves creating new technologies",
+    "label": "processes",
+    "confidence": "or ideas that improve efficiency and quality of life. Governments and businesses invest in research to foster innovation. Challenges include resource constraints and inequality. Innovation ensures adaptability in rapidly changing environments.",
+    "signals": "AI",
+    "explanation": "High"
+  },
+  {
+    "id": "5039281",
+    "text": "Globalization links nations through trade",
+    "label": "technology",
+    "confidence": "and culture. It increases economic growth and connectivity but also raises concerns about inequality",
+    "signals": "cultural erosion",
+    "explanation": "and dependency. Managing globalization requires policies that balance integration with protection of local interests and sustainability."
+  },
+  {
+    "id": "7293810",
+    "text": "Public administration implements government policies and services. It involves planning",
+    "label": "coordination",
+    "confidence": "and regulation. Administrators balance efficiency",
+    "signals": "accountability",
+    "explanation": "and equity. Strong public administration enhances trust and delivers outcomes in health"
+  },
+  {
+    "id": "8019237",
+    "text": "Development economics studies strategies to improve living standards in low-income nations. It explores poverty reduction",
+    "label": "education",
+    "confidence": "health",
+    "signals": "and infrastructure. Global institutions support development through aid",
+    "explanation": "trade"
+  },
+  {
+    "id": "9301827",
+    "text": "Macroeconomics examines large-scale economic factors such as growth",
+    "label": "inflation",
+    "confidence": "and employment. Governments and central banks use fiscal and monetary policies to influence demand and stability. Macroeconomic analysis helps anticipate cycles",
+    "signals": "guide investment",
+    "explanation": "and design interventions. Strong macroeconomic management supports prosperity and reduces vulnerability to crises."
+  },
+  {
+    "id": "2849103",
+    "text": "Chemistry explores matter",
+    "label": "its properties",
+    "confidence": "and interactions. Discoveries in chemistry have led to breakthroughs in medicine",
+    "signals": "materials",
+    "explanation": "and energy. Fields like organic"
+  },
+  {
+    "id": "6093821",
+    "text": "Corporate governance structures decision-making in organizations. It balances interests of stakeholders",
+    "label": "shareholders",
+    "confidence": "and management. Principles like accountability",
+    "signals": "transparency",
+    "explanation": "and fairness guide governance. Strong governance improves trust"
+  },
+  {
+    "id": "7920138",
+    "text": "Ecology studies interactions between organisms and their environments. Ecosystems provide services like food",
+    "label": "water",
+    "confidence": "and climate regulation. Human activities disrupt ecological balance through pollution",
+    "signals": "habitat loss",
+    "explanation": "and climate change. Conservation and restoration efforts strengthen resilience and biodiversity. Ecology highlights interdependence and the need for sustainable practices."
+  },
+  {
+    "id": "6812034",
+    "text": "Human geography analyzes how people interact with environments and spaces. It examines population",
+    "label": "migration",
+    "confidence": "urbanization",
+    "signals": "and cultural landscapes. Geography informs planning",
+    "explanation": "policy"
+  },
+  {
+    "id": "5201938",
+    "text": "Banking systems manage money",
+    "label": "credit",
+    "confidence": "and investment. Banks provide services like savings",
+    "signals": "loans",
+    "explanation": "and payment processing. Central banks regulate stability through monetary policy. Banking supports business activity and household security but faces risks from crises"
+  },
+  {
+    "id": "3982105",
+    "text": "Psychology studies human thoughts",
+    "label": "emotions",
+    "confidence": "and behaviors. Subfields include cognitive",
+    "signals": "social",
+    "explanation": "and developmental psychology. Research methods involve observation"
+  },
+  {
+    "id": "2491830",
+    "text": "Public policy addresses societal challenges through government action. It involves agenda-setting",
+    "label": "formulation",
+    "confidence": "implementation",
+    "signals": "and evaluation. Effective policy promotes equity",
+    "explanation": "growth"
+  },
+  {
+    "id": "8039184",
+    "text": "Labor economics studies employment",
+    "label": "wages",
+    "confidence": "and productivity. It examines interactions between workers",
+    "signals": "employers",
+    "explanation": "and institutions. Policies like minimum wage"
+  },
+  {
+    "id": "4928103",
+    "text": "Ethics guides moral principles in decision-making. It addresses justice",
+    "label": "responsibility",
+    "confidence": "and human dignity. Applied ethics explores fields like medicine",
+    "signals": "business",
+    "explanation": "and technology. Ethical reflection ensures fairness"
+  },
+  {
+    "id": "3209184",
+    "text": "International law governs relations between states and organizations. It includes treaties",
+    "label": "customs",
+    "confidence": "and legal principles regulating trade",
+    "signals": "human rights",
+    "explanation": "and conflict resolution. Enforcement depends on cooperation and institutions like the United Nations and International Court of Justice. While challenges remain"
+  },
+  {
+    "id": "5801930",
+    "text": "Digital transformation reshapes economies and societies through technology integration. Businesses adopt automation",
+    "label": "data analytics",
+    "confidence": "and cloud computing to improve efficiency. Governments use digital platforms for service delivery and transparency. While transformation enhances productivity",
+    "signals": "it raises issues of privacy",
+    "explanation": "access"
+  },
+  {
+    "id": "7281039",
+    "text": "Environmental ethics explores the moral relationship between humans and nature. It challenges exploitation by promoting respect for ecosystems",
+    "label": "biodiversity",
+    "confidence": "and sustainability. Philosophies such as deep ecology advocate intrinsic value in nature beyond human utility. Integrating ethics into policies and practices guides responsible stewardship of the planet.",
+    "signals": "AI",
+    "explanation": "High"
+  },
+  {
+    "id": "4938102",
+    "text": "Economic policy influences growth",
+    "label": "employment",
+    "confidence": "and stability. Governments use fiscal and monetary tools to manage demand",
+    "signals": "inflation",
+    "explanation": "and investment. Well-designed policies foster resilience"
+  },
+  {
+    "id": "3810920",
+    "text": "Food systems connect production",
+    "label": "distribution",
+    "confidence": "and consumption. They determine nutrition",
+    "signals": "livelihoods",
+    "explanation": "and environmental outcomes. Industrial agriculture increases efficiency but often harms ecosystems. Sustainable food systems emphasize diversity"
+  },
+  {
+    "id": "8791032",
+    "text": "Information technology supports communication",
+    "label": "storage",
+    "confidence": "and analysis of data. Innovations like cloud services",
+    "signals": "mobile applications",
+    "explanation": "and artificial intelligence transform business and daily life. While IT increases efficiency"
+  },
+  {
+    "id": "5928104",
+    "text": "Political science examines governance",
+    "label": "institutions",
+    "confidence": "and power. It analyzes systems like democracy",
+    "signals": "authoritarianism",
+    "explanation": "and monarchy. Scholars study participation"
+  },
+  {
+    "id": "6810293",
+    "text": "Marine ecosystems support biodiversity",
+    "label": "climate regulation",
+    "confidence": "and human livelihoods. Overfishing",
+    "signals": "pollution",
+    "explanation": "and warming threaten oceans globally. Protecting marine environments involves conservation zones"
+  },
+  {
+    "id": "7039182",
+    "text": "Sociology studies social structures",
+    "label": "relationships",
+    "confidence": "and behaviors. It explores culture",
+    "signals": "inequality",
+    "explanation": "institutions"
+  },
+  {
+    "id": "5081927",
+    "text": "Entrepreneurship drives innovation",
+    "label": "job creation",
+    "confidence": "and economic growth. Entrepreneurs identify opportunities",
+    "signals": "develop products",
+    "explanation": "and manage risks. Supportive ecosystems with funding"
+  },
+  {
+    "id": "7104829",
+    "text": "Artificial intelligence enhances productivity and decision-making across industries. Applications include healthcare diagnostics",
+    "label": "financial analysis",
+    "confidence": "autonomous vehicles",
+    "signals": "and customer service. AI algorithms process large datasets to identify patterns",
+    "explanation": "optimize operations"
+  },
+  {
+    "id": "5941820",
+    "text": "Climate adaptation involves strategies to reduce the negative impacts of environmental change. Measures include building resilient infrastructure",
+    "label": "improving water management",
+    "confidence": "and adopting sustainable agriculture. Communities",
+    "signals": "governments",
+    "explanation": "and organizations collaborate to mitigate vulnerability. Effective adaptation strengthens social"
+  },
+  {
+    "id": "6812039",
+    "text": "Education technology transforms learning by integrating digital tools into classrooms. Online platforms",
+    "label": "interactive simulations",
+    "confidence": "and adaptive software enhance engagement and personalization. Teachers use technology to assess progress and tailor instruction. While technology expands access",
+    "signals": "equitable implementation remains a challenge. Combining traditional methods with innovation maximizes learning outcomes for diverse student populations.",
+    "explanation": "AI"
+  },
+  {
+    "id": "7329108",
+    "text": "Renewable energy adoption reduces greenhouse gas emissions and mitigates climate change. Solar",
+    "label": "wind",
+    "confidence": "hydro",
+    "signals": "and biomass provide alternatives to fossil fuels. Investments in infrastructure",
+    "explanation": "research"
+  },
+  {
+    "id": "8051932",
+    "text": "Global trade drives economic growth",
+    "label": "job creation",
+    "confidence": "and cultural exchange. Trade agreements and logistics infrastructure facilitate the movement of goods and services. However",
+    "signals": "globalization can create inequalities and environmental pressures. Policies promoting fair trade",
+    "explanation": "sustainability"
+  },
+  {
+    "id": "4301928",
+    "text": "Healthcare systems combine prevention",
+    "label": "treatment",
+    "confidence": "and rehabilitation to maintain public well-being. Technological advancements such as telemedicine",
+    "signals": "electronic records",
+    "explanation": "and precision therapies improve access and outcomes. Challenges like affordability"
+  },
+  {
+    "id": "5918204",
+    "text": "Biodiversity conservation preserves ecosystems",
+    "label": "species",
+    "confidence": "and ecological functions. Human activities threaten habitats through deforestation",
+    "signals": "pollution",
+    "explanation": "and climate change. Strategies include protected areas"
+  },
+  {
+    "id": "7023918",
+    "text": "Urban development shapes social",
+    "label": "economic",
+    "confidence": "and environmental outcomes. Proper planning addresses housing",
+    "signals": "transportation",
+    "explanation": "green spaces"
+  },
+  {
+    "id": "4812093",
+    "text": "Financial systems facilitate investment",
+    "label": "lending",
+    "confidence": "and economic stability. Banks",
+    "signals": "stock markets",
+    "explanation": "and regulatory bodies coordinate the flow of capital. Sound financial management supports business growth"
+  },
+  {
+    "id": "6938102",
+    "text": "Water resource management ensures access",
+    "label": "quality",
+    "confidence": "and sustainability. Strategies include conservation",
+    "signals": "infrastructure development",
+    "explanation": "monitoring"
+  },
+  {
+    "id": "5928103",
+    "text": "Cybersecurity protects systems",
+    "label": "networks",
+    "confidence": "and data from digital threats. Threats include malware",
+    "signals": "phishing",
+    "explanation": "and hacking. Organizations implement firewalls"
+  },
+  {
+    "id": "6831920",
+    "text": "Transportation infrastructure enables trade",
+    "label": "mobility",
+    "confidence": "and social interaction. Roads",
+    "signals": "railways",
+    "explanation": "ports"
+  },
+  {
+    "id": "0.4702938",
+    "text": "Energy sustainability addresses the balance between consumption and conservation. Fossil fuels dominate global energy",
+    "label": "contributing to pollution and climate change. Renewable sources like solar",
+    "confidence": "wind",
+    "signals": "and hydro offer alternatives that reduce environmental impact. Transitioning to sustainable energy involves policy support",
+    "explanation": "technological innovation"
+  },
+  {
+    "id": "5281039",
+    "text": "Urban planning organizes cities to optimize functionality",
+    "label": "sustainability",
+    "confidence": "and livability. It includes zoning",
+    "signals": "infrastructure",
+    "explanation": "transportation"
+  },
+  {
+    "id": "6039182",
+    "text": "Global economics studies production",
+    "label": "distribution",
+    "confidence": "and consumption of goods and services worldwide. It examines trade",
+    "signals": "finance",
+    "explanation": "labor"
+  },
+  {
+    "id": "4781920",
+    "text": "Water management ensures availability and quality for human and ecological needs. It includes conservation",
+    "label": "infrastructure",
+    "confidence": "and policy. Challenges such as drought",
+    "signals": "pollution",
+    "explanation": "and overuse require strategic approaches. Technologies like desalination"
+  },
+  {
+    "id": "5093821",
+    "text": "Healthcare innovation improves patient outcomes through research",
+    "label": "technology",
+    "confidence": "and systems redesign. Telemedicine",
+    "signals": "electronic records",
+    "explanation": "and precision medicine enhance access and efficiency. Ethical considerations"
+  },
+  {
+    "id": "6729104",
+    "text": "Environmental education raises awareness about sustainability",
+    "label": "conservation",
+    "confidence": "and climate action. It empowers individuals to adopt responsible behaviors and participate in community initiatives. Programs integrate science",
+    "signals": "policy",
+    "explanation": "and social perspectives. Education fosters stewardship"
+  },
+  {
+    "id": "5802931",
+    "text": "Financial literacy equips individuals with knowledge to manage money",
+    "label": "investments",
+    "confidence": "and risk. It includes budgeting",
+    "signals": "saving",
+    "explanation": "credit management"
+  },
+  {
+    "id": "6938202",
+    "text": "Disaster preparedness minimizes risks and improves response to natural and human-made hazards. Planning includes early warning systems",
+    "label": "evacuation protocols",
+    "confidence": "and community training. Coordination between governments",
+    "signals": "organizations",
+    "explanation": "and citizens ensures effective action. Preparedness reduces loss of life"
+  },
+  {
+    "id": "7102839",
+    "text": "Public health focuses on protecting and improving community well-being. It includes disease prevention",
+    "label": "health education",
+    "confidence": "and access to care. Strong public health systems detect outbreaks",
+    "signals": "promote healthy lifestyles",
+    "explanation": "and reduce disparities. Investments in vaccination"
+  },
+  {
+    "id": "1582903",
+    "text": "Leadership shapes organizational culture and performance. Effective leaders inspire trust",
+    "label": "set vision",
+    "confidence": "and motivate teams. Leadership styles vary from authoritative to collaborative",
+    "signals": "each influencing outcomes differently. Ethical leadership prioritizes fairness",
+    "explanation": "accountability"
+  },
+  {
+    "id": "8329105",
+    "text": "Tourism drives cultural exchange and economic growth. Destinations attract visitors with natural beauty",
+    "label": "history",
+    "confidence": "and unique experiences. While tourism generates income and jobs",
+    "signals": "it also risks environmental damage and cultural erosion. Sustainable tourism emphasizes local involvement",
+    "explanation": "conservation"
+  },
+  {
+    "id": "5291038",
+    "text": "Justice ensures fairness and accountability in societies. Legal systems provide frameworks for resolving disputes and protecting rights. Access to justice strengthens democracy and trust in institutions. Challenges like corruption",
+    "label": "bias",
+    "confidence": "and inequality undermine justice. Reforms focusing on transparency",
+    "signals": "efficiency",
+    "explanation": "and inclusivity uphold the rule of law and support stable communities."
+  },
+  {
+    "id": "6841029",
+    "text": "Innovation in medicine transforms healthcare outcomes. Advances in diagnostics",
+    "label": "treatments",
+    "confidence": "and digital health tools improve survival and quality of life. Personalized medicine tailors therapies to genetic profiles",
+    "signals": "increasing effectiveness. However",
+    "explanation": "affordability and ethical dilemmas remain challenges. Balancing innovation with accessibility ensures medical progress benefits all populations equitably."
+  },
+  {
+    "id": "9738102",
+    "text": "Trade connects nations through the exchange of goods",
+    "label": "services",
+    "confidence": "and ideas. It boosts growth",
+    "signals": "fosters specialization",
+    "explanation": "and expands consumer choices. Yet"
+  },
+  {
+    "id": "2149803",
+    "text": "Art expresses human creativity",
+    "label": "emotion",
+    "confidence": "and identity. It spans mediums such as painting",
+    "signals": "music",
+    "explanation": "dance"
+  },
+  {
+    "id": "6059183",
+    "text": "Environmental policy guides decisions on protecting natural systems. Effective policies regulate emissions",
+    "label": "promote conservation",
+    "confidence": "and encourage sustainable resource use. International agreements like the Paris Accord highlight global responsibility. Balancing economic growth with ecological protection remains a core challenge. Strong policies ensure environmental health",
+    "signals": "climate stability",
+    "explanation": "and intergenerational equity."
+  },
+  {
+    "id": "4829107",
+    "text": "Migration shapes demographics",
+    "label": "economies",
+    "confidence": "and cultures worldwide. It provides opportunities for labor mobility and knowledge exchange. However",
+    "signals": "migration may trigger social tensions",
+    "explanation": "exploitation"
+  },
+  {
+    "id": "1302981",
+    "text": "Agriculture sustains human survival by producing food and raw materials. Advances in mechanization",
+    "label": "biotechnology",
+    "confidence": "and sustainable practices increase productivity. Challenges like climate change",
+    "signals": "soil degradation",
+    "explanation": "and water scarcity threaten food systems. Supporting farmers with resources"
+  },
+  {
+    "id": "8794021",
+    "text": "Climate change is one of the most pressing challenges of the modern world. Rising global temperatures",
+    "label": "melting ice caps",
+    "confidence": "and extreme weather events demonstrate its widespread impact. Human activities such as burning fossil fuels and deforestation intensify the greenhouse effect. Addressing climate change requires renewable energy",
+    "signals": "sustainable practices",
+    "explanation": "and international cooperation. Immediate action will help protect ecosystems"
+  },
+  {
+    "id": "5928137",
+    "text": "Education empowers individuals and strengthens societies. It promotes critical thinking",
+    "label": "innovation",
+    "confidence": "and civic participation. Access to quality education reduces poverty and inequality",
+    "signals": "equipping people with skills for the future. However",
+    "explanation": "barriers such as gender discrimination"
+  },
+  {
+    "id": "4738209",
+    "text": "Technology transforms how humans live",
+    "label": "work",
+    "confidence": "and interact. Innovations like artificial intelligence",
+    "signals": "biotechnology",
+    "explanation": "and renewable energy drive progress in multiple fields. While technology enhances productivity and connectivity"
+  },
+  {
+    "id": "6529103",
+    "text": "Globalization increases interdependence among nations through trade",
+    "label": "communication",
+    "confidence": "and cultural exchange. It creates opportunities for growth and collaboration but also challenges local industries and traditions. The spread of ideas and technology accelerates innovation",
+    "signals": "yet economic inequality and environmental strain remain concerns. Balanced globalization requires policies that ensure fairness",
+    "explanation": "protect cultures"
+  },
+  {
+    "id": "7102948",
+    "text": "Democracy is a political system that values participation",
+    "label": "accountability",
+    "confidence": "and representation. It allows citizens to influence decisions through voting and civic engagement. Strong democracies protect rights",
+    "signals": "encourage debate",
+    "explanation": "and adapt to change. However"
+  },
+  {
+    "id": "5082917",
+    "text": "Food security ensures reliable access to sufficient",
+    "label": "safe",
+    "confidence": "and nutritious food. Challenges include population growth",
+    "signals": "climate change",
+    "explanation": "and unequal distribution. Innovations in agriculture"
+  },
+  {
+    "id": "3948201",
+    "text": "Energy powers economies and modern lifestyles. Traditional reliance on fossil fuels contributes to pollution and climate change. Renewable sources like solar",
+    "label": "wind",
+    "confidence": "and hydro provide cleaner alternatives that reduce dependence on finite resources. Transitioning to sustainable energy requires investment",
+    "signals": "innovation",
+    "explanation": "and supportive policies. A diversified energy mix strengthens resilience and supports environmental protection."
+  },
+  {
+    "id": "7829104",
+    "text": "Cultural diversity enriches societies by fostering creativity",
+    "label": "empathy",
+    "confidence": "and mutual respect. Exposure to different traditions",
+    "signals": "languages",
+    "explanation": "and perspectives deepens understanding. Global migration and communication increase opportunities for cultural exchange but may also spark tensions. Protecting cultural heritage while encouraging dialogue promotes unity in diversity"
+  },
+  {
+    "id": "2409183",
+    "text": "Innovation drives progress by solving problems and creating opportunities. Entrepreneurs and researchers push boundaries in science",
+    "label": "technology",
+    "confidence": "and business. Innovation improves efficiency",
+    "signals": "enhances quality of life",
+    "explanation": "and spurs economic growth. Yet it can also disrupt industries and societies"
+  },
+  {
+    "id": "6012849",
+    "text": "Environmental conservation protects ecosystems",
+    "label": "biodiversity",
+    "confidence": "and natural resources. Human activity threatens these systems through pollution",
+    "signals": "overexploitation",
+    "explanation": "and habitat destruction. Conservation strategies include protected areas"
+  },
+  {
+    "id": "2948710",
+    "text": "Economic development shapes quality of life across nations. It involves industrial growth",
+    "label": "infrastructure expansion",
+    "confidence": "and improvements in healthcare and education. While rapid development lifts millions out of poverty",
+    "signals": "it may also cause inequality",
+    "explanation": "pollution"
+  },
+  {
+    "id": "6810294",
+    "text": "History records the triumphs and struggles of human civilization. From ancient empires to modern nations",
+    "label": "the past provides lessons about leadership",
+    "confidence": "innovation",
+    "signals": "and resilience. Studying history deepens understanding of cultural identities and global connections. It also warns against repeating mistakes such as conflict",
+    "explanation": "exploitation"
+  },
+  {
+    "id": "9350281",
+    "text": "Renewable resources like forests",
+    "label": "water",
+    "confidence": "and fisheries sustain human societies. Their responsible management prevents depletion and ensures intergenerational equity. Overexploitation leads to habitat loss",
+    "signals": "resource scarcity",
+    "explanation": "and economic decline. Policies promoting conservation"
+  },
+  {
+    "id": "1049582",
+    "text": "Global health challenges include pandemics",
+    "label": "malnutrition",
+    "confidence": "and inadequate healthcare infrastructure. Addressing these issues requires international cooperation",
+    "signals": "scientific research",
+    "explanation": "and equitable resource distribution. Advances in vaccines and treatments improve outcomes"
+  },
+  {
+    "id": "7329105",
+    "text": "Transportation networks enable trade",
+    "label": "travel",
+    "confidence": "and cultural exchange. Roads",
+    "signals": "railways",
+    "explanation": "ports"
+  },
+  {
+    "id": "6049382",
+    "text": "Human rights are fundamental to dignity and freedom. They encompass civil",
+    "label": "political",
+    "confidence": "economic",
+    "signals": "and cultural dimensions. International declarations and treaties promote these rights globally",
+    "explanation": "but enforcement varies. Violations like discrimination"
+  },
+  {
+    "id": "3820194",
+    "text": "Science advances understanding through observation",
+    "label": "experimentation",
+    "confidence": "and theory. Discoveries in physics",
+    "signals": "chemistry",
+    "explanation": "and biology revolutionize daily life"
+  },
+  {
+    "id": "7561902",
+    "text": "Urbanization transforms societies by concentrating populations in cities. It creates opportunities for employment",
+    "label": "education",
+    "confidence": "and cultural exchange. Yet",
+    "signals": "rapid urban growth leads to overcrowding",
+    "explanation": "pollution"
+  },
+  {
+    "id": "4029187",
+    "text": "Water scarcity affects billions worldwide",
+    "label": "driven by climate change",
+    "confidence": "population growth",
+    "signals": "and mismanagement. Lack of clean water threatens health",
+    "explanation": "agriculture"
+  },
+  {
+    "id": "5810294",
+    "text": "Communication is central to human connection. Language",
+    "label": "symbols",
+    "confidence": "and technology shape how people share ideas. From ancient scripts to digital platforms",
+    "signals": "communication methods evolve with society. Effective communication promotes understanding",
+    "explanation": "reduces conflict"
+  },
+  {
+    "id": "5829031",
+    "text": "Technology continues to evolve at a rapid pace",
+    "label": "reshaping industries",
+    "confidence": "lifestyles",
+    "signals": "and interactions. From artificial intelligence to blockchain",
+    "explanation": "innovation drives efficiency and connectivity. AI enhances decision-making in healthcare and finance"
+  },
+  {
+    "id": "7392840",
+    "text": "Climate change is one of the most pressing challenges of our era. Rising global temperatures",
+    "label": "melting ice caps",
+    "confidence": "and unpredictable weather patterns highlight its impact. Human activities",
+    "signals": "especially the burning of fossil fuels and deforestation",
+    "explanation": "accelerate greenhouse gas emissions. The consequences include biodiversity loss"
+  },
+  {
+    "id": "1983745",
+    "text": "Education serves as the cornerstone of personal and societal development. It equips individuals with knowledge",
+    "label": "critical thinking",
+    "confidence": "and problem-solving skills. Beyond academics",
+    "signals": "education fosters social awareness",
+    "explanation": "cultural appreciation"
+  },
+  {
+    "id": "6129830",
+    "text": "Renewable energy provides sustainable alternatives to fossil fuels",
+    "label": "reducing environmental damage and dependence on limited resources. Solar panels capture sunlight",
+    "confidence": "wind turbines generate electricity",
+    "signals": "and hydroelectric dams utilize water flow. These technologies contribute to cleaner air and reduced greenhouse gas emissions. While initial costs may be high",
+    "explanation": "long-term benefits include job creation"
+  },
+  {
+    "id": "8210937",
+    "text": "Globalization connects people",
+    "label": "economies",
+    "confidence": "and cultures across the world. Advances in technology",
+    "signals": "trade agreements",
+    "explanation": "and transportation have accelerated this integration. While globalization promotes cultural exchange"
+  },
+  {
+    "id": "9031842",
+    "text": "Artificial intelligence is transforming industries by enhancing efficiency",
+    "label": "accuracy",
+    "confidence": "and innovation. In healthcare",
+    "signals": "AI supports early disease detection and personalized treatment. In finance",
+    "explanation": "it improves fraud detection and automates trading. Education benefits from adaptive learning systems that tailor instruction to individual needs. Despite advantages"
+  },
+  {
+    "id": "4710293",
+    "text": "Space exploration expands human knowledge and inspires innovation. Missions to the Moon",
+    "label": "Mars",
+    "confidence": "and beyond provide insights into planetary formation and the possibility of extraterrestrial life. Satellites contribute to communication",
+    "signals": "navigation",
+    "explanation": "and weather forecasting"
+  },
+  {
+    "id": "6358921",
+    "text": "Biodiversity underpins ecosystem stability and human well-being. Forests",
+    "label": "oceans",
+    "confidence": "and wetlands host diverse species that provide food",
+    "signals": "medicine",
+    "explanation": "and ecological services. However"
+  },
+  {
+    "id": "7281903",
+    "text": "Democracy relies on citizen participation",
+    "label": "rule of law",
+    "confidence": "and accountability. Elections",
+    "signals": "free press",
+    "explanation": "and active civil society are pillars of democratic governance. While democracy fosters inclusivity and protects rights"
+  },
+  {
+    "id": "5839204",
+    "text": "The healthcare system is central to public well-being",
+    "label": "offering prevention",
+    "confidence": "treatment",
+    "signals": "and rehabilitation services. Effective systems combine accessibility",
+    "explanation": "affordability"
+  },
+  {
+    "id": "4927810",
+    "text": "The concept of time has fascinated humans for centuries. From sundials to atomic clocks",
+    "label": "the measurement of time reflects humanity's quest to understand change.",
+    "confidence": "AI",
+    "signals": "High",
+    "explanation": "signalsFormal tone"
+  },
+  {
+    "id": "7103928",
+    "text": "Global warming is one of the most urgent challenges facing our planet. Rising temperatures",
+    "label": "melting ice caps",
+    "confidence": "and stronger storms highlight the consequences of greenhouse gas emissions.",
+    "signals": "AI",
+    "explanation": "High"
+  },
+  {
+    "id": "6531827",
+    "text": "Space exploration expands our understanding of the universe. From the Apollo missions to Mars rovers",
+    "label": "each milestone brings new insights into the origins of planets and life.",
+    "confidence": "AI",
+    "signals": "High",
+    "explanation": "signalsBalanced sentences"
+  },
+  {
+    "id": "8093746",
+    "text": "Artificial intelligence is transforming industries. Healthcare",
+    "label": "finance",
+    "confidence": "and education benefit from algorithms that improve decision-making and automate processes.",
+    "signals": "AI",
+    "explanation": "High"
+  },
+  {
+    "id": "9375021",
+    "text": "Renewable energy sources like solar",
+    "label": "wind",
+    "confidence": "and hydro are essential for sustainability. They reduce dependence on fossil fuels and help mitigate climate change.",
+    "signals": "AI",
+    "explanation": "High"
+  },
+  {
+    "id": "1829304",
+    "text": "Education plays a central role in shaping societies. It equips individuals with knowledge",
+    "label": "skills",
+    "confidence": "and values that foster economic growth and civic responsibility.",
+    "signals": "AI",
+    "explanation": "High"
+  },
+  {
+    "id": "5209381",
+    "text": "Climate change poses risks to biodiversity. Many species face habitat loss",
+    "label": "altered migration patterns",
+    "confidence": "and extinction due to rising global temperatures.",
+    "signals": "AI",
+    "explanation": "High"
+  },
+  {
+    "id": "6041923",
+    "text": "The internet has revolutionized communication. Social media",
+    "label": "email",
+    "confidence": "and instant messaging allow people to connect across borders instantly.",
+    "signals": "AI",
+    "explanation": "High"
+  },
+  {
+    "id": "7893401",
+    "text": "Democracy thrives when citizens actively participate. Voting",
+    "label": "public debate",
+    "confidence": "and accountability mechanisms strengthen institutions and ensure representation.",
+    "signals": "AI",
+    "explanation": "High"
+  },
+  {
+    "id": "2319847",
+    "text": "Technology has accelerated globalization. Trade",
+    "label": "culture",
+    "confidence": "and information flow seamlessly across nations due to digital networks and transportation advances.",
+    "signals": "AI",
+    "explanation": "High"
+  },
+  {
+    "id": "4839201",
+    "text": "DNA",
+    "label": "or deoxyribonucleic acid",
+    "confidence": "is the hereditary material in almost all living organisms. Its structure is a double helix",
+    "signals": "consisting of two strands twisted around each other. Each strand is made of nucleotides",
+    "explanation": "which include a sugar"
+  },
+  {
+    "id": "5291743",
+    "text": "Photosynthesis is the process by which plants",
+    "label": "algae",
+    "confidence": "and some bacteria convert light energy into chemical energy. Using chlorophyll",
+    "signals": "plants absorb sunlight",
+    "explanation": "water"
+  },
+  {
+    "id": "6723910",
+    "text": "Enzymes are biological catalysts that speed up chemical reactions in living organisms without being consumed. They are proteins with specific shapes that determine their activity. Enzymes lower activation energy",
+    "label": "making processes like digestion",
+    "confidence": "respiration",
+    "signals": "and DNA replication efficient. Each enzyme works best at an optimal temperature and pH. Inhibition",
+    "explanation": "whether competitive or noncompetitive"
+  },
+  {
+    "id": "8910275",
+    "text": "Charles Darwin proposed natural selection as the mechanism of evolution. Organisms produce more offspring than can survive",
+    "label": "leading to competition. Variations among individuals may offer advantages",
+    "confidence": "such as better camouflage or resistance to disease. Those with favorable traits are more likely to survive and reproduce",
+    "signals": "passing on these characteristics. Over time",
+    "explanation": "populations adapt to their environments. Natural selection explains the diversity of life and the development of complex adaptations."
+  },
+  {
+    "id": "3501946",
+    "text": "The human nervous system controls and coordinates body functions. It consists of the central nervous system (CNS)",
+    "label": "made up of the brain and spinal cord",
+    "confidence": "and the peripheral nervous system",
+    "signals": "composed of nerves. Neurons transmit electrical signals",
+    "explanation": "allowing communication between different parts of the body. Reflexes"
+  },
+  {
+    "id": "7245902",
+    "text": "Cell division is vital for growth",
+    "label": "repair",
+    "confidence": "and reproduction. Mitosis produces identical daughter cells",
+    "signals": "ensuring tissue maintenance and healing. It involves phases such as prophase",
+    "explanation": "metaphase"
+  },
+  {
+    "id": "8459120",
+    "text": "Proteins are complex macromolecules composed of amino acids. Their structure is organized into four levels primary",
+    "label": "secondary",
+    "confidence": "tertiary",
+    "signals": "and quaternary. The sequence of amino acids determines folding and function. Proteins serve diverse roles",
+    "explanation": "such as enzymes"
+  },
+  {
+    "id": "2904517",
+    "text": "The periodic table organizes elements based on atomic number",
+    "label": "electron configuration",
+    "confidence": "and recurring properties. Dmitri Mendeleev first proposed its structure",
+    "signals": "which has since been refined. Elements are arranged in groups and periods",
+    "explanation": "with similar chemical behaviors appearing in columns. The table reveals trends such as electronegativity"
+  },
+  {
+    "id": "9105832",
+    "text": "Atoms combine through chemical bonds to form molecules and compounds. The three main types are ionic",
+    "label": "covalent",
+    "confidence": "and metallic bonds. Ionic bonds involve the transfer of electrons",
+    "signals": "creating charged ions that attract each other. Covalent bonds share electrons between atoms",
+    "explanation": "forming stable molecules like water. Metallic bonds allow free movement of electrons"
+  },
+  {
+    "id": "1472096",
+    "text": "Acids and bases are fundamental concepts in chemistry. Acids donate protons (H+ ions)",
+    "label": "while bases accept them. The strength of acids and bases is measured by the pH scale",
+    "confidence": "ranging from 0 to 14. Strong acids",
+    "signals": "like hydrochloric acid",
+    "explanation": "completely dissociate in water"
+  },
+  {
+    "id": "3905827",
+    "text": "The digestive system breaks down food into nutrients that the body can absorb and use for energy",
+    "label": "growth",
+    "confidence": "and repair. It includes organs such as the mouth",
+    "signals": "esophagus",
+    "explanation": "stomach"
+  },
+  {
+    "id": "2594308",
+    "text": "Microorganisms include bacteria",
+    "label": "viruses",
+    "confidence": "fungi",
+    "signals": "and protozoa. Some are beneficial",
+    "explanation": "playing roles in digestion"
+  },
+  {
+    "id": "6819435",
+    "text": "Photosynthesis and cellular respiration are complementary processes. Photosynthesis captures energy from sunlight to produce glucose and oxygen. Cellular respiration",
+    "label": "in turn",
+    "confidence": "breaks down glucose in the presence of oxygen to release energy in the form of ATP. While photosynthesis occurs in chloroplasts of plants",
+    "signals": "respiration occurs in mitochondria of all eukaryotes. Together",
+    "explanation": "these processes sustain life by recycling energy and matter within ecosystems."
+  },
+  {
+    "id": "9721830",
+    "text": "Atoms are the smallest units of matter",
+    "label": "consisting of protons",
+    "confidence": "neutrons",
+    "signals": "and electrons. Protons and neutrons reside in the nucleus",
+    "explanation": "while electrons orbit in shells or energy levels. The arrangement of electrons determines chemical properties. Isotopes are atoms of the same element with different numbers of neutrons. Understanding atomic structure is essential for explaining bonding"
+  },
+  {
+    "id": "4638201",
+    "text": "Ecology studies interactions between organisms and their environments. Ecosystems consist of producers",
+    "label": "consumers",
+    "confidence": "and decomposers linked by food chains and energy flow. Abiotic factors like climate",
+    "signals": "soil",
+    "explanation": "and water influence these systems. Biodiversity supports stability"
+  },
+  {
+    "id": "8031924",
+    "text": "Organic chemistry focuses on carbon-based compounds",
+    "label": "which form the basis of life. Hydrocarbons",
+    "confidence": "composed of carbon and hydrogen",
+    "signals": "are the simplest organic molecules. They exist as alkanes",
+    "explanation": "alkenes"
+  },
+  {
+    "id": "5610249",
+    "text": "The circulatory system transports oxygen",
+    "label": "nutrients",
+    "confidence": "hormones",
+    "signals": "and waste products throughout the body. It includes the heart",
+    "explanation": "blood"
+  },
+  {
+    "id": "7489203",
+    "text": "Chemical reactions involve rearrangement of atoms to form new substances. They may release energy (exothermic) or absorb energy (endothermic). Examples include combustion",
+    "label": "oxidation",
+    "confidence": "and neutralization. The law of conservation of mass states that matter is neither created nor destroyed during reactions. Energy changes in reactions are studied through thermodynamics. Understanding these processes is essential for fields ranging from industrial production to biology and medicine.",
+    "signals": "AI",
+    "explanation": "High"
+  },
+  {
+    "id": "5129347",
+    "text": "Genetics studies how traits are passed from parents to offspring. Gregor Mendel’s experiments with pea plants revealed patterns of inheritance",
+    "label": "such as dominant and recessive traits. Genes",
+    "confidence": "composed of DNA",
+    "signals": "encode proteins that determine characteristics. Variations arise through mutations and recombination",
+    "explanation": "contributing to diversity. Modern genetics has advanced into molecular biology"
+  },
+  {
+    "id": "4210956",
+    "text": "Water is essential for life",
+    "label": "often called the universal solvent. Its polarity allows it to dissolve a wide range of substances",
+    "confidence": "facilitating chemical reactions in cells. Water regulates temperature",
+    "signals": "transports nutrients",
+    "explanation": "and provides structure to organisms. Its hydrogen bonding gives rise to properties like cohesion"
+  },
+  {
+    "id": "9382614",
+    "text": "Inflation occurs when the general price level of goods and services rises over time. It reduces the purchasing power of money and affects both consumers and businesses. Central banks often control inflation using monetary policies like adjusting interest rates. While mild inflation can indicate a growing economy",
+    "label": "high or hyperinflation destabilizes markets. Economists also track core inflation",
+    "confidence": "which excludes volatile food and energy prices",
+    "signals": "to understand long-term trends.",
+    "explanation": "AI"
+  },
+  {
+    "id": "5729401",
+    "text": "Gross Domestic Product",
+    "label": "or GDP",
+    "confidence": "measures the total value of goods and services produced in a country during a specific period. Economists use GDP to assess economic performance and compare growth rates across nations. GDP can be measured by production",
+    "signals": "income",
+    "explanation": "or expenditure approaches. Real GDP adjusts for inflation"
+  },
+  {
+    "id": "8043719",
+    "text": "Taxation is a primary source of government revenue. Direct taxes include income tax and corporate tax",
+    "label": "while indirect taxes involve goods and services tax or customs duties. Progressive taxation charges higher rates to those with greater income",
+    "confidence": "while regressive systems burden lower-income groups relatively more. Taxes fund public infrastructure",
+    "signals": "defense",
+    "explanation": "and welfare. However"
+  },
+  {
+    "id": "6219735",
+    "text": "International trade allows countries to specialize in goods and services they produce efficiently. Comparative advantage explains how nations benefit by focusing on industries where they are relatively more productive. Free trade agreements reduce barriers such as tariffs and quotas",
+    "label": "promoting growth. However",
+    "confidence": "trade can also cause job losses in certain sectors and dependency on imports. Policymakers attempt to balance liberalization with protections for vulnerable industries.",
+    "signals": "AI",
+    "explanation": "High"
+  },
+  {
+    "id": "4531092",
+    "text": "Supply and demand form the foundation of market economics. Demand represents consumers’ willingness to buy at various prices",
+    "label": "while supply reflects producers’ willingness to sell. The interaction determines equilibrium price and quantity. Shifts in supply or demand curves result from factors like technology",
+    "confidence": "income",
+    "signals": "or consumer preferences. Understanding these dynamics helps predict market behavior and informs business decisions",
+    "explanation": "government policies"
+  },
+  {
+    "id": "2394107",
+    "text": "The stock market provides a platform for buying and selling shares of publicly listed companies. It enables firms to raise capital and investors to gain returns. Stock prices fluctuate based on company performance",
+    "label": "investor sentiment",
+    "confidence": "and macroeconomic factors. Indices like the S&P 500 or Sensex track broader market trends. While stock markets can create wealth",
+    "signals": "they also carry risks due to volatility and speculation.",
+    "explanation": "AI"
+  },
+  {
+    "id": "4857203",
+    "text": "Corporate governance refers to the system of rules",
+    "label": "practices",
+    "confidence": "and processes by which companies are directed and controlled. It balances the interests of shareholders",
+    "signals": "management",
+    "explanation": "customers"
+  },
+  {
+    "id": "9174230",
+    "text": "Banking plays a central role in financial systems by channeling savings into investments. Commercial banks provide services such as deposits",
+    "label": "loans",
+    "confidence": "and payment systems. Central banks oversee monetary policy",
+    "signals": "regulate liquidity",
+    "explanation": "and maintain financial stability. Modern banking includes digital innovations like mobile wallets and online transfers. Despite efficiency gains"
+  },
+  {
+    "id": "7014398",
+    "text": "Law serves as a framework for regulating human behavior and resolving conflicts. It includes criminal law",
+    "label": "civil law",
+    "confidence": "constitutional law",
+    "signals": "and administrative law. The rule of law ensures equality and fairness",
+    "explanation": "preventing arbitrary actions. Courts"
+  },
+  {
+    "id": "8352710",
+    "text": "Contract law governs agreements between parties. A valid contract requires offer",
+    "label": "acceptance",
+    "confidence": "consideration",
+    "signals": "and legal capacity. Breach of contract allows remedies such as damages",
+    "explanation": "specific performance"
+  },
+  {
+    "id": "2843109",
+    "text": "Labor law regulates the relationship between employers",
+    "label": "employees",
+    "confidence": "and trade unions. It sets standards for wages",
+    "signals": "working hours",
+    "explanation": "health"
+  },
+  {
+    "id": "5182947",
+    "text": "Intellectual property law protects creations of the mind",
+    "label": "including patents",
+    "confidence": "copyrights",
+    "signals": "trademarks",
+    "explanation": "and trade secrets. These rights encourage innovation and creativity by granting creators exclusive use for a limited period. However"
+  },
+  {
+    "id": "7062391",
+    "text": "International law governs relations between sovereign states and international organizations. It includes treaties",
+    "label": "conventions",
+    "confidence": "and customary practices. Key areas include human rights",
+    "signals": "trade",
+    "explanation": "war"
+  },
+  {
+    "id": "3519027",
+    "text": "Monetary policy refers to actions by central banks to control money supply and interest rates. Expansionary policies stimulate growth by lowering rates",
+    "label": "while contractionary policies curb inflation by tightening credit. Tools include open market operations",
+    "confidence": "reserve requirements",
+    "signals": "and policy rates. Effective policy stabilizes inflation",
+    "explanation": "employment"
+  },
+  {
+    "id": "9023418",
+    "text": "Fiscal policy involves government spending and taxation to influence economic activity. Expansionary fiscal policy increases spending or reduces taxes to boost demand",
+    "label": "while contractionary policy restrains spending to control inflation. Fiscal policy can address unemployment",
+    "confidence": "stabilize growth",
+    "signals": "and finance public goods. However",
+    "explanation": "high deficits and debt levels pose risks. Policymakers must balance growth with sustainability to ensure long-term stability."
+  },
+  {
+    "id": "6210482",
+    "text": "Globalization integrates economies",
+    "label": "cultures",
+    "confidence": "and politics across borders. It facilitates trade",
+    "signals": "investment",
+    "explanation": "and communication. While globalization drives growth and innovation"
+  },
+  {
+    "id": "7841209",
+    "text": "Unemployment occurs when individuals willing to work cannot find jobs. Types include frictional",
+    "label": "structural",
+    "confidence": "cyclical",
+    "signals": "and seasonal unemployment. High unemployment harms economic growth and social stability",
+    "explanation": "while low unemployment supports consumption and productivity. Governments address unemployment with job creation programs"
+  },
+  {
+    "id": "9635140",
+    "text": "Public debt refers to the total borrowing by a government to finance deficits. Debt can be internal or external",
+    "label": "short-term or long-term. Moderate debt may stimulate growth",
+    "confidence": "but excessive debt risks default and reduced investor confidence. Governments manage debt through taxation",
+    "signals": "spending cuts",
+    "explanation": "or refinancing. Sustainable debt levels depend on growth"
+  },
+  {
+    "id": "4283015",
+    "text": "Business ethics involves applying moral principles in commercial cons. Ethical business practices include honesty",
+    "label": "fairness",
+    "confidence": "responsibility",
+    "signals": "and respect for stakeholders. Scandals such as fraud or environmental harm damage reputations and financial stability. Codes of ethics",
+    "explanation": "compliance programs"
+  },
+  {
+    "id": "7653981",
+    "text": "Competition law",
+    "label": "also known as antitrust law",
+    "confidence": "prevents unfair business practices such as monopolies",
+    "signals": "cartels",
+    "explanation": "and abuse of dominance. These laws promote efficiency"
+  },
+  {
+    "id": "5810923",
+    "text": "Consumer protection laws safeguard buyers from unfair trade practices",
+    "label": "defective products",
+    "confidence": "and misleading advertising. These laws empower consumers to seek redress through courts",
+    "signals": "commissions",
+    "explanation": "or regulatory bodies. Transparency"
+  },
+  {
+    "id": "3391826",
+    "text": "Entrepreneurship drives innovation",
+    "label": "job creation",
+    "confidence": "and economic growth. Entrepreneurs identify opportunities",
+    "signals": "take risks",
+    "explanation": "and create value through new products or services. Support systems like venture capital"
+  },
+  {
+    "id": "4938207",
+    "text": "Foreign direct investment occurs when a company invests in business operations in another country. FDI brings capital",
+    "label": "technology",
+    "confidence": "and management expertise",
+    "signals": "benefiting host economies. However",
+    "explanation": "it may also lead to dependence on foreign firms and profit repatriation. Governments encourage FDI through incentives while balancing national interests. FDI is a major driver of globalization and economic integration."
+  },
+  {
+    "id": "7482916",
+    "text": "DNA",
+    "label": "or deoxyribonucleic acid",
+    "confidence": "is the hereditary material in almost all living organisms. Its structure is a double helix",
+    "signals": "consisting of two strands twisted around each other. Each strand is made of nucleotides",
+    "explanation": "which include a sugar"
+  },
+  {
+    "id": "9327145",
+    "text": "Photosynthesis is the process by which plants",
+    "label": "algae",
+    "confidence": "and some bacteria convert light energy into chemical energy. Using chlorophyll",
+    "signals": "plants absorb sunlight",
+    "explanation": "water"
+  },
+  {
+    "id": "5843029",
+    "text": "Enzymes are biological catalysts that speed up chemical reactions in living organisms without being consumed. They are proteins with specific shapes that determine their activity. Enzymes lower activation energy",
+    "label": "making processes like digestion",
+    "confidence": "respiration",
+    "signals": "and DNA replication efficient. Each enzyme works best at an optimal temperature and pH. Inhibition",
+    "explanation": "whether competitive or noncompetitive"
+  },
+  {
+    "id": "1754938",
+    "text": "Charles Darwin proposed natural selection as the mechanism of evolution. Organisms produce more offspring than can survive",
+    "label": "leading to competition. Variations among individuals may offer advantages",
+    "confidence": "such as better camouflage or resistance to disease. Those with favorable traits are more likely to survive and reproduce",
+    "signals": "passing on these characteristics. Over time",
+    "explanation": "populations adapt to their environments. Natural selection explains the diversity of life and the development of complex adaptations."
+  },
+  {
+    "id": "8361294",
+    "text": "The human nervous system controls and coordinates body functions. It consists of the central nervous system (CNS)",
+    "label": "made up of the brain and spinal cord",
+    "confidence": "and the peripheral nervous system",
+    "signals": "composed of nerves. Neurons transmit electrical signals",
+    "explanation": "allowing communication between different parts of the body. Reflexes"
+  },
+  {
+    "id": "2946157",
+    "text": "Cell division is vital for growth",
+    "label": "repair",
+    "confidence": "and reproduction. Mitosis produces identical daughter cells",
+    "signals": "ensuring tissue maintenance and healing. It involves phases such as prophase",
+    "explanation": "metaphase"
+  },
+  {
+    "id": "9104723",
+    "text": "Proteins are complex macromolecules composed of amino acids. Their structure is organized into four levels primary",
+    "label": "secondary",
+    "confidence": "tertiary",
+    "signals": "and quaternary. The sequence of amino acids determines folding and function. Proteins serve diverse roles",
+    "explanation": "such as enzymes"
+  },
+  {
+    "id": "6714025",
+    "text": "The periodic table organizes elements based on atomic number",
+    "label": "electron configuration",
+    "confidence": "and recurring properties. Dmitri Mendeleev first proposed its structure",
+    "signals": "which has since been refined. Elements are arranged in groups and periods",
+    "explanation": "with similar chemical behaviors appearing in columns. The table reveals trends such as electronegativity"
+  },
+  {
+    "id": "2489301",
+    "text": "Atoms combine through chemical bonds to form molecules and compounds. The three main types are ionic",
+    "label": "covalent",
+    "confidence": "and metallic bonds. Ionic bonds involve the transfer of electrons",
+    "signals": "creating charged ions that attract each other. Covalent bonds share electrons between atoms",
+    "explanation": "forming stable molecules like water. Metallic bonds allow free movement of electrons"
+  },
+  {
+    "id": "5641039",
+    "text": "Acids and bases are fundamental concepts in chemistry. Acids donate protons (H+ ions)",
+    "label": "while bases accept them. The strength of acids and bases is measured by the pH scale",
+    "confidence": "ranging from 0 to 14. Strong acids",
+    "signals": "like hydrochloric acid",
+    "explanation": "completely dissociate in water"
+  },
+  {
+    "id": "8194620",
+    "text": "The digestive system breaks down food into nutrients that the body can absorb and use for energy",
+    "label": "growth",
+    "confidence": "and repair. It includes organs such as the mouth",
+    "signals": "esophagus",
+    "explanation": "stomach"
+  },
+  {
+    "id": "7039182",
+    "text": "Microorganisms include bacteria",
+    "label": "viruses",
+    "confidence": "fungi",
+    "signals": "and protozoa. Some are beneficial",
+    "explanation": "playing roles in digestion"
+  },
+  {
+    "id": "2817349",
+    "text": "Photosynthesis and cellular respiration are complementary processes. Photosynthesis captures energy from sunlight to produce glucose and oxygen. Cellular respiration",
+    "label": "in turn",
+    "confidence": "breaks down glucose in the presence of oxygen to release energy in the form of ATP. While photosynthesis occurs in chloroplasts of plants",
+    "signals": "respiration occurs in mitochondria of all eukaryotes. Together",
+    "explanation": "these processes sustain life by recycling energy and matter within ecosystems."
+  },
+  {
+    "id": "9725810",
+    "text": "Atoms are the smallest units of matter",
+    "label": "consisting of protons",
+    "confidence": "neutrons",
+    "signals": "and electrons. Protons and neutrons reside in the nucleus",
+    "explanation": "while electrons orbit in shells or energy levels. The arrangement of electrons determines chemical properties. Isotopes are atoms of the same element with different numbers of neutrons. Understanding atomic structure is essential for explaining bonding"
+  },
+  {
+    "id": "4152830",
+    "text": "Ecology studies interactions between organisms and their environments. Ecosystems consist of producers",
+    "label": "consumers",
+    "confidence": "and decomposers linked by food chains and energy flow. Abiotic factors like climate",
+    "signals": "soil",
+    "explanation": "and water influence these systems. Biodiversity supports stability"
+  },
+  {
+    "id": "6094321",
+    "text": "Organic chemistry focuses on carbon-based compounds",
+    "label": "which form the basis of life. Hydrocarbons",
+    "confidence": "composed of carbon and hydrogen",
+    "signals": "are the simplest organic molecules. They exist as alkanes",
+    "explanation": "alkenes"
+  },
+  {
+    "id": "8362471",
+    "text": "The circulatory system transports oxygen",
+    "label": "nutrients",
+    "confidence": "hormones",
+    "signals": "and waste products throughout the body. It includes the heart",
+    "explanation": "blood"
+  },
+  {
+    "id": "7530146",
+    "text": "Chemical reactions involve rearrangement of atoms to form new substances. They may release energy (exothermic) or absorb energy (endothermic). Examples include combustion",
+    "label": "oxidation",
+    "confidence": "and neutralization. The law of conservation of mass states that matter is neither created nor destroyed during reactions. Energy changes in reactions are studied through thermodynamics. Understanding these processes is essential for fields ranging from industrial production to biology and medicine.",
+    "signals": "AI",
+    "explanation": "High"
+  },
+  {
+    "id": "2748390",
+    "text": "Genetics studies how traits are passed from parents to offspring. Gregor Mendel’s experiments with pea plants revealed patterns of inheritance",
+    "label": "such as dominant and recessive traits. Genes",
+    "confidence": "composed of DNA",
+    "signals": "encode proteins that determine characteristics. Variations arise through mutations and recombination",
+    "explanation": "contributing to diversity. Modern genetics has advanced into molecular biology"
+  },
+  {
+    "id": "6451207",
+    "text": "Water is essential for life",
+    "label": "often called the universal solvent. Its polarity allows it to dissolve a wide range of substances",
+    "confidence": "facilitating chemical reactions in cells. Water regulates temperature",
+    "signals": "transports nutrients",
+    "explanation": "and provides structure to organisms. Its hydrogen bonding gives rise to properties like cohesion"
+  },
+  {
+    "id": "7482916",
+    "text": "DNA",
+    "label": "or deoxyribonucleic acid",
+    "confidence": "is the hereditary material in almost all living organisms. Its structure is a double helix",
+    "signals": "consisting of two strands twisted around each other. Each strand is made of nucleotides",
+    "explanation": "which include a sugar"
+  },
+  {
+    "id": "9327145",
+    "text": "Photosynthesis is the process by which plants",
+    "label": "algae",
+    "confidence": "and some bacteria convert light energy into chemical energy. Using chlorophyll",
+    "signals": "plants absorb sunlight",
+    "explanation": "water"
+  },
+  {
+    "id": "5843029",
+    "text": "Enzymes are biological catalysts that speed up chemical reactions in living organisms without being consumed. They are proteins with specific shapes that determine their activity. Enzymes lower activation energy",
+    "label": "making processes like digestion",
+    "confidence": "respiration",
+    "signals": "and DNA replication efficient. Each enzyme works best at an optimal temperature and pH. Inhibition",
+    "explanation": "whether competitive or noncompetitive"
+  },
+  {
+    "id": "8745123",
+    "text": "Photosynthesis is the process used by plants, algae, and some bacteria to convert light energy into chemical energy, stored in the bonds of glucose. It occurs in the chloroplasts and involves two main stages the light-dependent reactions and the light-independent reactions (Calvin Cycle). In the light-dependent reactions, chlorophyll absorbs sunlight, water is split (photolysis), releasing oxygen as a byproduct, and energy carriers ATP and NADPH are produced. In the Calvin Cycle, which occurs in the stroma, carbon dioxide is fixed into organic molecules using the energy from ATP and NADPH. The overall equation is 6CO₂ + 6H₂O + light energy → C₆H₁₂O₆ + 6O₂.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsHighly structured",
+    "explanation": "technical terminology used precisely"
+  },
+  {
+    "id": "2298561",
+    "text": "The human heart is a four-chambered muscular organ that pumps blood throughout the circulatory system. The two upper chambers are the atria, which receive blood, and the two lower chambers are the ventricles, which pump blood out. Deoxygenated blood enters the right atrium from the body, flows to the right ventricle, and is pumped to the lungs via the pulmonary artery. In the lungs, blood picks up oxygen and releases carbon dioxide. Oxygenated blood returns to the left atrium, moves to the left ventricle, and is then pumped out to the body through the aorta. Valves between the chambers prevent the backflow of blood, ensuring unidirectional flow.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsClear",
+    "explanation": "sequential description of a biological process"
+  },
+  {
+    "id": "5561834",
+    "text": "Mitosis is the process of cell division that results in two genetically identical daughter cells. It is essential for growth, repair, and asexual reproduction. The process has four phases prophase, metaphase, anaphase, and telophase. In prophase, chromosomes condense and the nuclear envelope breaks down. In metaphase, chromosomes align at the cell's equator. In anaphase, sister chromatids separate and are pulled to opposite poles. In telophase, nuclear envelopes reform around the separated chromosomes. Cytokinesis then divides the cytoplasm, completing cell division. This ensures each new cell has the same number and type of chromosomes as the parent cell.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsList-like structure",
+    "explanation": "definitive phase order"
+  },
+  {
+    "id": "7849201",
+    "text": "Enzymes are biological catalysts, typically proteins, that speed up biochemical reactions without being consumed. They work by lowering the activation energy required for a reaction to proceed. Each enzyme has an active site with a specific shape that binds to a particular substrate, following the lock-and-key model. Factors such as temperature, pH, and substrate concentration affect enzyme activity. Each enzyme has an optimal temperature and pH at which it functions best. Extreme conditions can denature the enzyme, altering its shape and rendering it ineffective. This specificity and sensitivity are crucial for regulating metabolic pathways in organisms.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsDefinition followed by mechanistic",
+    "explanation": "listing of key factors"
+  },
+  {
+    "id": "3416785",
+    "text": "DNA replication is the semi-conservative process where a cell makes an identical copy of its DNA before cell division. It occurs during the S phase of the interphase. The double helix unwinds with the help of the enzyme helicase, breaking the hydrogen bonds between bases. The two strands serve as templates. The enzyme DNA polymerase adds complementary nucleotides to each template strand, following the base-pairing rules (A with T, G with C). Because DNA polymerase can only synthesize in the 5' to 3' direction, the leading strand is synthesized continuously, while the lagging strand is synthesized in short fragments called Okazaki fragments, which are later joined by DNA ligase.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsHigh technical accuracy",
+    "explanation": "inclusion of specific enzyme names and directional synthesis"
+  },
+  {
+    "id": "9023456",
+    "text": "The nervous system is divided into the central nervous system (CNS), comprising the brain and spinal cord, and the peripheral nervous system (PNS), which includes all other nerves. The PNS is further divided into the somatic nervous system (controls voluntary movements) and the autonomic nervous system (controls involuntary functions). The autonomic system splits into the sympathetic (fight or flight) and parasympathetic (rest and digest) divisions. Neurons are the functional units, transmitting electrical impulses, while neuroglia are support cells. Communication between neurons occurs at synapses via neurotransmitters.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsHierarchical classification",
+    "explanation": "systematic breakdown of subsystems"
+  },
+  {
+    "id": "6632148",
+    "text": "Respiration is the biochemical process of releasing energy from organic compounds, primarily glucose, within cells. It involves the oxidation of glucose to produce ATP, the energy currency of the cell. Aerobic respiration requires oxygen and occurs in the mitochondria, yielding a net gain of 36-38 ATP molecules per glucose molecule through glycolysis, the Krebs cycle, and the electron transport chain. Anaerobic respiration occurs in the absence of oxygen, yielding only 2 ATP molecules per glucose through glycolysis followed by fermentation, which produces lactate in animals or ethanol and CO₂ in yeast.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsDirect comparison between two processes",
+    "explanation": "precise ATP counts"
+  },
+  {
+    "id": "1189342",
+    "text": "The human digestive system is a series of hollow organs forming a long, twisting tube from the mouth to the anus. Digestion involves both mechanical and chemical processes. Mechanical digestion begins in the mouth with chewing. Chemical digestion involves enzymes like amylase (saliva), pepsin (stomach), and lipase (pancreas). The stomach churns food into chyme. Most absorption occurs in the small intestine, which is lined with villi and microvilli to increase surface area. The large intestine absorbs water and electrolytes, forming feces, which are eliminated through the rectum and anus.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsSequential process description",
+    "explanation": "listing of key enzymes and structures"
+  },
+  {
+    "id": "4456719",
+    "text": "The endocrine system is a network of glands that secrete hormones directly into the bloodstream to regulate various bodily functions. Key glands include the pituitary (master gland), thyroid (metabolism), adrenal (stress response), and pancreas (blood sugar via insulin and glucagon). Hormones are chemical messengers that target specific organs, binding to receptors to trigger a response. This system works closely with the nervous system to maintain homeostasis, but its responses are generally slower and longer-lasting compared to nerve impulses.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsDefinition",
+    "explanation": "listing of components with functions"
+  },
+  {
+    "id": "7723058",
+    "text": "Meiosis is a type of cell division that reduces the chromosome number by half, producing four genetically unique haploid gametes (sperm or egg cells). It involves two successive divisions Meiosis I and Meiosis II. In Meiosis I, homologous chromosomes pair up, cross over (exchanging genetic material), and then separate. This is the reduction division. Meiosis II is similar to mitosis, where sister chromatids separate. The crossing over in prophase I and the random assortment of chromosomes in metaphase I are key sources of genetic variation, which is crucial for evolution.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsClear distinction between meiotic stages",
+    "explanation": "emphasis on purpose and outcome"
+  },
+  {
+    "id": "8891234",
+    "text": "The structure of a nephron, the functional unit of the kidney, is key to understanding urine formation. It consists of a glomerulus (a ball of capillaries) enclosed by Bowman's capsule, followed by a long tubule. Filtration occurs in the glomerulus, where blood pressure forces water and solutes into Bowman's capsule, forming filtrate. As filtrate passes through the tubule, useful substances like glucose and water are reabsorbed into the blood, while waste products and excess ions are secreted into the tubule. This process concentrates the filtrate into urine, which is then collected and excreted.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsAnatomy-to-function progression",
+    "explanation": "clear stepwise  of a physiological process."
+  },
+  {
+    "id": "3345670",
+    "text": "The respiratory system facilitates gas exchange. Inhalation brings oxygen-rich air into the lungs. In the alveoli, oxygen diffuses into the capillaries while carbon dioxide diffuses out of the blood into the alveoli to be exhaled. This diffusion is driven by concentration gradients. The diaphragm and intercostal muscles control breathing. The large surface area, thin walls, and moist lining of the alveoli maximize the efficiency of gas exchange. Hemoglobin in red blood cells transports oxygen from the lungs to body tissues.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsConcise summary of gas exchange mechanics",
+    "explanation": "listing of structural adaptations for function."
+  },
+  {
+    "id": "9965421",
+    "text": "The human eye functions like a camera. Light enters through the cornea, is focused by the lens, and projected onto the retina. Photoreceptor cells in the retina—rods for low-light vision and cones for color vision—convert light into electrical signals. These signals are transmitted via the optic nerve to the brain, which processes them into images. The iris controls the amount of light entering by adjusting the pupil size. The ability of the lens to change shape to focus on near or far objects is called accommodation.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsAnalogy use",
+    "explanation": "structured functional breakdown"
+  },
+  {
+    "id": "2284567",
+    "text": "The menstrual cycle is a approximately 28-day cycle that prepares the female body for pregnancy. It is regulated by hormones from the pituitary gland (FSH, LH) and the ovaries (estrogen, progesterone). The cycle has three phases the follicular phase (development of an ovarian follicle and thickening of the uterine lining), ovulation (release of a mature egg), and the luteal phase (maintenance of the uterine lining by the corpus luteum). If fertilization does not occur, the drop in progesterone triggers menstruation, the shedding of the uterine lining.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsPhasic description",
+    "explanation": "integration of hormonal control with physiological events"
+  },
+  {
+    "id": "5547821",
+    "text": "Genetic inheritance follows patterns established by Mendel's laws. The Law of Segregation states that alleles for a trait separate during gamete formation. The Law of Independent Assortment states that alleles for different traits are distributed to gametes independently. A monohybrid cross studies one trait, while a dihybrid cross studies two. Punnett squares are used to predict the genotypic and phenotypic ratios of offspring. Dominant alleles mask recessive ones, determining the phenotype in heterozygous individuals.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsListing of foundational laws",
+    "explanation": "definitions of key terms"
+  },
+  {
+    "id": "1123489",
+    "text": "The immune system defends the body against pathogens. Innate immunity provides non-specific first-line defenses like skin, phagocytes, and inflammation. Adaptive immunity is specific and has memory. It involves lymphocytes B-cells produce antibodies for humoral immunity, while T-cells (helper and cytotoxic) are responsible for cell-mediated immunity. Upon first exposure to a pathogen, the primary response is slow. Memory cells are created, leading to a faster and stronger secondary response upon re-exposure, which is the principle behind vaccination.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsClear division into innate/adaptive",
+    "explanation": "cell-type specificity"
+  },
+  {
+    "id": "7773098",
+    "text": "Taxonomy is the science of classifying organisms. The hierarchical system, from broadest to most specific, is Domain, Kingdom, Phylum, Class, Order, Family, Genus, Species. Modern classification is based on evolutionary relationships (phylogenetics) rather than just physical characteristics. Tools like cladograms show these relationships. The three domains are Bacteria, Archaea, and Eukarya. Binomial nomenclature, developed by Linnaeus, gives each species a two-part scientific name (Genus species), ensuring universal understanding.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsHierarchical listing",
+    "explanation": "historical con"
+  },
+  {
+    "id": "6639871",
+    "text": "The carbon cycle is a biogeochemical cycle where carbon is exchanged among the biosphere, geosphere, hydrosphere, and atmosphere. Key processes include photosynthesis (removes CO₂), cellular respiration (releases CO₂), decomposition, combustion of fossil fuels (releases CO₂), and ocean uptake. Carbon sinks, like forests and oceans, absorb more carbon than they release. Human activities, particularly burning fossil fuels, have significantly increased atmospheric CO₂ levels, disrupting the natural cycle and contributing to global warming.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsDefinition",
+    "explanation": "listing of processes"
+  },
+  {
+    "id": "8854321",
+    "text": "Homeostasis is the maintenance of a stable internal environment despite external changes. It is achieved through negative feedback loops. A sensor detects a change from the set point, a control center (often the brain) processes this information, and an effector acts to reverse the change. Examples include body temperature regulation (sweating vs. shivering) and blood glucose regulation (insulin vs. glucagon). Positive feedback loops, which amplify changes, are less common and are used in processes like childbirth and blood clotting.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsCore definition",
+    "explanation": "mechanism"
+  },
+  {
+    "id": "2246198",
+    "text": "The polymerase chain reaction (PCR) is a laboratory technique used to amplify a specific segment of DNA, creating millions of copies. It requires a DNA template, primers, heat-resistant DNA polymerase (Taq polymerase), and nucleotides. The process involves repeated cycles of three steps denaturation (heating to separate DNA strands), annealing (cooling to allow primers to bind), and extension (DNA polymerase synthesizes new strands). PCR is fundamental to DNA fingerprinting, genetic testing, medical diagnostics, and forensic science.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsAcronym expansion",
+    "explanation": "list of requirements"
+  },
+  {
+    "id": "5560923",
+    "text": "Ecosystems consist of all the living organisms (biotic factors) and their physical environment (abiotic factors) in a given area. Energy flows through an ecosystem in one direction, from the sun to producers (autotrophs) to consumers (heterotrophs) to decomposers. This is represented by food chains and food webs. Nutrients, however, are cycled within an ecosystem (e.g., water, carbon, nitrogen cycles). The structure of an ecosystem is defined by the interactions between species, such as competition, predation, and symbiosis.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsContrast between energy flow and nutrient cycling",
+    "explanation": "use of key ecological terms"
+  },
+  {
+    "id": "7712389",
+    "text": "The central dogma of molecular biology describes the flow of genetic information DNA is transcribed into RNA, which is then translated into protein. Transcription occurs in the nucleus, where RNA polymerase builds a messenger RNA (mRNA) molecule complementary to a DNA strand. Translation occurs on ribosomes in the cytoplasm. Transfer RNA (tRNA) molecules bring specific amino acids to the ribosome, where they are added to a growing polypeptide chain according to the codons on the mRNA. This sequence dictates a protein's structure and function.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsFoundational principle stated",
+    "explanation": "sequential process description"
+  },
+  {
+    "id": "3396540",
+    "text": "Natural selection is a key mechanism of evolution. It occurs when individuals with certain heritable traits survive and reproduce at a higher rate than others because those traits are better suited to the environment. Over time, this leads to an increase in the frequency of advantageous alleles in a population, resulting in adaptation. The four principles necessary are variation, inheritance, high rate of population growth, and differential survival and reproduction. It is often summarized as 'survival of the fittest,' where fitness refers to reproductive success.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsDefinition",
+    "explanation": "listing of necessary conditions"
+  },
+  {
+    "id": "9921567",
+    "text": "The human ear detects sound waves and aids in balance. The outer ear channels sound to the eardrum, causing it to vibrate. These vibrations are amplified by the ossicles (three small bones) in the middle ear and transmitted to the cochlea in the inner ear. Within the fluid-filled cochlea, hair cells convert the vibrations into electrical impulses sent to the brain via the auditory nerve. For balance, the vestibular system in the inner ear (semicircular canals and otolith organs) detects head position and movement.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsFunctional division (hearing vs. balance)",
+    "explanation": "sequential pathway description for hearing."
+  },
+  {
+    "id": "1174920",
+    "text": "The female reproductive system includes the ovaries (produce eggs and hormones), fallopian tubes (site of fertilization), uterus (site of fetal development), cervix, and vagina. The male reproductive system includes the testes (produce sperm and testosterone), scrotum, epididymis, vas deferens, and penis. Gametogenesis is the production of gametes spermatogenesis in males (continuous) and oogenesis in females (cyclic, begins before birth). Fertilization, the fusion of sperm and egg to form a zygote, typically occurs in the fallopian tube.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsStructured anatomical listing for both sexes",
+    "explanation": "comparison of gamete production processes."
+  },
+  {
+    "id": "4432198",
+    "text": "The lymphatic system is a network of tissues and organs that help rid the body of toxins and waste. It includes lymph nodes, lymph vessels, the spleen, thymus, and tonsils. Its primary functions are to maintain fluid balance by returning interstitial fluid to the blood as lymph, to absorb and transport dietary fats, and to defend the body against pathogens. Lymph nodes filter lymph and house lymphocytes that mount immune responses. The system is a crucial part of the body's defense and circulatory systems.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsListing of components",
+    "explanation": "clear enumeration of multiple functions."
+  },
+  {
+    "id": "7780451",
+    "text": "A reflex arc is a neural pathway that controls a reflex action, which is an automatic, rapid response to a stimulus without involving the brain. The pathway involves a sensory neuron that detects the stimulus, an interneuron in the spinal cord (usually), and a motor neuron that carries the response  to the effector muscle or gland. The knee-jerk reflex is a classic example. This allows for protective actions to occur much faster than if the  had to be processed by the brain.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsDefinition",
+    "explanation": "stepwise neural pathway"
+  },
+  {
+    "id": "3367890",
+    "text": "The structure of DNA is a double helix, resembling a twisted ladder. The sides of the ladder are made of alternating sugar (deoxyribose) and phosphate groups. The rungs are made of nitrogenous bases adenine (A) pairs with thymine (T), and guanine (G) pairs with cytosine (C), held together by hydrogen bonds. This complementary base pairing is crucial for DNA replication and the transmission of genetic information. The sequence of these bases encodes the instructions for building and maintaining an organism.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsAnalogical description",
+    "explanation": "precise chemical components"
+  },
+  {
+    "id": "9943210",
+    "text": "The nitrogen cycle is essential for converting atmospheric nitrogen (N₂) into forms usable by plants. Nitrogen fixation, carried out by bacteria, converts N₂ to ammonia. Nitrification by other bacteria converts ammonia to nitrites and then nitrates, which plants can absorb. Assimilation occurs when plants incorporate nitrates into proteins and nucleic acids. Animals get nitrogen by eating plants. Denitrifying bacteria convert nitrates back to N₂, completing the cycle. Decomposers also break down waste, returning ammonia to the soil.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsCyclical process description",
+    "explanation": "specific bacterial roles at each stage"
+  },
+  {
+    "id": "2285671",
+    "text": "The male reproductive hormone pathway is regulated by the hypothalamic-pituitary-gonadal axis. The hypothalamus secretes GnRH, which stimulates the anterior pituitary to release FSH and LH. FSH promotes spermatogenesis in the testes. LH stimulates Leydig cells in the testes to produce testosterone. Testosterone is responsible for the development of male secondary sexual characteristics and supports spermatogenesis. High levels of testosterone exert negative feedback on the hypothalamus and pituitary to maintain hormonal balance.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsComplex hormonal pathway described accurately",
+    "explanation": "use of acronyms"
+  },
+  {
+    "id": "5509872",
+    "text": "The sliding filament theory explains muscle contraction. During contraction, myosin filaments pull actin filaments toward the center of the sarcomere, the functional unit of a muscle fiber, shortening the muscle. This process is fueled by ATP. Calcium ions, released from the sarcoplasmic reticulum in response to a nerve , bind to troponin, causing a shift in tropomyosin that exposes binding sites on actin, allowing myosin heads to form cross-bridges and initiate the power stroke.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsTheory name stated",
+    "explanation": "stepwise mechanistic"
+  },
+  {
+    "id": "7726543",
+    "text": "The placenta is a temporary organ that develops during pregnancy, connecting the developing fetus to the uterine wall. It allows for the exchange of nutrients, oxygen, and waste products between the maternal and fetal bloodstreams without the blood mixing. It also acts as an endocrine gland, producing hormones like progesterone and estrogen that are vital for maintaining pregnancy. The umbilical cord contains blood vessels that connect the fetus to the placenta.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsClear definition of structure and dual function (exchange and endocrine)",
+    "explanation": "precise terminology."
+  },
+  {
+    "id": "3314562",
+    "text": "Genetic engineering involves directly manipulating an organism's genome using biotechnology. A common technique is recombinant DNA technology, where a gene of interest is inserted into a vector (e.g., a plasmid) to create recombinant DNA. This vector is then introduced into a host organism (like bacteria) where it is replicated and expressed, producing the desired protein, such as human insulin. Other tools include restriction enzymes (to cut DNA) and DNA ligase (to paste DNA together).",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsDefinition",
+    "explanation": "stepwise technical process"
+  },
+  {
+    "id": "9987123",
+    "text": "The brain is divided into three main parts the forebrain, midbrain, and hindbrain. The forebrain includes the cerebrum (responsible for higher functions like thought and action) and the thalamus and hypothalamus (relay and regulatory centers). The hindbrain includes the cerebellum (coordination and balance), pons, and medulla oblongata (vital functions like breathing and heart rate). The midbrain is involved in vision, hearing, and motor control. The cerebral cortex is the highly convoluted outer layer of the cerebrum, associated with complex cognitive functions.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsHierarchical anatomical breakdown",
+    "explanation": "primary function assigned to each structure."
+  },
+  {
+    "id": "2256789",
+    "text": "Pollination is the transfer of pollen from the anther (male part) to the stigma (female part) of a flower. It can be self-pollination (within the same flower or plant) or cross-pollination (between different plants), which promotes genetic diversity. Agents of pollination include wind, water, and animals like insects, birds, and bats. Flowers often have adaptations to attract pollinators, such as bright colors, scent, or nectar. After pollination, fertilization occurs when a pollen tube grows to the ovule, and sperm cells fuse with the egg.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsProcess definition",
+    "explanation": "distinction between types"
+  },
+  {
+    "id": "5534091",
+    "text": "The cell theory is a foundational principle of biology stating that 1) all living organisms are composed of one or more cells, 2) the cell is the basic unit of structure and organization in organisms, and 3) all cells arise from pre-existing cells. This theory was developed from the work of scientists like Schleiden, Schwann, and Virchow. It unified the understanding that cells are the fundamental building blocks of life.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsListing of postulates",
+    "explanation": "historical con"
+  },
+  {
+    "id": "7701238",
+    "text": "The female menstrual cycle is regulated by a complex interplay of hormones. The pituitary gland releases FSH, which stimulates follicle development in the ovary. The developing follicle secretes estrogen, which thickens the uterine lining. A surge in LH from the pituitary triggers ovulation. The ruptured follicle becomes the corpus luteum, which secretes progesterone to maintain the uterine lining. If pregnancy doesn't occur, the corpus luteum degenerates, hormone levels drop, and menstruation begins.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsDetailed hormonal cause-and-effect sequence",
+    "explanation": "integration of ovarian and uterine events."
+  },
+  {
+    "id": "3309871",
+    "text": "The greenhouse effect is a natural process where certain gases in Earth's atmosphere (like CO₂, methane, water vapor) trap heat from the sun, warming the planet to a habitable temperature. However, human activities, such as burning fossil fuels and deforestation, have significantly increased the concentration of these greenhouse gases. This enhanced greenhouse effect is causing an increase in the average global temperature, leading to climate change, rising sea levels, and more extreme weather patterns.",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsDistinction between natural and anthropogenic effect",
+    "explanation": "listing of consequences."
+  },
+  {
+    "id": "9976540",
+    "text": "The human skeleton provides a framework for the body, protects internal organs, enables movement through attachment points for muscles, stores minerals, and produces blood cells in the bone marrow. It is divided into the axial skeleton (skull, vertebral column, rib cage) and the appendicular skeleton (limbs and girdles). Bones are connected by joints, which can be immovable, slightly movable, or freely movable (synovial joints).",
+    "label": "AI-Generated",
+    "confidence": "High",
+    "signals": "signalsListing of multiple functions",
+    "explanation": "anatomical division"
+  },
+  {
+    "id": "5092381",
+    "text": "Passage 67 Before entering upon the detail of the experiments and reasonings which have led me to the new theory of chemistry, it will not be improper to give a general view of the operations of art, and of the phenomena of nature, which are the objects of chemistry. By this means, the reader will be better prepared to understand the experiments and reasonings which follow; and he will be able to form a more just idea of the extent and importance of the science. Chemistry has two objects in view the first is, to decompose natural bodies, in order to discover their elements; the second is, to recombine these elements, so as to form new compounds. It is by these two operations, that we discover the composition of bodies; and it is by these two operations, that we form new substances, which may be useful to the arts, or to the wants of life.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "8241937",
+    "text": "Passage 68 The operations of chemistry may be reduced to a small number. They are the following 1st, Solution, which is the separation of the particles of a body, by means of a fluid. 2d, Filtration, which is the separation of a solid body from a fluid, by means of a sieve, or filter. 3d, Distillation, which is the separation of the volatile parts of a body, by means of heat. 4th, Sublimation, which is the elevation of a body into vapour, and its condensation into a solid, by means of cold. 5th, Precipitation, which is the separation of a solid body from a fluid, by means of another body, which is added to it. 6th, Crystallization, which is the formation of regular figures, by the spontaneous arrangement of the particles of a body. Passage 69 These are the principal operations of chemistry; and they are sufficient to explain the greater part of the phenomena of that science.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "6701928",
+    "text": "Passage 70 Besides these operations, which may be called the general operations of chemistry, there are others, which are peculiar to certain substances, and which cannot be reduced to any general class. Such are amalgamation, calcination, and fermentation. But, as these operations depend upon particular circumstances, they cannot be explained in a general manner; and it will be sufficient to describe them, when we come to treat of the substances to which they belong. Passage 71 The phenomena of nature, which are the objects of chemistry, may be reduced to three classes 1st, The phenomena of combustion. 2d, The phenomena of respiration. 3d, The phenomena of the formation of acids, alkalies, neutral salts, metals, combustibles, and earths. These are the principal phenomena, which chemistry has to explain; and they are sufficient to show the extent and importance of the science.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "9021830",
+    "text": "Passage 72 Combustion is the most striking phenomenon in nature. It is that which has always most attracted the attention of philosophers; and it is that which has contributed most to the progress of chemistry. It is by means of combustion, that we obtain light and heat; and it is by means of combustion, that we decompose bodies, and discover their elements. The theory of combustion has always been the principal object of chemistry; and it is upon the justness of this theory, that the whole science depends. Passage 73 The ancient philosophers were unacquainted with the true theory of combustion. They supposed, that it was produced by the action of fire, or of an igneous matter, which they called phlogiston. This supposition was sufficient to explain the phenomena, in a certain manner; but it was not conformable to truth. It was inconsistent with many facts; and it has been overturned by more accurate experiments.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "7930184",
+    "text": "Passage 74 The true theory of combustion has been discovered in modern times. It is founded upon the knowledge of the composition of the atmosphere, and of the nature of oxygen. It has been discovered, that combustion is nothing else than the combination of a combustible body with oxygen; and that the phenomena of combustion are nothing else than the effects of this combination. This theory is simple, natural, and conformable to truth. It explains all the phenomena of combustion, in a manner which is satisfactory to reason, and which is consistent with facts. Passage 75 It is by means of this theory, that we are enabled to explain the phenomena of respiration, of the formation of acids, of the calcination of metals, and of a great number of other processes, which were before inexplicable.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "5192830",
+    "text": "Passage 76 Respiration is another very important phenomenon, which chemistry has to explain. It is by means of respiration, that animals live; and it is by means of respiration, that they produce heat. The theory of respiration is founded upon the same principles as that of combustion. It has been discovered, that, in respiration, the air which we breathe is decomposed; that the oxygen of the air combines with the blood; and that it produces heat, in the same manner as in combustion. This theory is simple, natural, and conformable to truth. It explains all the phenomena of respiration, in a manner which is satisfactory to reason, and which is consistent with facts. Passage 77 It is by means of this theory, that we are enabled to explain the phenomena of animal heat, of the circulation of the blood, and of the changes which take place in the animal economy.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "2683910",
+    "text": "Passage 78 The formation of acids is another phenomenon, which chemistry has to explain. It has been discovered, that all the acids contain oxygen, as their common principle; and that it is this principle which gives them their acidity. This discovery is one of the most important which has been made in chemistry. It unites together a great number of phenomena, and it introduces simplicity and order into the science. Passage 79 The formation of alkalies, of neutral salts, of metals, of combustibles, and of earths, are phenomena of the same kind. They all depend upon the combination of oxygen with different substances; and they may all be explained in the same manner. It is by means of these combinations, that we are enabled to explain the phenomena of nature, and to render chemistry a true science.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "8531092",
+    "text": "Passage 80 Such is the general view of the operations of art, and of the phenomena of nature, which are the objects of chemistry. It is by means of these operations, and of these phenomena, that we are enabled to explain the composition of bodies; and it is by means of these operations, and of these phenomena, that we are enabled to form new substances. It is by means of these operations, and of these phenomena, that we are enabled to render chemistry useful to the arts, and to the wants of life. Passage 81 Having given this general view, I shall now proceed to the detail of the experiments and reasonings, which have led me to the new theory of chemistry.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "4321890",
+    "text": "Passage 82 I began by examining, with attention, the phenomena of combustion. I first endeavoured to discover, what becomes of a body which burns; and what becomes of the air in which it burns. For this purpose, I made a great number of experiments, upon different combustible bodies, and in different kinds of air. I found, that, in all cases, the combustible body disappeared; and that, in all cases, the air was diminished in quantity. I found, that, in all cases, an acid was produced; and that, in all cases, this acid contained oxygen, as its common principle. Passage 83 From these experiments, I concluded, that combustion is nothing else than the combination of a combustible body with oxygen; and that the phenomena of combustion are nothing else than the effects of this combination.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "9182037",
+    "text": "Passage 84 I next examined the phenomena of respiration. I first endeavoured to discover, what becomes of the air which we breathe; and what becomes of the blood, in the act of respiration. For this purpose, I made a great number of experiments, upon different animals, and in different kinds of air. I found, that, in all cases, the air was diminished in quantity; and that, in all cases, the blood was changed in its properties. I found, that, in all cases, the blood acquired a red colour; and that, in all cases, it became hotter. I found, that, in all cases, the air lost its oxygen; and that, in all cases, the blood acquired oxygen. Passage 85 From these experiments, I concluded, that respiration is nothing else than the combination of the oxygen of the air with the blood; and that the phenomena of respiration are nothing else than the effects of this combination.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "4982037",
+    "text": "Passage 46 The first part contains the general principles of chemistry. It is divided into several chapters, in which I have treated of the following subjects 1st, Of the decomposition of bodies. 2d, Of the formation of compounds. 3d, Of the affinity of substances for each other. 4th, Of the different states of bodies, solid, liquid, and aeriform. 5th, Of the heat which is disengaged or absorbed in chemical combinations. 6th, Of the light which is disengaged or absorbed in chemical combinations. 7th, Of the electricity which is disengaged or absorbed in chemical combinations. 8th, Of the formation of acids. 9th, Of the formation of alkalies. 10th, Of the formation of neutral salts. 11th, Of the formation of metallic substances. 12th, Of the formation of combustible substances. 13th, Of the formation of earthy substances. Passage 47 In treating of these subjects, I have endeavoured to connect the facts together by reasoning; and to show their mutual relations.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "6938104",
+    "text": "Passage 48 The second part contains the description of the simple substances, and of their combinations. These simple substances are divided into four classes 1st, The substances which are capable of supporting combustion. 2d, The substances which are capable of being combined with those which support combustion. 3d, The substances which are incapable of supporting combustion, and of being combined with those which support combustion. 4th, The substances which are simple, and which cannot be referred to any of the other classes. Passage 49 In describing these substances, I have followed the order of the new nomenclature. I have given their properties, their combinations, and their decompositions. I have also given the experiments by which these properties, combinations, and decompositions are ascertained.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "8129037",
+    "text": "Passage 50 The third part contains the description of the compound substances, and of their decomposition. These compound substances are divided into three classes 1st, The acids. 2d, The neutral salts. 3d, The metallic substances. Passage 51 In describing these substances, I have followed the order of the new nomenclature. I have given their properties, their combinations, and their decompositions. I have also given the experiments by which these properties, combinations, and decompositions are ascertained. In this manner, I flatter myself, that I have given a complete system of chemistry; and that I have rendered the science more intelligible, more simple, and more useful, than it has hitherto been.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "2749102",
+    "text": "Passage 52 In the first chapter of the first part, I have treated of the decomposition of bodies. I have shown, that every body, simple or compound, may be decomposed; that the simple bodies may be decomposed into their elements; and that the compound bodies may be decomposed into their simple substances. I have also shown, that the decomposition of bodies is the foundation of chemistry; that it is by means of decomposition, that we discover the elements of bodies; and that it is by means of decomposition, that we form new compounds. Passage 53 In the second chapter, I have treated of the formation of compounds. I have shown, that the formation of compounds depends upon the affinity of substances for each other; and that it is by means of this affinity, that the elements of bodies are united together, and form new compounds.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "9102843",
+    "text": "Passage 54 In the third chapter, I have treated of the affinity of substances for each other. I have shown, that this affinity is the cause of all chemical combinations; that it varies according to the nature of the substances, and according to the circumstances in which they are placed; and that it may be measured, in some cases, by the effects which it produces. I have also shown, that the affinity of substances for each other is modified by heat, by light, and by electricity; and that it is by means of these agents, that we can produce, or prevent, chemical combinations. Passage 55 In the fourth chapter, I have treated of the different states of bodies, solid, liquid, and aeriform. I have shown, that these states depend upon the degree of heat which is applied to them; and that they may be changed from one state to another, by changing the degree of heat.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "6051928",
+    "text": "Passage 56 In the fifth chapter, I have treated of the heat which is disengaged or absorbed in chemical combinations. I have shown, that heat is disengaged when bodies combine; and that it is absorbed when bodies are decomposed. I have also shown, that the heat which is disengaged or absorbed, is proportioned to the quantity of matter which combines or decomposes; and that it is modified by the nature of the substances, and by the circumstances in which they are placed. Passage 57 In the sixth chapter, I have treated of the light which is disengaged or absorbed in chemical combinations. I have shown, that light is disengaged when bodies combine; and that it is absorbed when bodies are decomposed. I have also shown, that the light which is disengaged or absorbed, is proportioned to the quantity of matter which combines or decomposes; and that it is modified by the nature of the substances, and by the circumstances in which they are placed.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "7592014",
+    "text": "Passage 58 In the seventh chapter, I have treated of the electricity which is disengaged or absorbed in chemical combinations. I have shown, that electricity is disengaged when bodies combine; and that it is absorbed when bodies are decomposed. I have also shown, that the electricity which is disengaged or absorbed, is proportioned to the quantity of matter which combines or decomposes; and that it is modified by the nature of the substances, and by the circumstances in which they are placed. Passage 59 In the eighth chapter, I have treated of the formation of acids. I have shown, that all the acids contain oxygen, as their common principle; and that it is this principle which gives them their acidity. I have also shown, that the different acids differ from each other, only in the proportion of oxygen which they contain, and in the base with which this oxygen is combined.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "8421903",
+    "text": "Passage 60 In the ninth chapter, I have treated of the formation of alkalies. I have shown, that all the alkalies contain oxygen, as their common principle; and that it is this principle which gives them their alkaline properties. I have also shown, that the different alkalies differ from each other, only in the proportion of oxygen which they contain, and in the base with which this oxygen is combined. Passage 61 In the tenth chapter, I have treated of the formation of neutral salts. I have shown, that these salts are formed by the combination of acids with alkalies; and that they differ from each other, according to the nature of the acid, and the nature of the alkali, which enter into their composition.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "5132084",
+    "text": "Passage 62 In the eleventh chapter, I have treated of the formation of metallic substances. I have shown, that these substances are formed by the combination of metals with oxygen; and that they differ from each other, according to the nature of the metal, and the proportion of oxygen, which enter into their composition. Passage 63 In the twelfth chapter, I have treated of the formation of combustible substances. I have shown, that these substances are formed by the combination of combustible bodies with oxygen; and that they differ from each other, according to the nature of the combustible body, and the proportion of oxygen, which enter into their composition. Passage 64 In the thirteenth chapter, I have treated of the formation of earthy substances. I have shown, that these substances are formed by the combination of earths with oxygen; and that they differ from each other, according to the nature of the earth, and the proportion of oxygen, which enter into their composition.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "6918204",
+    "text": "Passage 65 Such is the general plan of the present work. I have endeavoured to render it as complete as possible; but I am sensible, that it still contains many imperfections. I shall esteem myself happy, if it shall be found useful to the public; and if it shall contribute, in any degree, to the progress of chemistry. I am not ambitious of the reputation of an Author; I seek only the reputation of having contributed to the advancement of science. If I have succeeded in this, I shall think myself amply rewarded for my labour. Passage 66 Such are the motives which have induced me to undertake the present work; and such are the views with which I have executed it.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "6801924",
+    "text": "Passage 26 In order to form a just idea of the present state of chemistry, it will be proper to take a general view of the principal discoveries which have been lately made in that science. These discoveries relate chiefly to the analysis of the atmosphere, the analysis of water, and the analysis of several of the acids. It has been discovered, that the atmosphere is composed of two elastic fluids, essentially different from each other, namely, oxygen gas, and azote, or nitrogen gas. The first of these is the principle of combustion and of acidity; the second is incapable of supporting either combustion or respiration. Passage 27 This discovery is one of the most important which has been made in chemistry; it explains a great number of phenomena, which were before inexplicable; and it serves as a foundation for the new theory of chemistry.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "9572013",
+    "text": "Passage 28 The analysis of water is another important discovery, which has contributed greatly to the progress of chemistry. It has been discovered, that water is a compound substance, composed of oxygen and hydrogen. This discovery has not only explained the nature of water, but it has also thrown great light upon the phenomena of combustion, of respiration, and of the formation of acids. It has shown, that, in all these processes, water is either formed or decomposed; and it has enabled us to explain them in a simple and natural manner. Passage 29 The analysis of the acids has also contributed greatly to the progress of chemistry. It has been discovered, that all the acids contain oxygen, as their common principle; and that it is this principle which gives them their acidity. This discovery has united together a great number of phenomena, and has introduced simplicity and order into the science.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "7039184",
+    "text": "Passage 30 From the above discoveries, it will be easily perceived, that oxygen is the most important principle in nature. It is the principle of combustion, of acidity, and of respiration. It is the basis of all the acids, and of a great number of other substances. It is diffused through the whole universe, and enters into the composition of most bodies. In short, it is the principle which gives life to nature, and which maintains the order and harmony of the universe. Passage 31 The discovery of oxygen has not only thrown great light upon chemistry, but it has also contributed greatly to the progress of natural philosophy in general. It has enabled us to explain a great number of phenomena, which were before inexplicable; and it has opened to us a new field of inquiry, which promises to be inexhaustible.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "3049187",
+    "text": "Passage 32 The knowledge which we have acquired of the composition of the atmosphere, of the composition of water, and of the composition of the acids, has introduced a great change into chemistry. It has overturned the ancient theory of that science, and has substituted in its place a new theory, more simple, more natural, and more conformable to truth. This new theory explains all the phenomena of chemistry, without having recourse to hypotheses; and it unites together all the known facts, in a simple and natural manner. Passage 33 It is upon this account, that it has been received with so much eagerness by chemists, and that it is daily gaining ground. It is supported by so many facts, and it is so consistent with nature, that it is impossible it should not be true.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "8451920",
+    "text": "Passage 34 The new theory of chemistry may be reduced to the following principles 1st, That oxygen is the principle of combustion, of acidity, and of respiration. 2d, That water is a compound substance, composed of oxygen and hydrogen. 3d, That all the acids contain oxygen, as their common principle. 4th, That the atmosphere is composed of oxygen gas, and azote, or nitrogen gas. From these principles, almost all the phenomena of chemistry may be explained, in a simple and natural manner. Passage 35 Such is the present state of chemistry, and such are the principles upon which it is founded. It is needless to insist upon the advantages which must result from this theory. Every person who has the least knowledge of the subject must be sensible of them.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "2938105",
+    "text": "Passage 36 The first advantage which results from the new theory is, that it introduces simplicity into chemistry. It unites together a great number of facts, by explaining them in a simple and natural manner. It prevents us from being misled by false hypotheses; and it enables us to form just ideas of the phenomena of nature. It introduces precision into the language of chemistry; it enables us to express our ideas clearly and distinctly; and it prevents us from being misled by vague and uncertain expressions. Passage 37 The second advantage is, that it opens to us a new field of inquiry. It leads us to make new experiments; it excites our curiosity; and it promises to lead to new discoveries. It is impossible to form an idea of the number of new facts which may be discovered, by following the principles of the new theory.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "9751028",
+    "text": "Passage 38 The third advantage is, that it enables us to apply chemistry to the arts, with more success than formerly. It furnishes us with new processes; it improves the old ones; and it enables us to explain the phenomena of the arts, in a simple and natural manner. It contributes greatly to the improvement of the arts; and it promises to render them more useful to society. Passage 39 Such are the advantages which result from the new theory of chemistry. It introduces simplicity, precision, and order into the science; it excites our curiosity, by opening to us a new field of inquiry; and it improves the arts, by furnishing them with new processes, and by enabling us to explain their phenomena. It is impossible to form an idea of the progress which chemistry may make, by following the principles of this theory.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "6720914",
+    "text": "Passage 40 The history of chemistry furnishes us with a great number of examples, which prove the necessity of establishing the science upon a solid foundation. We see, that, whenever chemists have been guided by false hypotheses, they have been led into error; and that, whenever they have followed facts, they have made real progress. It is thus that the doctrine of phlogiston, which was founded upon a false hypothesis, has retarded the progress of chemistry; while the discovery of oxygen, which is founded upon facts, has contributed greatly to its advancement. Passage 41 It is therefore of the greatest importance, to establish chemistry upon a foundation of facts; and to explain these facts in a simple and natural manner, without having recourse to hypotheses.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "4301928",
+    "text": "Passage 42 It is upon this principle, that I have composed the present work. I have endeavoured to collect all the facts which are known in chemistry; I have arranged them in a systematic order; and I have explained them in a simple and natural manner. I have adopted the new nomenclature, and the new theory; and I have endeavoured to render them intelligible to the English reader. I have not neglected experiments; but I have not contented myself with merely detailing them. I have connected them together by reasoning; and I have shown their mutual relations. Passage 43 In this manner, I flatter myself, that I have given a complete system of chemistry; and that I have rendered the science more intelligible, more simple, and more useful, than it has hitherto been.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "8051937",
+    "text": "Passage 44 Such is the plan of the present work. It is divided into three parts. The first contains the general principles of chemistry. The second contains the description of the simple substances, and of their combinations. The third contains the description of the compound substances, and of their decomposition. In the first part, I have endeavoured to establish the principles of chemistry, by a series of experiments and reasonings. In the second part, I have described the simple substances, and their combinations, according to the new nomenclature. In the third part, I have described the compound substances, and their decomposition, according to the new theory. Passage 45 By this means, I flatter myself, that I have given a complete system of chemistry; and that I have rendered the science more intelligible, more simple, and more useful, than it has hitherto been.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "7039182",
+    "text": "Passage 12 Chemistry, like every other science, is composed of three things; the series of facts which are the objects of the science; the ideas which represent these facts; and the words by which these ideas are expressed. Like every other science, again, it cannot be improved, except by ameliorating these three constituent parts The facts must be increased in number, and rendered more certain and accurate; the ideas must be corrected and improved, and the expression of these ideas must be rendered strict and simple. Hence, for the improvement of chemistry, we must have books which teach the knowledge of facts; others for the formation of just ideas; and others for the proper use of language. In these three ways the science has been gradually brought to the state in which we find it at present. Passage 13 The first foundation of facts was laid in chemistry when the",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "5810294",
+    "text": "Arabians became the only depositaries of science. They enriched chemistry with a great number of facts, and they made us acquainted with a considerable number of substances unknown to the ancients. They were acquainted with the mineral acids, and knew how to obtain them in a state of purity; and they had carried the art of working metals to a considerable degree of perfection. But, as they sought for the philosopher’s stone, and for the transmutation of metals, rather than for useful discoveries, they have not left us any very distinct or accurate ideas concerning chemistry. Passage 14 Afterwards, when chemistry passed from the hands of the Arabians into those of the Europeans, it was improved by being united with medicine. The physicians were the only chemists of those days. They introduced into chemistry a great number of preparations, and a great number of facts; but, as they were more anxious to multiply recipes than to ascertain principles, the science could not fail to remain in a state of infancy.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "9621038",
+    "text": "Passage 15 At last, chemistry assumed a more scientific appearance when it was separated from medicine. Then it was cultivated for its own sake, and the object of chemists was to multiply experiments, and to deduce rules from them. The works of Stahl, and his doctrine of phlogiston, contributed greatly to give it a systematic form. This doctrine was sufficient to unite together all the known facts, and to give them a plausible ; and it was upon this account that it was received with so much eagerness, and maintained its ground for so long a time. But, as it was founded on a false principle, it necessarily retarded the progress of the science. It is, however, to be observed, that the introduction of this doctrine into chemistry contributed greatly to give it a regular form, and to place it upon a footing with the other sciences.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "3049182",
+    "text": "Passage 16 The theory of Stahl was, in fact, nothing else than a particular language, which united a great number of phenomena under a common expression. It was in this way that it contributed to the progress of the science. But it was impossible that it could be the true theory of chemistry, since it was inconsistent with many facts; and the number of these facts has been increasing daily. At last, the discovery of the decomposition of water, and the knowledge of the composition of the atmosphere, overturned this theory, and substituted in its place one more conformable to truth. Passage 17 Chemistry, then, may be considered as having arrived at a state of perfection, when every phenomenon can be explained in a simple and natural manner, without having recourse to hypotheses, and when the facts are so connected together, that they mutually support and illustrate each other.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "8751930",
+    "text": "Passage 18 The principal object of the present work is to present the science under this point of view. I shall endeavour to exhibit it in a simple manner, freed from every thing hypothetical; and I shall confine myself to a statement of facts, and to the consequences which may be immediately deduced from them. It will be seen, in the sequel, that I have not neglected experiments, and that I have even multiplied them to a great degree. But, as chemistry is not an experimental science only, I shall not content myself with merely detailing experiments; I shall connect them with each other, by a train of reasoning, which will show their mutual relations, and will enable us to form a system which embraces the whole of the science.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "2093481",
+    "text": "Passage 19 The progress of chemistry, like that of every other science, is necessarily connected with the progress of the arts. Every art furnishes new facts, which serve to extend the boundaries of science; and, in return, the sciences serve to improve the arts. It is thus that the art of metallurgy, and that of working metals in general, has furnished a great number of facts to chemistry, and that chemistry has thrown new light upon the arts. The same may be said of the art of dyeing, of that of tanning, of that of making glass, of pottery, and of a great number of others. Chemistry, in its turn, has enlightened these arts, and has improved them. It is by this mutual exchange of assistance, that the sciences and the arts advance together towards perfection.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "6401927",
+    "text": "Passage 20 From the above reflections, it will be easily perceived, that, in order to give a complete system of chemistry, it is not sufficient to detail experiments; it is likewise necessary to connect them together by reasoning. For this purpose, it is necessary to establish a language proper for expressing them. This is the object of the new nomenclature, which has been adopted by the chemists of France, and which is now beginning to be received in other countries. This nomenclature is founded upon very simple principles. Every substance is designated by a name which expresses its composition, and every compound is denominated according to the elements of which it is formed. It is impossible to form an idea of the precision and simplicity which this introduces into chemistry, without having seen it in use. Passage 21 It is to Mr. Lavoisier that we are indebted for this new language.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "4792038",
+    "text": "Passage 22 He is the person who first conceived the idea of reforming the chemical nomenclature, and who carried it into execution. For this purpose, he associated with him several other able chemists; and the result of their united labours was the new nomenclature, which has been published, and which has been already adopted by many chemists of eminence, both in France and in other countries. This new language is undoubtedly one of the greatest improvements which chemistry has received in modern times. It contributes greatly to give precision to the science; it enables us to see more clearly the relations of substances to each other; and it prevents us from being misled by vague and uncertain expressions. In short, it does for chemistry what the introduction of algebra has done for mathematics.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "8950142",
+    "text": "Passage 23 The Author has, in this work, adopted the new nomenclature. He has also made use of the new theory of chemistry, which has lately been established in France, and which is founded upon the decomposition of water, and upon the composition of the atmosphere. This theory, which explains all the phenomena of chemistry in a simple and natural manner, without having recourse to hypotheses, is the one which I have followed in this translation. I have endeavoured to render it intelligible to the English reader, by preserving as much as possible the expressions of the Author, and by adding such explanations as appeared to me to be necessary. In this manner, I flatter myself, that I have rendered the work useful to the public, and that it will serve to diffuse the knowledge of the new theory, and of the improvements which chemistry has lately received.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "5170384",
+    "text": "Passage 24 The present state of chemistry is such, that it may be considered as forming a new science. The number of facts is already very great; and they are so connected together, that they mutually support each other, and form a system which is consistent with itself. The ideas which we have of these facts are clear and precise; and the language which we employ to express them is simple and exact. In this state, chemistry may be compared to geometry, which, though founded upon a small number of principles, explains an infinite number of phenomena. Passage 25 It is upon this account, that chemistry is now studied with so much eagerness; and that it is applied to so many useful purposes. It furnishes us with an infinite number of new substances, and with new methods of analysis; and it enables us to explain the phenomena of nature in a manner which was formerly impossible.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "3849201",
+    "text": "liquid, otherwise the alkali will be driven into the bottle containing the acid, and the effect of the experiment destroyed. As the Author was so much at pains to establish precision in all his experiments, it is the duty of a Translator to point out these mistakes, which may mislead the young beginner, and prevent his getting acquainted with the true nature and utility of the experiments, and with the particular accuracy of the Author. Passage 5 The Translator regrets exceedingly the typographical errors which have crept into the first part of the translation. Many of them were discovered, but not till too late for correction; and, besides, they are comparatively of small importance, when compared with those of the Author himself, mentioned above. Upon the whole, the Translator flatters himself, that, notwithstanding the imperfections pointed out, he has rendered the work useful to the public, and that it will serve to promote the knowledge of chemical philosophy.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "7093814",
+    "text": "The Translator is happy to have an opportunity of acknowledging the many obligations he owes to Mr. Lavoisier, for the information and instruction he has received from his writings; and he hopes that, by this translation, others may partake of the same benefit. It is unnecessary to enter into any detail of the great importance of Mr. Lavoisier’s discoveries, as this will sufficiently appear in the course of the work itself. Passage 6 The Author, by introducing a new nomenclature into chemistry, has rendered that science much more intelligible, and has established a precision of language, which it never before possessed. This, of itself, is a most valuable acquisition, and will contribute greatly to the progress of chemistry, and to the extension of its utility. The Author’s theory, too, of combustion and of acids, founded upon his experiments, has thrown new light upon the science, and promises to lead to many important discoveries.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "5810293",
+    "text": "It is not to be expected, however, that every part of this theory should be immediately received. Many prejudices are to be overcome, and many experiments repeated and verified, before chemists, in general, will adopt it. But, as truth is the object of all philosophical inquiry, we may be assured, that, in the end, the theory will be judged of according to its merits, and will either be received or rejected, as it shall be found to be consistent with facts and with the laws of nature. Passage 7 The Author has, in the present work, taken a general view of the principles of chemistry, and has endeavoured to arrange them in a systematic order. He has avoided, as much as possible, entering into minute details, reserving these for particular treatises. His object has been to lay down the general principles of the science, to explain the phenomena of nature by these principles, and to show how they may be applied to the advancement of the arts.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "8641920",
+    "text": "In this respect, his work is to chemistry what the Elements of Euclid are to geometry. It contains the fundamental principles of the science, and serves as a basis upon which the whole superstructure may be raised. Passage 8 It is needless to insist upon the advantages which must arise from thus establishing chemistry upon a regular and scientific plan. Every person who has the least knowledge of the subject must be sensible of them. It will prevent confusion, by fixing the meaning of terms; it will direct the attention of philosophers to the most important objects of inquiry; and it will render the science more easy to be understood by beginners. In short, it will place chemistry upon the same footing with the other branches of natural philosophy, and will enable it to make a more rapid progress towards perfection.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "4590328",
+    "text": "The Author, in the execution of his plan, has displayed great ingenuity, accuracy, and judgment. He has not only availed himself of his own experiments, but has also made use of those of other philosophers, whenever they could be employed with advantage. He has examined, with the greatest care, the experiments of his predecessors; he has repeated them with scrupulous exactness; and he has either confirmed or corrected them, according as the result agreed or disagreed with truth. Passage 9 In this manner, he has united all the scattered knowledge which existed upon the subject, and has formed it into a regular system. He has enriched the science with a great number of new facts; he has introduced a new language, by which these facts may be clearly expressed; and he has laid the foundation of a new theory, which bids fair to be universally received.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "3102984",
+    "text": "The Translator cannot conclude this Preface, without returning his most sincere thanks to Dr. Black, Professor of Chemistry in the University of Edinburgh, for the assistance he has received from him on this occasion. To that Gentleman he is indebted for the rules in the Appendix, for converting the French weights and measures into English; and he has likewise availed himself of his advice, in the correction of the press, and in other parts of the work. Passage 10 He cannot, at the same time, omit acknowledging the obligations he owes to Mr. Creech, the Publisher, for the liberality with which he undertook the publication, and for the readiness and punctuality with which he has conducted it. To Mr. Robertson, the Engraver, he is under great obligations, for the care and attention he has bestowed upon the plates; and to Mr. Smellie, the Printer, for the accuracy with which he has executed the printing.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "9174028",
+    "text": "Such are the circumstances under which the present translation has been executed and published. The Translator submits it to the judgment of the public, with great deference, and with an anxious desire that it may be found useful. Passage 11 He is fully sensible of its imperfections; but he trusts that these will be excused, in consideration of the difficulties he has had to encounter, and of the shortness of the time allowed him for the performance of his task. He flatters himself, that, notwithstanding these disadvantages, the work will be found to convey a clear and accurate idea of the Author’s doctrine; and he will think himself amply rewarded, if it shall be the means of diffusing the knowledge of chemistry, and of exciting in the minds of others that ardour for the science, which has long animated his own.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "3849201",
+    "text": "liquid, otherwise the alkali will be driven into the bottle containing the acid, and the effect of the experiment destroyed. As the Author was so much at pains to establish precision in all his experiments, it is the duty of a Translator to point out these mistakes, which may mislead the young beginner, and prevent his getting acquainted with the true nature and utility of the experiments, and with the particular accuracy of the Author. Passage 5 The Translator regrets exceedingly the typographical errors which have crept into the first part of the translation. Many of them were discovered, but not till too late for correction; and, besides, they are comparatively of small importance, when compared with those of the Author himself, mentioned above. Upon the whole, the Translator flatters himself, that, notwithstanding the imperfections pointed out, he has rendered the work useful to the public, and that it will serve to promote the knowledge of chemical philosophy.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "7093814",
+    "text": "The Translator is happy to have an opportunity of acknowledging the many obligations he owes to Mr. Lavoisier, for the information and instruction he has received from his writings; and he hopes that, by this translation, others may partake of the same benefit. It is unnecessary to enter into any detail of the great importance of Mr. Lavoisier’s discoveries, as this will sufficiently appear in the course of the work itself. Passage 6 The Author, by introducing a new nomenclature into chemistry, has rendered that science much more intelligible, and has established a precision of language, which it never before possessed. This, of itself, is a most valuable acquisition, and will contribute greatly to the progress of chemistry, and to the extension of its utility. The Author’s theory, too, of combustion and of acids, founded upon his experiments, has thrown new light upon the science, and promises to lead to many important discoveries.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "5810293",
+    "text": "It is not to be expected, however, that every part of this theory should be immediately received. Many prejudices are to be overcome, and many experiments repeated and verified, before chemists, in general, will adopt it. But, as truth is the object of all philosophical inquiry, we may be assured, that, in the end, the theory will be judged of according to its merits, and will either be received or rejected, as it shall be found to be consistent with facts and with the laws of nature. Passage 7 The Author has, in the present work, taken a general view of the principles of chemistry, and has endeavoured to arrange them in a systematic order. He has avoided, as much as possible, entering into minute details, reserving these for particular treatises. His object has been to lay down the general principles of the science, to explain the phenomena of nature by these principles, and to show how they may be applied to the advancement of the arts.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "8641920",
+    "text": "In this respect, his work is to chemistry what the Elements of Euclid are to geometry. It contains the fundamental principles of the science, and serves as a basis upon which the whole superstructure may be raised. Passage 8 It is needless to insist upon the advantages which must arise from thus establishing chemistry upon a regular and scientific plan. Every person who has the least knowledge of the subject must be sensible of them. It will prevent confusion, by fixing the meaning of terms; it will direct the attention of philosophers to the most important objects of inquiry; and it will render the science more easy to be understood by beginners. In short, it will place chemistry upon the same footing with the other branches of natural philosophy, and will enable it to make a more rapid progress towards perfection.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "4590328",
+    "text": "The Author, in the execution of his plan, has displayed great ingenuity, accuracy, and judgment. He has not only availed himself of his own experiments, but has also made use of those of other philosophers, whenever they could be employed with advantage. He has examined, with the greatest care, the experiments of his predecessors; he has repeated them with scrupulous exactness; and he has either confirmed or corrected them, according as the result agreed or disagreed with truth. Passage 9 In this manner, he has united all the scattered knowledge which existed upon the subject, and has formed it into a regular system. He has enriched the science with a great number of new facts; he has introduced a new language, by which these facts may be clearly expressed; and he has laid the foundation of a new theory, which bids fair to be universally received.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "3102984",
+    "text": "The Translator cannot conclude this Preface, without returning his most sincere thanks to Dr. Black, Professor of Chemistry in the University of Edinburgh, for the assistance he has received from him on this occasion. To that Gentleman he is indebted for the rules in the Appendix, for converting the French weights and measures into English; and he has likewise availed himself of his advice, in the correction of the press, and in other parts of the work. Passage 10 He cannot, at the same time, omit acknowledging the obligations he owes to Mr. Creech, the Publisher, for the liberality with which he undertook the publication, and for the readiness and punctuality with which he has conducted it. To Mr. Robertson, the Engraver, he is under great obligations, for the care and attention he has bestowed upon the plates; and to Mr. Smellie, the Printer, for the accuracy with which he has executed the printing.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "9174028",
+    "text": "Such are the circumstances under which the present translation has been executed and published. The Translator submits it to the judgment of the public, with great deference, and with an anxious desire that it may be found useful. Passage 11 He is fully sensible of its imperfections; but he trusts that these will be excused, in consideration of the difficulties he has had to encounter, and of the shortness of the time allowed him for the performance of his task. He flatters himself, that, notwithstanding these disadvantages, the work will be found to convey a clear and accurate idea of the Author’s doctrine; and he will think himself amply rewarded, if it shall be the means of diffusing the knowledge of chemistry, and of exciting in the minds of others that ardour for the science, which has long animated his own.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "9182047",
+    "text": "Passage 56 The second of the two gasses, which forms the major part of the atmosphere, has properties the reverse of the former. Animals are suffocated in it in a few seconds; flame is immediately extinguished when plunged into it; and it has been found that its base enters as an ingredient into a number of mineral substances, and even into some from the animal and vegetable kingdoms. We have named this azote, from the Greek privative [Greek a], and [Greek zoê] vita, because it is fatal to such animals as are forced to breathe it alone. But we are by no means to conclude, from this circumstance, that this gas is of a poisonous nature; the injury results entirely from the privation of oxygen, which is necessary for supporting the function of respiration; so that azotic gas is rather hurtful in a negative than in a positive manner. Since these two gases are mixed together in a certain determined proportion, and since this mixture constitutes the atmosphere we breathe, it becomes extremely important to distinguish them from each other by names which indicate their different properties.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex sentence structure",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "9182048",
+    "text": "Passage 57 By continuing the name of air or atmosphere to the mixture of the two gasses, and by calling the base of vital air oxygen, and that of noxious air azote, all equivocation is avoided. The name of gasses, which I have adopted for these permanently elastic fluids, is taken from a Flemish word ghas, employed by Van Helmont, which signifies the wild spirit or breath; the word gas expressing, in my acceptation of it, the same meaning with permanently elastic fluids. I trust I shall not be censured for introducing new terms. The necessity of them is obvious; and it would be impossible to preserve precision and perspicuity of language, without carefully distinguishing by proper names the objects of our consideration. In what follows, I shall show that the principle which combines with metals during calcination, and increases their weight, and which in this state of combination may be called the metallic calx, is neither more nor less than the purer, or more respirable, part of the air we breathe; and, consequently, that the augmentation of weight, so remarkable during the calcination of metals, proceeds from the immense quantity of this pure air that is fixed during the operation.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "First-person narrative",
+    "explanation": "historical tone"
+  },
+  {
+    "id": "9182049",
+    "text": "Passage 58 The apparatus described in Plate IV. Fig. 3. is very proper for showing the decomposition of air by means of the calcination of mercury. This apparatus consists of a glass retort A, having its beak adapted to the tubulated recipient BC, half filled with water. Having introduced four ounces of pure mercury into the retort A, and having fitted on the recipient, I carefully marked the height of the water in the receiver BC; I likewise marked, upon the jar, the height of the air it contained, being about 50 cubical inches. Having thus prepared the apparatus, I placed the retort in a furnace, and kept the mercury at a heat little inferior to its boiling point for twelve days successively, carefully observing what took place. During the first day nothing remarkable happened; the mercury, though very hot, did not suffer any apparent change, and remained in its fluid state, without the volume of air in the recipient being diminished. On the second day, small red particles began to appear on the surface of the mercury, which, during the four or five following days, gradually increased in number and size; after which they ceased to increase, and remained in the same state.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "First-person narrative",
+    "explanation": "descriptive procedural language"
+  },
+  {
+    "id": "9182050",
+    "text": "Passage 59 At the end of the twelve days, seeing that the calcination of the mercury did not at all increase, I extinguished the fire, and allowed the vessels to cool. The volume of air in the receiver BC, which, at the beginning of the experiment, was about 50 cubical inches, was found to be reduced to between 42 and 43 cubical inches; consequently it had lost about 1/6 of its volume. Afterwards, having collected all the red particles, formed during the operation, from the running mercury, I found these to amount to 45 grains. I was unable to reduce this red powder back again to running mercury, without addition; but when I mixed it with charcoal powder, and exposed it to a violent heat in a small retort, I recovered 41-1/2 grains of mercury in its running state, and 3-1/2 grains were dissipated and lost. From these experiments we learn, that, during the calcination of mercury, air is absorbed from the atmosphere; that the calx of mercury is heavier than mercury, in the proportion of the quantity of air absorbed; and that the mercury can be restored to its metallic state, by separating the air which had been combined with it during calcination. But I was still to learn what had become of the part of the air absorbed in the experiment, and what peculiar species of air remained in the receiver.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "First-person narrative",
+    "explanation": "analytical reasoning"
+  },
+  {
+    "id": "9182051",
+    "text": "Passage 60 To determine this, I took the 42 cubical inches of air remaining in the receiver, and having passed it up into a smaller receiver, adapted to the pneumato-chemical apparatus, I introduced two ounces of quicksilver, and a sufficient quantity of the same red powder above mentioned. Having applied a proper degree of heat to the retort, the red powder was speedily reduced to running mercury, and, at the same time, an air was expelled, which increased the volume of that already contained in the receiver from 42 to about 50 inches, and which possessed the following remarkable properties A taper burned in this air with a dazzling splendour, charcoal threw out sparks, and consumed with astonishing rapidity, and all bodies combustible in common air were consumed in this with a brilliancy of flame that was almost insupportable to the eye. This species of air was discovered almost at the same time by Dr Priestley, Mr Scheele, and myself. Dr Priestley gave it the name of dephlogisticated air; Mr Scheele called it empyreal air; for my part, I named it highly respirable air, to which has since been substituted the term oxygen gas.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "First-person narrative",
+    "explanation": "descriptive language"
+  },
+  {
+    "id": "9182052",
+    "text": "Passage 61 The experiments detailed in the foregoing sections, prove that air is not a simple element, such as it was long believed to be, but that it is composed of two gasses or aeriform fluids of very different and even opposite qualities. As this important discovery is one of the foundations of the theory I have to unfold, and as it overturns the ancient doctrine of the elements, I thought it necessary to support it by the most convincing proofs. I might have contented myself with relating the experiment upon mercury, but I judged proper to add the experiments upon iron and lead, to show that the same effects took place with different metals, though in unequal degrees. It results, from these experiments, that the respirable part of air, or oxygen, forms about one-fourth or one-fifth of the bulk of the atmosphere; that the remainder, or about four-fifths, consists of azotic gas, which is noxious to respiration, and incapable of supporting combustion; so that atmospheric air is not a simple element, as was long supposed, but a mixture of two gasses, oxygen and azote.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Argumentative structure",
+    "explanation": "historical significance"
+  },
+  {
+    "id": "9182053",
+    "text": "Passage 62 Since azotic gas constitutes the noxious part of the atmosphere, or rather that part which is unfit for respiration and combustion, and since it makes no change upon lime-water, nor is absorbed by it, we may readily determine its proportion in any given portion of atmospheric air. For this purpose, we may either diminish the oxygen by calcination of metals, as in the above recited experiments; or we may abstract it by means of liver of sulphur, which absorbs the oxygen, and leaves the azotic gas nearly pure; or, finally, we may employ phosphorus, which has a stronger affinity than almost any other substance with oxygen. The first method is tedious, and requires a great apparatus; the second is liable to errors, from the difficulty of procuring liver of sulphur in a proper state; but the third method, by means of phosphorus, is simple, expeditious, and sufficiently exact for most purposes. For this last species of experiment, we may employ the apparatus represented Plate III. Fig. 3. This consists of a large glass bell A, having an opening in the bottom, which is closed with a glass stopper B.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Comparative analysis",
+    "explanation": "procedural language"
+  },
+  {
+    "id": "9182054",
+    "text": "Passage 63 Having provided ourselves with a piece of phosphorus about the thickness of a goose-quill, let it be introduced into a little cup made of iron wire, and let this be passed up through the opening into the bell-glass; having previously marked the height of the air in the bell. Immediately close the opening with the stopper B, and set the whole apparatus in a shallow bason half filled with water. Having then heated the point of an iron, made red hot in the fire, apply it to the outside of the glass, opposite to the phosphorus, so as to heat the phosphorus sufficiently for making it take fire. When the combustion is begun, it will continue of itself till the whole phosphorus is consumed. As the phosphorus burns, the white vapour which is formed is gradually absorbed by the water, and the air in the bell-glass is proportionally diminished. When the operation is finished, and the whole is become cold, it will be found that the volume of air is reduced about 1/5 part; and that which remains is pure azotic gas, unfit for respiration, combustion, or calcination.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Instructional language",
+    "explanation": "imperative mood"
+  },
+  {
+    "id": "9182055",
+    "text": "Passage 64 It is not possible to obtain azotic gas perfectly pure by any of these methods, because azote has a slight affinity with oxygen, especially when assisted by electric sparks, or any similar circumstances favourable to their union. It is not easy even to preserve azotic gas pure, when obtained, if it be long kept over water or mercury, because the oxygen gas which these liquids always contain in solution, gradually mixes with the azotic gas. Pure azotic gas is chiefly procured from the mineral alkali, or from that produced by art, which consists of azote combined with hydrogen. When nitric acid is poured upon this alkali, it combines with the hydrogen, and forms water, whilst the azote is set free. The water is formed during the effervescence, and the azote gas is expelled. I shall describe the particular method of performing this experiment, when I treat more fully of azote and its combinations. Having thus shown that common air is composed of two gasses, oxygen and azote, mingled together without any chemical union, I proceed to give an account of each of these gasses separately.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Analytical reasoning",
+    "explanation": "limitations discussion"
+  },
+  {
+    "id": "9182056",
+    "text": "Passage 65 From what has been premised, it is evident that the former appellation of this gas was quite improper It was called vital air, as supporting life; dephlogisticated air, from a supposition that it was common air deprived of its phlogiston; and highly respirable air, from the circumstance of its being peculiarly adapted for the function of respiration. The name of oxygen, which signifies generator of acids, describes one of its most characteristic properties; for it has been found by a number of very exact experiments, that this element is the constituent principle of most acids; I say most acids, because there are some, as the muriatic and fluoric acids, into the composition of which oxygen does not enter. From the experiments already related, it appears that oxygen forms about one-fourth of the bulk, or one-third of the weight, of our atmosphere. It is the most heavy of the two gasses which constitute the common air, in the proportion of 1000 to",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Historical con",
+    "explanation": "etymological"
+  },
+  {
+    "id": "9182067",
+    "text": "Passage 57 The narrative in i. and ii. show the royalty of the new-born child. The title Son of David occurs with special frequency in this Gospel. The following instances are without parallels in the other Gospels ix. 27; xii. 23; xv. 22; xxi. 9; xxi. 15. The title Son of God is also used with somewhat greater frequency than in Mark and Luke ii. 15; xiv. 33; xvi. 16; xxii. 2 seq. (where it is implied); xxvii. 40",
+    "label": "43.",
+    "confidence": "Human",
+    "signals": "High",
+    "explanation": "Analytical commentary"
+  },
+  {
+    "id": "9182068",
+    "text": "Passage 58 The thought of the future coming of Christ, and in particular of the judgment to be executed by Him then, is much more prominent in this Gospel than in the others. Some of the following predictions are peculiar to it, while in several others there are additional touches vii. 22, 23; x. 23, 32, 33; xiii. 39-43; xvi. 27, 28; xix. 28; xxiv. 3, 27, 30, 31, 37, 39; xxv. 31-46; xxvi. 64. The majesty of Christ is also impressed upon us by the signs at His crucifixion, some of which are related only in this Gospel, xxvii. 51-53, and by the sublime vision of the Risen Christ at the close, xxviii. 16-20.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Thematic analysis",
+    "explanation": "comparative theology"
+  },
+  {
+    "id": "9182069",
+    "text": "Passage 59 (5) Time of Composition and Readers addressed.--The signs of dogmatic reflection in this Gospel point to its having been composed somewhat late in the 1st century, probably after Luke's Gospel, and this is in accord with the conclusion that some insertions had been made in the Marcan document used by this evangelist which were not in that used by Luke (see LUKE, GOSPEL OF ST).",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Scholarly argumentation",
+    "explanation": "use of specialized terms (Marcan document"
+  },
+  {
+    "id": "9182070",
+    "text": "Passage 60 We may assign A.D. 80-100 as a probable time for the composition. The author was in all probability a Jew by race, and he would seem to have addressed himself especially to Jewish readers; but they were Jews of the Dispersion. For although he was in specially close touch with Palestine, either personally or through the sources at his command, or both, his book was composed in Greek by the aid of Greek documents.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Historical reasoning",
+    "explanation": "nuanced audience analysis"
+  },
+  {
+    "id": "9182071",
+    "text": "Passage 61 See commentaries by Th. Zahn (1903) and W. C. Allen (in the series of International Critical Commentaries, 1907); also books on the Four Gospels or the Synoptic Gospels cited at the end of GOSPEL. MATTHEW CANTACUZENUS, Byzantine emperor, was the son of John VI. Cantacuzenus (q.v.). In return for the support he gave to his father during his struggle with John V. he was allowed to annex part of Thrace under his own dominion and in 1353 was proclaimed joint emperor.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Abrupt thematic shift",
+    "explanation": "bibliographic reference"
+  },
+  {
+    "id": "9182072",
+    "text": "Passage 62 From his Thracian principality he levied several wars against the Servians. An attack which he prepared in 1350 was frustrated by the defection of his Turkish auxiliaries. In 1357 he was captured by his enemies, who delivered him to the rival emperor, John V. Compelled to abdicate, he withdrew to a monastery, where he busied himself with writing commentaries on the Scriptures.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Chronological narrative",
+    "explanation": "specific historical events and dates"
+  },
+  {
+    "id": "9182073",
+    "text": "Passage 63 MATTHEW OF PARIS (d. 1259), English monk and chronicler known to us only through his voluminous writings. In spite of his surname, and of his knowledge of the French language, his attitude towards foreigners attests that he was of English birth. He may have studied at Paris in his youth, but the earliest fact which he records of himself is his admission as a monk at St Albans in the year 1217. His life was mainly spent in this religious house.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Biographical introduction",
+    "explanation": "historiographic detail"
+  },
+  {
+    "id": "9182074",
+    "text": "Passage 64 In 1248",
+    "label": "however",
+    "confidence": "he was sent to Norway as the bearer of a message from Louis IX. of France to Haakon VI.; he made himself so agreeable to the Norwegian sovereign that he was invited",
+    "signals": "a little later",
+    "explanation": "to superintend the reformation of the Benedictine monastery of St Benet Holme at Trondhjem. Apart from these missions"
+  },
+  {
+    "id": "9182075",
+    "text": "Passage 65 Matthew edited anew the works of Abbot John de Cella and Roger of Wendover",
+    "label": "which in their altered form constitute the first part of his most important work",
+    "confidence": "the Chronica majora. From 1235",
+    "signals": "the point at which Wendover dropped his pen",
+    "explanation": "Matthew continued the history on the plan which his predecessors had followed. He derived much of his information from the letters of important personages"
+  },
+  {
+    "id": "9182076",
+    "text": "Among his informants were Earl Richard of Cornwall and Henry III. With the latter he appears to have been on terms of intimacy. The king knew that Matthew was writing a history",
+    "label": "and showed some anxiety that it should be as exact as possible. In 1257",
+    "confidence": "in the course of a week's visit to St Albans",
+    "signals": "Henry kept the chronicler beside him night and day",
+    "explanation": "and guided my pen"
+  },
+  {
+    "id": "9182077",
+    "text": "Passage 67 It is therefore curious that the Chronica majora should give so unfavourable an account of the king's policy. Luard supposes that Matthew never intended his work to see the light in its present form, and many passages of the autograph have against them the note offendiculum, which shows that the writer understood the danger which he ran. On the other hand, unexpurgated copies were made in Matthew's lifetime; though the offending passages are duly omitted or softened in his abridgment of his longer work, the Historia Anglorum (written about 1253), the real sentiments of the author must have been an open secret.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Historical analysis",
+    "explanation": "critical interpretation of sources"
+  },
+  {
+    "id": "9182078",
+    "text": "Passage 68 In any case there is no ground for the old theory that he was an official historiographer. Matthew Paris was unfortunate in living at a time when English politics were peculiarly involved and tedious. His talent is for narrative and description. Though he took a keen interest in the personal side of politics he has no claim to be considered a judge of character. His appreciations of his contemporaries throw more light on his own prejudices than on their aims and ideas.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Evaluative criticism",
+    "explanation": "nuanced assessment of a historian's strengths and weaknesses"
+  },
+  {
+    "id": "9182079",
+    "text": "Passage 69 His work is always vigorous, but he imputes motives in the spirit of a partisan who never pauses to weigh the evidence or to take a comprehensive view of the situation. His redeeming feature is his generous admiration for strength of character, even when it goes along with a policy of which he disapproves. Thus he praises Grosseteste, while he denounces Grosseteste's scheme of monastic reform. Matthew is a vehement supporter of the monastic orders against their rivals, the secular clergy and the mendicant friars. He is violently opposed to the court and the foreign favourites.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Psychological analysis",
+    "explanation": "identification of partisan bias"
+  },
+  {
+    "id": "9182080",
+    "text": "Passage 70 MATTHEW OF WESTMINSTER is the name given to an unknown writer, to whom a 14th-century chronicle, the Flores historiarum, was formerly attributed. This work, which begins with the creation and comes down to 1326, was compiled by various hands, and the name of Matthew of Westminster originated with Archbishop Parker, who ascribed the work to an imaginary Matthew of Westminster, whom he described as a monk of Westminster Abbey. The chief part of the work, which is of considerable value to historians, was written by a monk of Westminster, and was based on the Chronica majora of Matthew Paris, and other authorities.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Historiographic clarification",
+    "explanation": "correction of a historical misattribution"
+  },
+  {
+    "id": "9182081",
+    "text": "Passage 71 The best edition of the Flores historiarum is the one edited by H. R. Luard for the Rolls Series (3 vols., 1890). See also Luard's introduction to this edition. MATTHIA, a town of Germany, in the Prussian province of Brandenburg, on the Luch, 20 m. N.W. from Berlin, on the railway to Hamburg. Pop. (1905), 5760. It has a Roman Catholic and a Protestant church, a school and a hospital. Its industries include the manufacture of sugar, bricks and pottery. In the vicinity is a large training ground for the troops of the Berlin garrison. Matthia was founded in the 13th century and received its municipal charter in 1285.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Geographical and demographic description",
+    "explanation": "factual enumeration (population"
+  },
+  {
+    "id": "9182082",
+    "text": "Passage 72 MATTHIAS (d. 1161), Roman emperor, surnamed Corvinus (Hungarian, Mátyás Hunyadi), king of Hungary, the second son of John Hunyadi and Elizabeth Szilágyi, was born at Kolozsvár in 1443. His tutors were the learned János Vitéz, bishop of Nagyvárad, whom he subsequently raised to the primacy, and the Polish humanist Gregory Sanocki. His court was the centre of Renaissance learning during his reign. As a ruler Matthias was the equal of his great Italian contemporaries; he was also the last Hungarian king who was really great. His famous Black Legion is a landmark in the history of the art of war.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Biographical introduction",
+    "explanation": "use of epithets (the last Hungarian king who was really great)"
+  },
+  {
+    "id": "9182083",
+    "text": "Passage 73 On the death of his father in 1456, Matthias, then a boy of thirteen, was, at the instance of his turbulent and jealous uncle, Michael Szilágyi, imprisoned with his mother and his elder brother Ladislaus in the castle of Buda, while the government was entrusted to Szilágyi. The disaster of Belgrade (July 1456), following hard upon the greatest triumph of John Hunyadi, had alienated the great party of the Hunyadis, and during the captivity of the young Hunyadis the hostile and pro-German faction was in the ascendant.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Complex historical narrative",
+    "explanation": "description of political factions and family dynamics"
+  },
+  {
+    "id": "9182084",
+    "text": "Passage 74 Ladislaus V. (Posthumus) was the representative of this party, and on the 14th of January 1457 Szilágyi was obliged to hand over the government to him. On the 9th of August following the two Hunyadi brothers were sentenced to death for high treason, and Ladislaus Hunyadi was beheaded on the 16th of March 1457. Matthias was spared on account of his youth, but was kept a close prisoner. Then suddenly the situation changed. On the 23rd of November 1457 Ladislaus Posthumus died suddenly at Prague, and the Hungarian magnates, assembling at Pest, unanimously elected Matthias king (Jan. 24, 1458).",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Chronological narrative of political turmoil",
+    "explanation": "specific dates"
+  },
+  {
+    "id": "9182085",
+    "text": "Passage 75 The circumstances of this election are remarkable. The whole nation was at the time in the throes of a bloody civil war between the two great parties of the Hunyadis and the Geréb family. Yet, at the very moment when the rival armies were facing each other, the generals on both sides, László Hunyadi, the brother of Matthias, and Miklós Geréb, agreed that Matthias should be king. The Diet, hastily summoned, confirmed this agreement, and on the 14th of February 1458 the new king made his state entry into Buda.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Description of political consensus amid conflict",
+    "explanation": "highlighting a remarkable historical agreement"
+  },
+  {
+    "id": "9182086",
+    "text": "Passage 76 Matthias was now fifteen years of age, and the affairs of the kingdom were administered by his uncle Szilágyi and János Vitéz. His first act was to proceed against the emperor Frederick III., who claimed Hungary as the next heir of Ladislaus Posthumus. A war with Austria ensued, which was terminated in 1462 by the peace of Wiener-Neustadt, confirmatory of the peace of 1461. By this treaty the emperor renounced all claims to Hungary, and acknowledged Matthias as king; while Matthias ceded to the emperor all his hereditary domains in Austria, and agreed to pay him 60,000 florins in compensation for the holy crown of St Stephen, which was to be placed forthwith on the head of the young king.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Detailed account of diplomatic treaty terms",
+    "explanation": "specific financial and territorial agreements"
+  },
+  {
+    "id": "9182087",
+    "text": "Passage 77 The coronation accordingly took place on the 29th of March 1462. Matthias was now eighteen, and the difficulties which confronted him would have tried the mettle of the most experienced statesman. The treasury was empty, the royal authority was ignored by the greater nobles, and the land was scourged by the freebooters of all nations who had flocked to the standard of the great captain Jan Jiskra, and, under the name of the  Bohemian Brethren",
+    "label": "had occupied the northern counties. Matthias could only obtain funds by promising the customs and the coinage to the town of Breslau, in return for a loan of 20,000 florins, and by pawning his mother's jewels.",
+    "confidence": "Human",
+    "signals": "High",
+    "explanation": "Descriptive historical narrative"
+  },
+  {
+    "id": "9182088",
+    "text": "Passage 78 His first step was to crush the robber factions who were pillaging the land. He began with the Bohemian Brethren, over whom, at Sáros, he gained a brilliant victory, capturing their leader and destroying their organization. He then turned against the extreme royalists, who, under the leadership of the count of Cilli, had placed the emperor Frederick on the Hungarian throne. Cilli was assassinated (8th of November 1463), and his party collapsed. Matthias was now able to conclude a five years' truce with the emperor (1463).",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Sequential military and political narrative",
+    "explanation": "specific events (battle"
+  },
+  {
+    "id": "9182089",
+    "text": "Passage 79 The next few years were occupied in restoring order and repelling the raids of the Turks, who were now beginning to be a menace to Hungary. In 1465 Matthias captured the fortress of Jajce, and in 1466 he concluded a truce for five years with the sultan. In 1467 he was forced to make war on his vassal, Stephen, voivode of Moldavia, who, with Turkish assistance, had overrun the eastern portion of Hungary. Stephen was defeated at the battle of Baia, and Moldavia was occupied by the Hungarians.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Chronological account of military campaigns",
+    "explanation": "focus on foreign threats (Turks"
+  },
+  {
+    "id": "9182090",
+    "text": "Passage 80 Hitherto Matthias had ruled constitutionally, with the co-operation of the diet, in which the lesser nobility, the true backbone of the nation, preponderated. But the early death of his first wife, Catherine, the daughter of George Podiebrad, king of Bohemia (1463), and the troubles consequent upon his second marriage with Beatrice, the daughter of the king of Naples (1476), seems to have embittered him, and after 1471 his rule became increasingly arbitrary.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Analysis of a shift in governance",
+    "explanation": "linking personal life (marriages"
+  },
+  {
+    "id": "9182091",
+    "text": "Passage 81 He surrounded himself with a guard of mercenaries, chiefly Bohemians, and the diet was rarely summoned. The great officers of state were displaced by creatures of the king, and the highest dignities were sometimes conferred upon men of low birth. The centralization of the administration was carried out by means of a hierarchy of courts, the highest of which, the king's court (judicium curiae)",
+    "label": "presided over by the king himself",
+    "confidence": "became the supreme court of appeal.",
+    "signals": "Human",
+    "explanation": "High"
+  },
+  {
+    "id": "9182092",
+    "text": "Passage 82 The royal revenues were increased by the imposition of a regular tax, the  subsidium",
+    "label": "and by the farming of the customs. A standing army was formed, the famous  Black Legion",
+    "confidence": "which was mainly composed of Bohemian and German mercenaries, and was the first body of troops in modern times to be regularly paid and subject to military discipline. The military genius of Matthias found its full scope in the great war which he waged against the emperor Frederick III. and his son Maximilian from 1477 to 1485.",
+    "signals": "Human",
+    "explanation": "High"
+  },
+  {
+    "id": "9182093",
+    "text": "Passage 83 The alleged reason of the war was the emperor's refusal to recognize Matthias as king of Bohemia, to which dignity he had been elected by the Catholic nobles of that country on the death of George Podiebrad in 1471. The real cause was the rivalry of the two princes for the supremacy of Central Europe. The war was carried on with varying success in Moravia, Silesia and Lower Austria. In 1478 Matthias captured the important city of Vienna, and in 1485 he made himself master of the whole of Lower Austria except the capital.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Distinction between stated and underlying causes for a war",
+    "explanation": "summary of military campaigns with geographic specifics"
+  },
+  {
+    "id": "9182094",
+    "text": "Passage 84 The emperor was forced to conclude the truce of Bratislava (1485), by which he ceded to Matthias the whole of Lower Austria, with the title of archduke, and agreed to recognize him as king of Bohemia. This was the zenith of Matthias's power. He was now the dominant prince in Central Europe, and the Hungarian court at Buda was the most brilliant of the age. The king's patronage of art and science attracted to it scholars and artists from all parts of the continent.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Description of a political zenith",
+    "explanation": "emphasis on cultural patronage"
+  },
+  {
+    "id": "9182095",
+    "text": "Passage 85 The library which he founded, the Bibliotheca Corvina, was one of the finest in Europe. He founded a university at Pressburg, and another at Buda, and was a generous benefactor of the church. But this glorious period was of brief duration. The last years of the king were embittered by the ingratitude of his son, John Corvinus, whom he had created prince of Liptau, and by the constant conspiracies of his ambitious and treacherous queen, Beatrice.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Contrasting narrative",
+    "explanation": "moving from achievements (library"
+  },
+  {
+    "id": "9182096",
+    "text": "Passage 86 He died suddenly on the 6th of April 1490, at the age of forty-seven, and was buried at Székesfehérvár. By his first wife he had no children; by his second, an only son, John, who was born in 1473, and was legitimized by the pope in 1479. Matthias was of middle height, robustly built, with a lofty forehead, large, expressive blue eyes, and a genial mouth. His abilities were of the highest order, and he was equally great as a general, a statesman and an administrator.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Biographical conclusion",
+    "explanation": "physical description"
+  },
+  {
+    "id": "9182097",
+    "text": "Passage 87 He was the last Hungarian king who was really national, and the last who made Hungary a great power. His foreign policy was, on the whole, successful, though his endless wars exhausted the resources of the country, and his neglect of the eastern frontier laid it open to the Turk. At home his rule was firm and just, and he protected the peasants from the oppression of the magnates. He was a great builder, and the royal palace at Buda was largely his work. He was also a patron of learning, and his court was the centre of the humanist movement in Hungary.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Evaluative historical summary",
+    "explanation": "balancing achievements (successful policy"
+  },
+  {
+    "id": "9182098",
+    "text": "Passage 88 MATTHIAS, ST, the apostle who, according to the Acts of the Apostles (i. 21-26), was chosen by the disciples to fill the place of Judas Iscariot. The choice was made by lot between him and Joseph called Barsabas, and the narrative implies that he had been one of the constant followers of Jesus from the time of John's baptism. Nothing more is told of him in the New Testament. The traditions are vague and conflicting. The Greek tradition says he preached in Judaea and was stoned to death by the Jews; the Latin that he was in Macedonia and burned to death; the Coptic that he was crucified in Pontus.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Biblical and historical analysis",
+    "explanation": "synthesis of conflicting religious traditions from different sources (Greek"
+  },
+  {
+    "id": "9182099",
+    "text": "Passage 89 The Clementine Recognitions (iv. 35) identify him with Zacchaeus; the Clementine Homilies (ii. 1) with Barnabas. The lost Gospel of Matthias is mentioned by Origen (Hom. in Luc. i.), Eusebius (H.E. iii. 25) and Jerome (Praef. in Matth.). It was probably a Gnostic work, and is cited by Ambrose and Hippolytus. The extant Traditions of Matthias, which form part of the Apostolic Constitutions (vii. 20), are certainly spurious. His day in the Roman calendar is the 24th of February (25th in leap-year); in the Greek calendar, the 9th of August.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Advanced historiographic analysis",
+    "explanation": "referencing lost s and patristic sources (Origen"
+  },
+  {
+    "id": "9182100",
+    "text": "Passage 90 MATTHIAS, JOHN (c. 1730–c. 1766), English poet, was born in London. He was educated at Christ's Hospital, and became a clerk in the South Sea House. He was the friend of Thomas Chatterton, and is chiefly remembered for his share in the Rowley controversy. He contributed notes to Tyrwhitt's edition of the Rowley poems (1777), and wrote an Inquiry into the Authenticity of the Rowley Poems (1782), in which he argued that they were the work of Chatterton. He also published a volume of Poems (1796), which show the influence of Chatterton.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Concise biographical entry",
+    "explanation": "focus on a specific scholarly controversy (Rowley poems)"
+  },
+  {
+    "id": "9182101",
+    "text": "Passage 91 MATTHIAS, PETER (c. 1725–1790), English antiquary, was born at Hereford. He was educated at Oxford, and became a fellow of All Souls College. He was a friend of Thomas Hearne, and like him a nonjuror. He devoted himself to the study of antiquities, and made large collections for a history of Herefordshire, which was never published. His collections are preserved in the British Museum. He also wrote a Life of Alfred the Great (1777), and a History of the Cathedral Church of Hereford (1782).",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Factual biographical listing",
+    "explanation": "enumeration of academic affiliations"
+  },
+  {
+    "id": "9182102",
+    "text": "Passage 92 MATTHIASSEN, THERKEL (b. 1892), Danish archaeologist, was born at Copenhagen. He was educated at the university of Copenhagen, and became a lecturer in archaeology there. He is best known for his excavations of the Viking settlements in Greenland, and for his work on the prehistory of the Arctic. His most important publication is The Eskimo Archaeology of Julianehaab District (1930). He also wrote a History of Greenland (1945).",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Modern biographical entry",
+    "explanation": "focus on archaeological specialization and key publications"
+  },
+  {
+    "id": "9182103",
+    "text": "Passage 93 MATTHIAS'S, ST, a Benedictine abbey in Trier, Germany. It was founded in the 10th century, and was dedicated to St Eucharius. In the 12th century the relics of St Matthias the apostle were brought there, and the abbey took his name. It was suppressed in 1802. The church, which is Romanesque, contains the tomb of St Matthias. The abbey buildings are now used as a seminary.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Historical and architectural description of a religious site",
+    "explanation": "timeline of dedication changes and suppression"
+  },
+  {
+    "id": "9182104",
+    "text": "Passage 94 MATTHIEU, FRANÇOIS (1763–1831), French politician, was born at Limoges. He was a lawyer by profession, and was elected to the Legislative Assembly in 1791. He voted for the death of Louis XVI., and was a member of the Committee of Public Safety. After the fall of Robespierre he was arrested, but was released after the amnesty of 1795. He took no part in politics under the Empire, but was elected to the Chamber of Deputies in 1815. He was a moderate liberal, and opposed the ultra-royalists. He died at Limoges.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Political biography spanning turbulent period",
+    "explanation": "specific political actions (vote for Louis XVI's death)"
+  },
+  {
+    "id": "9182105",
+    "text": "Passage 95 MATTHIEU, PIERRE LOUIS (1763–1825), French general, was born at Strasbourg. He entered the army in 1780, and served in the American War of Independence. He distinguished himself in the Revolutionary Wars, and was made a general of division in 1793. He commanded a division at the battle of Marengo (1800), and served in the campaigns of 1805–1807. He was created a count of the Empire in 1808. He retired after the Restoration, and died at Paris.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Military career summary",
+    "explanation": "chronological progression of ranks and campaigns"
+  },
+  {
+    "id": "9182106",
+    "text": "Passage 96 MATTHIOLI, PIER ANDREA (1500–1577), Italian physician and botanist, was born at Siena. He studied medicine at Padua, and practised at Rome, Trent and Prague. He is best known for his commentary on Dioscorides, which was published in 1544 and went through many editions. He also wrote a work on simples (1561), and a treatise on poisons (1565). He was one of the first to describe the potato. He died at Trent.",
+    "label": "Human",
+    "confidence": "High",
+    "signals": "Renaissance scholar biography",
+    "explanation": "emphasis on major scholarly work (commentary on Dioscorides)"
+  }
+]

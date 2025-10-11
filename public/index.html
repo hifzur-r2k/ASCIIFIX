@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>ASCIIFIX</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="header-main">
+    ASCIIFIX
+  </div>
+  <div class="navbar">
+    <div class="navbar-left">
+      <a class="navbar-link" href="#">Home</a>
+      <div class="dropdown">
+        <a class="navbar-link" href="#">Tools</a>
+        <div class="dropdown-content">
+          <a href="#">Plagiarism Check</a>
+          <a href="#">Image Converter</a>
+          <a href="#">AI Detector</a>
+          <a href="#">Image Resizer</a>
+          <a href="#">Grammar Check</a>
+          <a href="/file_converter/">File Converter</a>
+
+        </div>
+      </div>
+      <a class="navbar-link" href="#">About</a>
+    </div>
+    <!-- Hamburger Menu Icon for Mobile -->
+    <div class="hamburger" id="hamburger">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="navbar-right">
+      <span style="font-weight: bold;">Login / Sign Up</span>
+    </div>
+  </div>
+  <!-- Mobile Menu -->
+  <nav class="mobile-menu" id="mobileMenu">
+    <a href="#">Home</a>
+    <div class="submenu-toggle" id="submenuToggle">Tools</div>
+    <div class="submenu" id="submenu">
+      <a href="#">Plagiarism Check</a>
+      <a href="#">Image Converter</a>
+      <a href="#">AI Detector</a>
+      <a href="#">Image Resizer</a>
+      <a href="#">Grammar Check</a>
+      <a href="/file_converter/">File Converter</a>
+    </div>
+    <a href="#">About</a>
+  </nav>
+  <div class="hero-box">
+    <h2>
+      YOUR ALL-IN-ONE CONTENT AND FILE TOOLKIT
+    </h2>
+    <p>
+      Instantly check for plagiarism, AI content, grammar; convert and <br>
+      resize any image, convert files &amp; text to all formats, and more—right <br>
+      here, for students and professionals.
+    </p>
+    <button>See All Tools</button>
+  </div>
+  <div class="tools-grid">
+    <div class="tool-card">
+      <h3>
+        Plagiarism Check
+        <img src="images/plagiarismcheck img.png" alt="Plagiarism Logo" class="tool-logo" />
+      </h3>
+      <p>Detect duplicate or copied content in text instantly.</p>
+      <button onclick="window.location.href='/plagiarism_check/'">Go to Tool</button>
+    </div>
+    <div class="tool-card">
+      <h3>
+        Image Converter
+        <img src="images/convertImg.png" alt="Image Converter Logo" class="tool-logo" />
+      </h3>
+      <p>Change images between all popular file formats.</p>
+      <button onclick="window.location.href='/image_converter/'">Go to Tool</button>
+    </div>
+    <div class="tool-card">
+      <h3>
+        AI Detector
+        <img src="images/ai detect bot img.png" alt="AI Detector Logo" class="tool-logo" />
+      </h3>
+      <p>Discern whether content was written by AI or human</p>
+      <a href="/ai-detection" class="tool-button-link">
+        <button>Go to Tool</button>
+      </a>
+
+    </div>
+    <div class="tool-card">
+      <h3>
+        Image Resizer
+        <img src="images/resizeIMGicon.png" alt="Image Resizer Logo" class="tool-logo" />
+      </h3>
+      <p>Resize images to any dimensions quickly and easily.</p>
+      <button>Go to Tool</button>
+    </div>
+    <div class="tool-card">
+      <h3>
+        Grammar Check
+        <img src="images/grammarCheck_ICON.png" alt="Grammar Check Logo" class="tool-logo" />
+      </h3>
+      <p>Fix grammar and spelling errors for clearer writing.</p>
+      <button>Go to Tool</button>
+    </div>
+    <div class="tool-card">
+      <h3>
+        File Converter
+        <img src="images/file_convert_img.png" alt="File Converter Logo" class="tool-logo" />
+      </h3>
+      <p>Convert text or any file to a variety of document formats.</p>
+      <button onclick="window.location.href='/file_converter/'">Go to tool</button>
+    </div>
+  </div>
+  <div class="footer">
+    &copy; 2025 AsciiFix | Minimal Wireframe UI
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>

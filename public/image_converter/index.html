@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Converter - AsciiFix</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Header Navigation Box -->
+    <div class="header-nav-box">
+        <div class="nav-left-section">
+            <div class="logo-section">
+                <div class="logo-circle">A</div>
+                <span class="logo-text">ASCIIFIX</span>
+            </div>
+            <div class="nav-menu">
+                <a href="../index.html">Home</a>
+                <a href="#">Tools</a>
+                <a href="#">About</a>
+            </div>
+        </div>
+        <div class="vertical-separator"></div>
+        <div class="nav-right-section">
+            <span>Login/Signup</span>
+        </div>
+    </div>
+
+    <!-- Title Box -->
+    <div class="title-container-box">
+        <h1>IMAGE CONVERTER</h1>
+    </div>
+
+    <!-- Main Dashed Container -->
+    <div class="main-dashed-container">
+        <!-- Left Section -->
+        <div class="left-content-section">
+            <!-- Upload Area -->
+            <div class="upload-drop-area" id="uploadArea">
+                <p>Drag & Drop or <span class="choose-file-button" id="chooseFileBtn">Choose File</span></p>
+                <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.webp,.tiff,.heic,.bmp" multiple
+                    style="display: none;">
+                <p class="accepted-text">Upload: JPG, PNG, WEBP, TIFF, HEIC, BMP → Convert to: JPG, PNG, WEBP, TIFF</p>
+
+            </div>
+
+            <!-- Convert To Section -->
+            <div class="convert-to-section">
+                <div class="convert-to-row">
+                    <span class="convert-to-label">Convert to:</span>
+                    <div class="dropdown-box">
+                        <select id="formatDropdown">
+                            <option value="">--Select Format--</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons Section -->
+            <div class="buttons-section">
+                <div class="convert-button-box">
+                    <button id="convertButton">Convert</button>
+                </div>
+                <div class="download-button-box" style="display: none;">
+                    <button id="downloadButton">Download</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Section -->
+        <div class="right-content-section">
+            <div class="preview-section">
+                <div class="preview-header">Preview</div>
+                <div class="preview-dotted-box" id="previewArea">
+                    <!-- Preview content goes here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Batch Upload Button -->
+    <div class="batch-upload-section">
+        <div class="batch-button-box">
+            <button id="batchButton">Batch Upload</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-section">
+        <p>© 2025 AsciiFix | Minimal Wireframe UI</p>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-box">
+            <div class="loading-spinner"></div>
+            <p>Converting images...</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

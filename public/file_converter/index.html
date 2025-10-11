@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCIIFIX - File Converter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-bar">
+        <div class="logo">ASCIIFIX</div>
+        <nav class="nav">
+            <a href="/">Home</a>
+            <a href="/tools">Tools</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+            <a href="/login" class="login">Login</a>
+        </nav>
+    </div>
+
+    <!-- File Converter Header -->
+    <div class="file-converter-header">
+        <button>FILE CONVERTER</button>
+    </div>
+
+    <!-- Subtitle Description -->
+    <div class="sub-desc">
+        Convert your files to PDF format quickly and easily. Support for Text, Word, Excel, and Image files.
+    </div>
+
+    <!-- Converters Grid -->
+    <div class="converters-grid">
+        
+        <!-- Text to PDF Converter -->
+        <div class="convert-card" id="txt2pdf">
+            <div class="convert-title">Text to PDF</div>
+            <div class="convert-icons">📄 → 📕</div>
+            
+            <!-- Text Area for Manual Input -->
+            <textarea class="text-upload-box" placeholder="Type your text here or upload a .txt file..."></textarea>
+            
+            <!-- File Upload Area -->
+            <div class="upload-area">
+                <input type="file" accept=".txt">
+                <div>Drag & drop .txt file</div>
+                <button class="choose-btn">Choose File</button>
+            </div>
+            
+            <div class="accepted">Accepted: .txt files</div>
+            <div class="file-name-display"></div>
+            
+            <button class="convert-btn" disabled>Convert to PDF</button>
+            <button class="download-btn" disabled>Download PDF</button>
+        </div>
+
+        <!-- Word to PDF Converter -->
+        <div class="convert-card" id="doc2pdf">
+            <div class="convert-title">Word to PDF</div>
+            <div class="convert-icons">📘 → 📕</div>
+            
+            <div class="upload-area">
+                <input type="file" accept=".doc,.docx">
+                <div>Drag & drop Word file</div>
+                <button class="choose-btn">Choose File</button>
+            </div>
+            
+            <div class="accepted">Accepted: .doc, .docx files</div>
+            <div class="file-name-display"></div>
+            
+            <button class="convert-btn" disabled>Convert to PDF</button>
+            <button class="download-btn" disabled>Download PDF</button>
+        </div>
+
+        <!-- Excel to PDF Converter -->
+        <div class="convert-card" id="xls2pdf">
+            <div class="convert-title">Excel to PDF</div>
+            <div class="convert-icons">📗 → 📕</div>
+            
+            <div class="upload-area">
+                <input type="file" accept=".xls,.xlsx,.xlsm,.csv">
+                <div>Drag & drop Excel file</div>
+                <button class="choose-btn">Choose File</button>
+            </div>
+            
+            <div class="accepted">Accepted: .xls, .xlsx, .csv files</div>
+            <div class="file-name-display"></div>
+            
+            <button class="convert-btn" disabled>Convert to PDF</button>
+            <button class="download-btn" disabled>Download PDF</button>
+        </div>
+
+        <!-- Image to PDF Converter -->
+        <div class="convert-card" id="img2pdf">
+            <div class="convert-title">Image to PDF</div>
+            <div class="convert-icons">🖼️ → 📕</div>
+            
+            <div class="upload-area">
+                <input type="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff,.webp">
+                <div>Drag & drop image file</div>
+                <button class="choose-btn">Choose File</button>
+            </div>
+            
+            <div class="accepted">Accepted: .jpg, .png, .gif, .bmp files</div>
+            <div class="file-name-display"></div>
+            
+            <button class="convert-btn" disabled>Convert to PDF</button>
+            <button class="download-btn" disabled>Download PDF</button>
+        </div>
+        
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        © 2025 ASCIIFIX - File Conversion Made Simple
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
