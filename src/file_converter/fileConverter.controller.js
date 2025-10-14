@@ -1,28 +1,23 @@
 const fs = require('fs');
 const path = require('path');
-const axios = require('axios');
 const PDFDocument = require('pdfkit');
-const { exec } = require('child_process');
-const FormData = require('form-data');
-require('dotenv').config();
+const sharp = require('sharp');
+const mammoth = require('mammoth');
+const XLSX = require('xlsx');
+const puppeteer = require('puppeteer');
 
-const UPLOAD_DIR = path.join(__dirname, '../uploads');
-const CONVERTAPI_KEY = process.env.CONVERTAPI_KEY;
-
-// Helper to create logs
 const LOG_FILE = path.join(__dirname, '../../logs/conversions.log');
+
 function logConversion(status, type, ip, filename, msg = '') {
   const line = `${new Date().toISOString()} [${status}] [${type}] [${ip}] [${filename}] ${msg}\n`;
   fs.appendFile(LOG_FILE, line, () => { });
 }
 
-// Controller for Text to PDF conversion (FIXED)
+// ==========================================
+// TEXT TO PDF (Keep working version)
+// ==========================================
 exports.textToPdf = (req, res) => {
   console.log('📝 Processing text conversion...');
-  console.log('📝 req.body:', req.body);
-  console.log('📝 req.file:', req.file);
-  console.log('📝 Text content from body:', req.body.text);
-  console.log('📝 Keys in req.body:', Object.keys(req.body));
   const ip = req.ip;
   let textContent = req.body.text || '';
 
@@ -37,37 +32,17 @@ exports.textToPdf = (req, res) => {
     const fileContent = fs.readFileSync(req.file.path, 'utf-8');
     fs.unlinkSync(req.file.path);
 
-    const doc = new PDFDocument({
-      font: 'Helvetica',
-      fontSize: 12
-    });
+    const doc = new PDFDocument({ font: 'Helvetica', fontSize: 12 });
     const chunks = [];
-
-    doc.font('Helvetica')
-      .fontSize(12)
-      .text(fileContent, {
-        width: 410,
-        align: 'left'
-      });
-
+    doc.font('Helvetica').fontSize(12).text(fileContent, { width: 410, align: 'left' });
     doc.end();
     doc.on('data', c => chunks.push(c));
     doc.on('end', () => done(Buffer.concat(chunks), `${path.parse(req.file.originalname).name}.pdf`));
 
   } else if (textContent && textContent.trim().length > 0) {
-    const doc = new PDFDocument({
-      font: 'Helvetica',
-      fontSize: 12
-    });
+    const doc = new PDFDocument({ font: 'Helvetica', fontSize: 12 });
     const chunks = [];
-
-    doc.font('Helvetica')
-      .fontSize(12)
-      .text(textContent.trim(), {
-        width: 410,
-        align: 'left'
-      });
-
+    doc.font('Helvetica').fontSize(12).text(textContent.trim(), { width: 410, align: 'left' });
     doc.end();
     doc.on('data', c => chunks.push(c));
     doc.on('end', () => done(Buffer.concat(chunks), `text.pdf`));
@@ -78,468 +53,255 @@ exports.textToPdf = (req, res) => {
   }
 };
 
-// Controller for Word to PDF conversion (ConvertAPI with FormData)
+// ==========================================
+// WORD TO PDF (Mammoth.js + Puppeteer - 100% Node.js!)
+// ==========================================
 exports.wordToPdf = async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'File missing or invalid.' });
 
   const ip = req.ip;
   const inPath = req.file.path;
-  const fileExtension = path.extname(req.file.originalname).toLowerCase();
+  let browser;
 
   try {
-    console.log('📝 Starting Word conversion for:', req.file.originalname);
-    console.log('🔑 API Key loaded:', CONVERTAPI_KEY ? 'YES' : 'NO');
+    console.log('📝 [MAMMOTH] Converting DOCX to HTML...');
+    
+    // Step 1: Convert DOCX to HTML using mammoth
+    const result = await mammoth.convertToHtml({ path: inPath });
+    const html = result.value; // The generated HTML
+    
+    console.log('✅ [MAMMOTH] HTML generated, length:', html.length);
+    console.log('📄 [PUPPETEER] Converting HTML to PDF...');
 
-    let endpoint;
-    if (fileExtension === '.docx') {
-      endpoint = 'https://v2.convertapi.com/convert/docx/to/pdf';
-    } else if (fileExtension === '.doc') {
-      endpoint = 'https://v2.convertapi.com/convert/doc/to/pdf';
-    } else {
-      throw new Error('Unsupported Word document format');
-    }
+    // Step 2: Convert HTML to PDF using Puppeteer
+    browser = await puppeteer.launch({ 
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+    
+    const page = await browser.newPage();
+    
+    // Create full HTML document with styling
+    const fullHtml = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <style>
+          body { 
+            font-family: Arial, sans-serif; 
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+          }
+          p { margin: 10px 0; line-height: 1.6; }
+          h1, h2, h3 { margin: 20px 0 10px 0; }
+        </style>
+      </head>
+      <body>${html}</body>
+      </html>
+    `;
 
-    console.log('🌐 Using endpoint:', endpoint);
-
-    // Create FormData
-    console.log('📋 Creating FormData...');
-    const form = new FormData();
-    form.append('File', fs.createReadStream(inPath), {
-      filename: req.file.originalname,
-      contentType: req.file.mimetype
+    await page.setContent(fullHtml, { waitUntil: 'networkidle0' });
+    
+    const pdfBuffer = await page.pdf({
+      format: 'A4',
+      printBackground: true,
+      margin: { top: '20mm', right: '20mm', bottom: '20mm', left: '20mm' }
     });
 
-    console.log('📤 Sending request to ConvertAPI...');
+    await browser.close();
 
-    // Get JSON response from ConvertAPI
-    const response = await axios({
-      method: 'POST',
-      url: endpoint,
-      headers: {
-        'Authorization': `Bearer ${CONVERTAPI_KEY}`,
-        ...form.getHeaders()
-      },
-      data: form,
-      timeout: 45000,
-      maxContentLength: Infinity,
-      maxBodyLength: Infinity
-    });
+    const filename = `${path.parse(req.file.originalname).name}.pdf`;
 
-    console.log('📥 Response received, status:', response.status);
+    console.log('✅ [PUPPETEER] Conversion successful!');
+    console.log('📄 Output size:', pdfBuffer.length, 'bytes');
 
-    if (response.status === 200 && response.data) {
-      console.log('✅ ConvertAPI response received');
+    logConversion('OK', 'WORD', ip, req.file.originalname);
 
-      const responseData = response.data;
-
-      // Check if we have the expected response structure
-      if (!responseData.Files || !responseData.Files[0]) {
-        throw new Error('Invalid ConvertAPI response - missing Files array');
-      }
-
-      const file = responseData.Files[0];
-
-      // FIXED: Handle Base64 response (this is the key change!)
-      if (file.FileData) {
-        console.log('📄 Processing Base64 PDF data...');
-        console.log('📄 Original file size from API:', file.FileSize, 'bytes');
-
-        // Convert Base64 to Buffer - THIS IS THE IMPORTANT PART
-        const pdfBuffer = Buffer.from(file.FileData, 'base64');
-        const filename = `${path.parse(req.file.originalname).name}.pdf`;
-
-        console.log('📄 Converted PDF buffer size:', pdfBuffer.length, 'bytes');
-        console.log('✅ Conversion successful!');
-
-        logConversion('OK', 'WORD', ip, req.file.originalname);
-
-        // Send PDF to user
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-        res.end(pdfBuffer);
-
-        // Cleanup
-        fs.unlinkSync(inPath);
-        console.log('🗑️ Cleanup completed');
-
-      } else {
-        throw new Error('ConvertAPI response missing FileData field');
-      }
-
-    } else {
-      throw new Error(`ConvertAPI error: ${response.status}`);
-    }
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.end(pdfBuffer);
 
   } catch (error) {
-    console.log('❌ FULL ERROR DETAILS:');
-    console.log('❌ Error message:', error.message);
-
-    if (error.response) {
-      console.log('❌ Response status:', error.response.status);
-    }
-
+    console.log('❌ [WORD] Error:', error.message);
+    
+    if (browser) await browser.close();
+    
     logConversion('FAIL', 'WORD', ip, req.file.originalname, error.message);
-
-    // Cleanup
-    try {
-      if (fs.existsSync(inPath)) {
-        fs.unlinkSync(inPath);
-      }
-    } catch (e) { }
-
-    res.status(500).json({ error: 'Failed to convert Word to PDF.' });
+    res.status(500).json({ 
+      error: 'Failed to convert Word to PDF.',
+      details: error.message
+    });
+  } finally {
+    if (fs.existsSync(inPath)) fs.unlinkSync(inPath);
   }
 };
 
-
-// Controller for Excel to PDF conversion
+// ==========================================
+// EXCEL TO PDF (XLSX + Puppeteer - 100% Node.js!)
+// ==========================================
 exports.excelToPdf = async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'File missing or invalid.' });
 
   const ip = req.ip;
   const inPath = req.file.path;
-  const fileExtension = path.extname(req.file.originalname).toLowerCase();
+  let browser;
 
   try {
-    console.log('📊 Starting Excel conversion for:', req.file.originalname);
-    console.log('🔑 API Key loaded:', CONVERTAPI_KEY ? 'YES' : 'NO');
-    console.log('📂 File size:', req.file.size, 'bytes');
-    console.log('📂 File extension:', fileExtension);
+    console.log('📊 [XLSX] Reading Excel file...');
+    
+    // Step 1: Read Excel file and convert to HTML
+    const workbook = XLSX.readFile(inPath);
+    let html = '';
 
-    // Choose correct API endpoint based on file type
-    let endpoint;
-    if (fileExtension === '.xlsx') {
-      endpoint = 'https://v2.convertapi.com/convert/xlsx/to/pdf';
-    } else if (fileExtension === '.xls') {
-      endpoint = 'https://v2.convertapi.com/convert/xls/to/pdf';
-    } else if (fileExtension === '.xlsm') {
-      endpoint = 'https://v2.convertapi.com/convert/xlsm/to/pdf';
-    } else if (fileExtension === '.csv') {
-      endpoint = 'https://v2.convertapi.com/convert/csv/to/pdf';
-    } else if (fileExtension === '.xlsb') {
-      endpoint = 'https://v2.convertapi.com/convert/xlsb/to/pdf';
-    } else if (fileExtension === '.xlt') {
-      endpoint = 'https://v2.convertapi.com/convert/xlt/to/pdf';
-    } else if (fileExtension === '.xltx') {
-      endpoint = 'https://v2.convertapi.com/convert/xltx/to/pdf';
-    } else {
-      throw new Error('Unsupported Excel document format');
-    }
-
-    console.log('🌐 Using endpoint:', endpoint);
-
-    // Create FormData (same approach as Word)
-    console.log('📋 Creating FormData...');
-    const form = new FormData();
-
-    // Check if file exists before creating stream
-    if (!fs.existsSync(inPath)) {
-      throw new Error('Uploaded file not found');
-    }
-
-    form.append('File', fs.createReadStream(inPath), {
-      filename: req.file.originalname,
-      contentType: req.file.mimetype
+    // Convert each sheet to HTML table
+    workbook.SheetNames.forEach((sheetName, index) => {
+      const worksheet = workbook.Sheets[sheetName];
+      const sheetHtml = XLSX.utils.sheet_to_html(worksheet);
+      
+      html += `<h2>${sheetName}</h2>${sheetHtml}`;
+      
+      if (index < workbook.SheetNames.length - 1) {
+        html += '<div style="page-break-after: always;"></div>';
+      }
     });
 
-    console.log('📤 Sending request to ConvertAPI...');
+    console.log('✅ [XLSX] HTML generated');
+    console.log('📄 [PUPPETEER] Converting HTML to PDF...');
 
-    // Send request to ConvertAPI (same as Word)
-    const response = await axios({
-      method: 'POST',
-      url: endpoint,
-      headers: {
-        'Authorization': `Bearer ${CONVERTAPI_KEY}`,
-        ...form.getHeaders()
-      },
-      data: form,
-      timeout: 45000,
-      maxContentLength: Infinity,
-      maxBodyLength: Infinity
+    // Step 2: Convert HTML to PDF using Puppeteer
+    browser = await puppeteer.launch({ 
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+    
+    const page = await browser.newPage();
+    
+    const fullHtml = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <style>
+          body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px;
+          }
+          table { 
+            border-collapse: collapse; 
+            width: 100%; 
+            margin: 20px 0;
+          }
+          th, td { 
+            border: 1px solid #ddd; 
+            padding: 8px; 
+            text-align: left;
+          }
+          th { 
+            background-color: #f2f2f2; 
+            font-weight: bold;
+          }
+          h2 {
+            margin-top: 30px;
+            margin-bottom: 10px;
+          }
+        </style>
+      </head>
+      <body>${html}</body>
+      </html>
+    `;
+
+    await page.setContent(fullHtml, { waitUntil: 'networkidle0' });
+    
+    const pdfBuffer = await page.pdf({
+      format: 'A4',
+      landscape: true, // Excel sheets often look better in landscape
+      printBackground: true,
+      margin: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' }
     });
 
-    console.log('📥 Response received, status:', response.status);
+    await browser.close();
 
-    if (response.status === 200 && response.data) {
-      console.log('✅ ConvertAPI response received');
+    const filename = `${path.parse(req.file.originalname).name}.pdf`;
 
-      const responseData = response.data;
+    console.log('✅ [PUPPETEER] Excel conversion successful!');
+    logConversion('OK', 'EXCEL', ip, req.file.originalname);
 
-      if (!responseData.Files || !responseData.Files[0]) {
-        throw new Error('Invalid ConvertAPI response - missing Files array');
-      }
-
-      const file = responseData.Files[0];
-
-      // Handle Base64 response (same as Word conversion)
-      if (file.FileData) {
-        console.log('📄 Processing Base64 PDF data...');
-        console.log('📄 Original file size from API:', file.FileSize, 'bytes');
-
-        // Convert Base64 to Buffer
-        const pdfBuffer = Buffer.from(file.FileData, 'base64');
-        const filename = `${path.parse(req.file.originalname).name}.pdf`;
-
-        console.log('📄 Converted PDF buffer size:', pdfBuffer.length, 'bytes');
-        console.log('✅ Excel conversion successful!');
-
-        logConversion('OK', 'EXCEL', ip, req.file.originalname);
-
-        // Send PDF to user
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-        res.end(pdfBuffer);
-
-        // Cleanup
-        fs.unlinkSync(inPath);
-        console.log('🗑️ Cleanup completed');
-
-      } else {
-        throw new Error('ConvertAPI response missing FileData field');
-      }
-
-    } else {
-      throw new Error(`ConvertAPI error: ${response.status}`);
-    }
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.end(pdfBuffer);
 
   } catch (error) {
-    console.log('❌ EXCEL CONVERSION ERROR:');
-    console.log('❌ Error type:', error.constructor.name);
-    console.log('❌ Error message:', error.message);
-
-    if (error.response) {
-      console.log('❌ Response status:', error.response.status);
-      console.log('❌ Response statusText:', error.response.statusText);
-
-      if (error.response.data) {
-        try {
-          const errorText = Buffer.from(error.response.data).toString();
-          console.log('❌ Response body:', errorText);
-        } catch (e) {
-          console.log('❌ Could not read response body');
-        }
-      }
-    }
-
+    console.log('❌ [EXCEL] Error:', error.message);
+    
+    if (browser) await browser.close();
+    
     logConversion('FAIL', 'EXCEL', ip, req.file.originalname, error.message);
-
-    // Cleanup
-    try {
-      if (fs.existsSync(inPath)) {
-        fs.unlinkSync(inPath);
-      }
-    } catch (e) { }
-
     res.status(500).json({ error: 'Failed to convert Excel to PDF.' });
+  } finally {
+    if (fs.existsSync(inPath)) fs.unlinkSync(inPath);
   }
 };
 
-// Controller for Image to PDF conversion (ConvertAPI)
+// ==========================================
+// IMAGE TO PDF (Keep your working version)
+// ==========================================
 exports.imageToPdf = async (req, res) => {
-  console.log('🔥 DEBUG: IMAGE FUNCTION STARTED - IF YOU SEE THIS, FUNCTION IS CALLED');
-
   if (!req.file) return res.status(400).json({ error: 'File missing or invalid.' });
 
   const ip = req.ip;
   const inPath = req.file.path;
-  const fileExtension = path.extname(req.file.originalname).toLowerCase();
 
   try {
-    console.log('🖼️ Starting Image conversion for:', req.file.originalname);
-    console.log('🔑 API Key loaded:', CONVERTAPI_KEY ? 'YES' : 'NO');
-    console.log('📂 File size:', req.file.size, 'bytes');
-    console.log('📂 File extension:', fileExtension);
+    console.log('🖼️ [FREE] Starting Image conversion');
+    
+    const imageBuffer = await sharp(inPath)
+      .resize(2000, 2000, { fit: 'inside', withoutEnlargement: true })
+      .jpeg({ quality: 85 })
+      .toBuffer();
 
-    // Choose correct API endpoint based on file type
-    let endpoint;
-    if (fileExtension === '.jpg' || fileExtension === '.jpeg') {
-      endpoint = 'https://v2.convertapi.com/convert/jpg/to/pdf';
-    } else if (fileExtension === '.png') {
-      endpoint = 'https://v2.convertapi.com/convert/png/to/pdf';
-    } else if (fileExtension === '.gif') {
-      endpoint = 'https://v2.convertapi.com/convert/gif/to/pdf';
-    } else if (fileExtension === '.bmp') {
-      endpoint = 'https://v2.convertapi.com/convert/bmp/to/pdf';
-    } else if (fileExtension === '.tiff' || fileExtension === '.tif') {
-      endpoint = 'https://v2.convertapi.com/convert/tiff/to/pdf';
-    } else if (fileExtension === '.webp') {
-      endpoint = 'https://v2.convertapi.com/convert/webp/to/pdf';
-    } else {
-      throw new Error('Unsupported image format');
-    }
+    const metadata = await sharp(imageBuffer).metadata();
+    const doc = new PDFDocument({ size: [metadata.width, metadata.height], margin: 0 });
+    const chunks = [];
 
-    console.log('🌐 Using endpoint:', endpoint);
-
-    // Create FormData (same approach as Word/Excel)
-    console.log('📋 Creating FormData...');
-    const form = new FormData();
-
-    // Check if file exists before creating stream
-    if (!fs.existsSync(inPath)) {
-      throw new Error('Uploaded file not found');
-    }
-
-    form.append('File', fs.createReadStream(inPath), {
-      filename: req.file.originalname,
-      contentType: req.file.mimetype
+    doc.on('data', chunk => chunks.push(chunk));
+    const pdfPromise = new Promise((resolve, reject) => {
+      doc.on('end', () => resolve(Buffer.concat(chunks)));
+      doc.on('error', reject);
     });
 
-    console.log('📤 Sending request to ConvertAPI...');
+    doc.image(imageBuffer, 0, 0, { width: metadata.width, height: metadata.height });
+    doc.end();
 
-    // Send request to ConvertAPI (same as Word/Excel)
-    const response = await axios({
-      method: 'POST',
-      url: endpoint,
-      headers: {
-        'Authorization': `Bearer ${CONVERTAPI_KEY}`,
-        ...form.getHeaders()
-      },
-      data: form,
-      timeout: 45000,
-      maxContentLength: Infinity,
-      maxBodyLength: Infinity
-    });
+    const pdfBuffer = await pdfPromise;
+    const filename = `${path.parse(req.file.originalname).name}.pdf`;
 
-    console.log('📥 Response received, status:', response.status);
+    console.log('✅ [PDFKIT] Conversion successful!');
+    logConversion('OK', 'IMAGE', ip, req.file.originalname);
 
-    if (response.status === 200 && response.data) {
-      console.log('✅ ConvertAPI response received');
-
-      const responseData = response.data;
-
-      if (!responseData.Files || !responseData.Files[0]) {
-        throw new Error('Invalid ConvertAPI response - missing Files array');
-      }
-
-      const file = responseData.Files[0];
-
-      // Handle Base64 response (same as Word/Excel conversion)
-      if (file.FileData) {
-        console.log('📄 Processing Base64 PDF data...');
-        console.log('📄 Original file size from API:', file.FileSize, 'bytes');
-
-        // Convert Base64 to Buffer
-        const pdfBuffer = Buffer.from(file.FileData, 'base64');
-        const filename = `${path.parse(req.file.originalname).name}.pdf`;
-
-        console.log('📄 Converted PDF buffer size:', pdfBuffer.length, 'bytes');
-        console.log('✅ Image conversion successful!');
-
-        logConversion('OK', 'IMAGE', ip, req.file.originalname);
-
-        // Send PDF to user
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-        res.end(pdfBuffer);
-
-        // Cleanup
-        fs.unlinkSync(inPath);
-        console.log('🗑️ Cleanup completed');
-
-      } else {
-        throw new Error('ConvertAPI response missing FileData field');
-      }
-
-    } else {
-      throw new Error(`ConvertAPI error: ${response.status}`);
-    }
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.end(pdfBuffer);
 
   } catch (error) {
-    console.log('❌ IMAGE CONVERSION ERROR:');
-    console.log('❌ Error type:', error.constructor.name);
-    console.log('❌ Error message:', error.message);
-
-    if (error.response) {
-      console.log('❌ Response status:', error.response.status);
-      console.log('❌ Response statusText:', error.response.statusText);
-
-      if (error.response.data) {
-        try {
-          const errorText = Buffer.from(error.response.data).toString();
-          console.log('❌ Response body:', errorText);
-        } catch (e) {
-          console.log('❌ Could not read response body');
-        }
-      }
-    }
-
-    if (error.code === 'ENOTFOUND') {
-      console.log('❌ Network error: Cannot reach ConvertAPI');
-    } else if (error.code === 'ECONNABORTED') {
-      console.log('❌ Timeout error: Request took too long');
-    }
-
+    console.log('❌ [PDFKIT] Error:', error.message);
     logConversion('FAIL', 'IMAGE', ip, req.file.originalname, error.message);
-
-    // Cleanup
-    try {
-      if (fs.existsSync(inPath)) {
-        fs.unlinkSync(inPath);
-        console.log('🗑️ Cleanup completed (error case)');
-      }
-    } catch (e) {
-      console.log('❌ Cleanup failed:', e.message);
-    }
-
     res.status(500).json({ error: 'Failed to convert image to PDF.' });
+  } finally {
+    if (fs.existsSync(inPath)) fs.unlinkSync(inPath);
   }
 };
 
-// ConvertAPI test function (ADD THIS TO THE END OF YOUR CONTROLLER FILE)
 exports.testConvertAPI = async (req, res) => {
-  try {
-    console.log('🧪 Testing ConvertAPI connection...');
-    console.log('🧪 API Key present:', !!CONVERTAPI_KEY);
-    console.log('🧪 API Key length:', CONVERTAPI_KEY?.length || 0);
-
-    const testData = Buffer.from('ConvertAPI Test', 'utf8');
-
-    const startTime = Date.now();
-    const response = await axios({
-      method: 'POST',
-      url: 'https://v2.convertapi.com/convert/txt/to/pdf',
-      headers: {
-        'Authorization': `Bearer ${CONVERTAPI_KEY}`,
-        'Content-Type': 'application/octet-stream'
-      },
-      data: testData,
-      responseType: 'arraybuffer',
-      timeout: 10000
-    });
-    const duration = Date.now() - startTime;
-
-    console.log('✅ Test successful, status:', response.status);
-    console.log('⏱️ Response time:', duration + 'ms');
-
-    res.json({
-      success: true,
-      message: 'ConvertAPI connection working perfectly',
-      responseTime: duration + 'ms',
-      apiKeyLength: CONVERTAPI_KEY?.length || 0,
-      timestamp: new Date().toISOString()
-    });
-
-  } catch (error) {
-    console.log('❌ Test failed:', error.message);
-    console.log('❌ Error code:', error.code);
-
-    let errorDetails = error.message;
-    if (error.response?.status === 401) {
-      errorDetails = 'Invalid API key or expired token';
-    } else if (error.response?.status === 429) {
-      errorDetails = 'Rate limit exceeded or out of credits';
-    } else if (error.code === 'ENOTFOUND') {
-      errorDetails = 'Cannot reach ConvertAPI servers (network issue)';
+  res.json({
+    success: true,
+    message: '100% FREE Node.js converters',
+    converters: {
+      text: 'PDFKit',
+      word: 'Mammoth.js + Puppeteer',
+      excel: 'XLSX + Puppeteer',
+      image: 'Sharp + PDFKit'
     }
-
-    res.status(500).json({
-      success: false,
-      error: 'ConvertAPI test failed',
-      details: errorDetails,
-      timestamp: new Date().toISOString()
-    });
-  }
+  });
 };
-
-
-
