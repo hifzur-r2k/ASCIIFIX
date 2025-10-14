@@ -1,11 +1,12 @@
 require('dotenv').config();
 const express = require('express');
+const app = express();
+app.set('trust proxy', true);
 const path = require('path');
 const fs = require('fs');
 const fileConverterRoutes = require('./src/file_converter/fileConverter.routes');
 const plagiarismRoutes = require('./src/plagiarism_check/routes/plagiarismCheck.routes');
 const aiDetectorRoutes = require('./src/plagiarism_check/routes/aiDetector.routes');
-const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware

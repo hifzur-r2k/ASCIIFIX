@@ -287,7 +287,7 @@ class AdvancedAIDetector {
         reject(new Error("Enhanced neural detection timeout (90s exceeded)"));
       }, 90000);
 
-      const pythonProcess = spawn("python", [this.pythonScript], {
+      const pythonProcess = spawn("python3", [this.pythonScript], {
         cwd: path.dirname(this.pythonScript),
         stdio: ["pipe", "pipe", "pipe"],
         shell: false,

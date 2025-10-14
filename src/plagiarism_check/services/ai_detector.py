@@ -1,4 +1,6 @@
 import sys
+print("AI Detector script starting...", flush=True)
+sys.stdout.flush()
 import json
 import time
 import re
