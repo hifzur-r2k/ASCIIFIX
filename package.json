@@ -9,6 +9,7 @@
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@mozilla/readability": "^0.6.0",
+    "@sparticuz/chromium": "^141.0.0",
     "@tensorflow/tfjs-node": "^4.22.0",
     "axios": "^1.11.0",
     "cheerio": "^1.1.2",
@@ -37,6 +38,7 @@
     "pdf-parse": "^1.1.1",
     "pdfkit": "^0.13.0",
     "puppeteer": "^24.24.1",
+    "puppeteer-core": "^24.24.1",
     "redis": "^5.8.2",
     "sharp": "^0.34.4",
     "stemmer": "^2.0.1",

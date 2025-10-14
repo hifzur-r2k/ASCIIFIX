@@ -4,7 +4,23 @@ const PDFDocument = require('pdfkit');
 const sharp = require('sharp');
 const mammoth = require('mammoth');
 const XLSX = require('xlsx');
-const puppeteer = require('puppeteer');
+
+// Platform detection
+const isWindows = process.platform === 'win32';
+const isProduction = process.env.NODE_ENV === 'production';
+
+// Dynamic Puppeteer import based on platform
+let puppeteer;
+let chromium;
+
+if (isWindows && !isProduction) {
+  // Windows localhost: use full puppeteer with bundled Chromium
+  puppeteer = require('puppeteer');
+} else {
+  // Linux/Render: use puppeteer-core + @sparticuz/chromium
+  puppeteer = require('puppeteer-core');
+  chromium = require('@sparticuz/chromium');
+}
 
 const LOG_FILE = path.join(__dirname, '../../logs/conversions.log');
 
@@ -14,7 +30,7 @@ function logConversion(status, type, ip, filename, msg = '') {
 }
 
 // ==========================================
-// TEXT TO PDF (Keep working version)
+// TEXT TO PDF
 // ==========================================
 exports.textToPdf = (req, res) => {
   console.log('📝 Processing text conversion...');
@@ -54,7 +70,7 @@ exports.textToPdf = (req, res) => {
 };
 
 // ==========================================
-// WORD TO PDF (Mammoth.js + Puppeteer - 100% Node.js!)
+// WORD TO PDF (Cross-Platform)
 // ==========================================
 exports.wordToPdf = async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'File missing or invalid.' });
@@ -66,22 +82,32 @@ exports.wordToPdf = async (req, res) => {
   try {
     console.log('📝 [MAMMOTH] Converting DOCX to HTML...');
     
-    // Step 1: Convert DOCX to HTML using mammoth
     const result = await mammoth.convertToHtml({ path: inPath });
-    const html = result.value; // The generated HTML
+    const html = result.value;
     
     console.log('✅ [MAMMOTH] HTML generated, length:', html.length);
     console.log('📄 [PUPPETEER] Converting HTML to PDF...');
+    console.log('🖥️ Platform:', process.platform);
 
-    // Step 2: Convert HTML to PDF using Puppeteer
-    browser = await puppeteer.launch({ 
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
+    // Launch Puppeteer based on platform
+    if (isWindows && !isProduction) {
+      console.log('💻 Using Windows Chromium (localhost)');
+      browser = await puppeteer.launch({ 
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+      });
+    } else {
+      console.log('🐧 Using @sparticuz/chromium (Linux/Render)');
+      browser = await puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath(),
+        headless: chromium.headless,
+      });
+    }
     
     const page = await browser.newPage();
     
-    // Create full HTML document with styling
     const fullHtml = `
       <!DOCTYPE html>
       <html>
@@ -139,7 +165,7 @@ exports.wordToPdf = async (req, res) => {
 };
 
 // ==========================================
-// EXCEL TO PDF (XLSX + Puppeteer - 100% Node.js!)
+// EXCEL TO PDF (Cross-Platform)
 // ==========================================
 exports.excelToPdf = async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'File missing or invalid.' });
@@ -151,11 +177,9 @@ exports.excelToPdf = async (req, res) => {
   try {
     console.log('📊 [XLSX] Reading Excel file...');
     
-    // Step 1: Read Excel file and convert to HTML
     const workbook = XLSX.readFile(inPath);
     let html = '';
 
-    // Convert each sheet to HTML table
     workbook.SheetNames.forEach((sheetName, index) => {
       const worksheet = workbook.Sheets[sheetName];
       const sheetHtml = XLSX.utils.sheet_to_html(worksheet);
@@ -169,12 +193,24 @@ exports.excelToPdf = async (req, res) => {
 
     console.log('✅ [XLSX] HTML generated');
     console.log('📄 [PUPPETEER] Converting HTML to PDF...');
+    console.log('🖥️ Platform:', process.platform);
 
-    // Step 2: Convert HTML to PDF using Puppeteer
-    browser = await puppeteer.launch({ 
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
+    // Launch Puppeteer based on platform
+    if (isWindows && !isProduction) {
+      console.log('💻 Using Windows Chromium (localhost)');
+      browser = await puppeteer.launch({ 
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+      });
+    } else {
+      console.log('🐧 Using @sparticuz/chromium (Linux/Render)');
+      browser = await puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath(),
+        headless: chromium.headless,
+      });
+    }
     
     const page = await browser.newPage();
     
@@ -216,7 +252,7 @@ exports.excelToPdf = async (req, res) => {
     
     const pdfBuffer = await page.pdf({
       format: 'A4',
-      landscape: true, // Excel sheets often look better in landscape
+      landscape: true,
       printBackground: true,
       margin: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' }
     });
@@ -245,7 +281,7 @@ exports.excelToPdf = async (req, res) => {
 };
 
 // ==========================================
-// IMAGE TO PDF (Keep your working version)
+// IMAGE TO PDF
 // ==========================================
 exports.imageToPdf = async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'File missing or invalid.' });
@@ -293,14 +329,18 @@ exports.imageToPdf = async (req, res) => {
   }
 };
 
+// ==========================================
+// TEST ENDPOINT
+// ==========================================
 exports.testConvertAPI = async (req, res) => {
   res.json({
     success: true,
-    message: '100% FREE Node.js converters',
+    platform: process.platform,
+    environment: isProduction ? 'production' : 'development',
     converters: {
       text: 'PDFKit',
-      word: 'Mammoth.js + Puppeteer',
-      excel: 'XLSX + Puppeteer',
+      word: isWindows && !isProduction ? 'Puppeteer (Windows)' : '@sparticuz/chromium (Linux)',
+      excel: isWindows && !isProduction ? 'Puppeteer (Windows)' : '@sparticuz/chromium (Linux)',
       image: 'Sharp + PDFKit'
     }
   });
