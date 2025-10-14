@@ -287,14 +287,17 @@ class AdvancedAIDetector {
         reject(new Error("Enhanced neural detection timeout (90s exceeded)"));
       }, 90000);
 
-      const pythonProcess = spawn("python3", [this.pythonScript], {
+      // Cross-platform Python command detection
+      const pythonCommand = process.platform === 'win32' ? 'python' : 'python3';
+
+      const pythonProcess = spawn(pythonCommand, [this.pythonScript], {
         cwd: path.dirname(this.pythonScript),
         stdio: ["pipe", "pipe", "pipe"],
         shell: false,
         env: {
           ...process.env,
           PYTHONUNBUFFERED: "1",
-          PYTHONDONTWRITEBYTECODE: "1", 
+          PYTHONDONTWRITEBYTECODE: "1",
         },
       });
 
@@ -493,7 +496,7 @@ class AdvancedAIDetector {
         return cached.result;
       } else {
         // Clean up expired or outdated cache
-        await fs.unlink(cacheFile).catch(() => {});
+        await fs.unlink(cacheFile).catch(() => { });
       }
     } catch (error) {
     }
