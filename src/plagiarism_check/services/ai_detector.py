@@ -1,5 +1,5 @@
 import sys
-print("AI Detector script starting...", flush=True)
+sys.stderr.write("AI Detector script starting...\n")
 sys.stdout.flush()
 import json
 import time
