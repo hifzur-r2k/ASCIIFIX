@@ -74,13 +74,14 @@ body {
   letter-spacing: 0.3px;
 }
 
+/* Updated Grid for 6 boxes (3 columns x 2 rows) */
 .converters-grid {
   width: 95vw;
-  max-width: 1000px;
+  max-width: 1400px;
   margin: 0 auto 30px auto;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
   gap: 30px;
 }
 
@@ -165,6 +166,45 @@ body {
   color: #888;
   font-size: 0.97rem;
   margin-bottom: 11px;
+}
+
+/* Format Selector Dropdown */
+.format-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  margin-top: 8px;
+}
+
+.format-selector label {
+  font-size: 0.98rem;
+  font-weight: bold;
+  color: #222;
+  letter-spacing: 0.3px;
+}
+
+.format-selector select {
+  background: #fff;
+  border: 1.5px solid #222;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  color: #222;
+  font-weight: 500;
+}
+
+.format-selector select:hover {
+  background: #f8f8f8;
+}
+
+.format-selector select:focus {
+  outline: none;
+  border-color: #000;
+  background: #fafafa;
 }
 
 /* Enhanced Convert Button with Minimal Animations */
@@ -349,13 +389,25 @@ body {
   to { opacity: 0; transform: translateY(-10px); }
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* Responsive Design */
+@media (max-width: 1200px) {
+  .converters-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto auto auto;
+  }
+}
+
 @media (max-width: 900px) {
   .converters-grid {
     width: 98vw;
     max-width: 99vw;
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto;
+    grid-template-rows: auto auto auto auto auto auto;
   }
 }
 
@@ -387,6 +439,15 @@ body {
     width: 92vw;
     min-width: 0;
     max-width: 98vw;
+  }
+  
+  .format-selector {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .format-selector select {
+    width: 150px;
   }
 }
 

@@ -1,15 +1,43 @@
+// Icon mapping for different formats
+const formatIcons = {
+  pdf: '📕',
+  word: '📘',
+  excel: '📗',
+  text: '📄',
+  image: '🖼️',
+  powerpoint: '📊'
+};
+
+// File extensions for different formats
+const formatExtensions = {
+  pdf: '.pdf',
+  word: '.docx',
+  excel: '.xlsx',
+  text: '.txt',
+  image: '.png',
+  powerpoint: '.pptx'
+};
+
 document.querySelectorAll('.convert-card').forEach(card => {
   const id = card.id;
+  const inputType = card.dataset.inputType;
   const uploadArea = card.querySelector('.upload-area');
   const fileNameDisplay = card.querySelector('.file-name-display');
   const convertBtn = card.querySelector('.convert-btn');
   const downloadBtn = card.querySelector('.download-btn');
+  const outputFormatSelect = card.querySelector('.output-format');
+  const outputIcon = card.querySelector('.output-icon');
+  
   let selectedFile = null;
-  let convertedBlob = null; // Store the converted PDF blob
-  let convertedFilename = null; // Store the filename
+  let convertedBlob = null;
+  let convertedFilename = null;
+  
+  // PowerPoint has no dropdown (fixed PDF output)
+  const isPowerPointCard = inputType === 'powerpoint';
+  let selectedOutputFormat = isPowerPointCard ? 'pdf' : (outputFormatSelect ? outputFormatSelect.value : 'pdf');
 
-  // Special for text-to-pdf: textarea input
-  const isTextCard = id === 'txt2pdf';
+  // Special for text converter: textarea input
+  const isTextCard = inputType === 'text';
   let textArea = isTextCard ? card.querySelector('.text-upload-box') : null;
   let hasTextInput = false;
 
@@ -19,6 +47,31 @@ document.querySelectorAll('.convert-card').forEach(card => {
   progressBar.innerHTML = '<div class="progress-fill"></div>';
   convertBtn.parentNode.insertBefore(progressBar, convertBtn);
   const progressFill = progressBar.querySelector('.progress-fill');
+
+  // Handle output format change (only if dropdown exists)
+  if (outputFormatSelect && !isPowerPointCard) {
+    outputFormatSelect.addEventListener('change', function() {
+      selectedOutputFormat = this.value;
+      
+      // Update output icon
+      if (outputIcon) {
+        outputIcon.textContent = formatIcons[selectedOutputFormat];
+      }
+      
+      // Update button text
+      const formatName = selectedOutputFormat.charAt(0).toUpperCase() + selectedOutputFormat.slice(1);
+      convertBtn.textContent = `Convert to ${formatName}`;
+      downloadBtn.textContent = `Download ${formatName}`;
+      
+      // Clear previous conversion when format changes
+      convertedBlob = null;
+      convertedFilename = null;
+      downloadBtn.disabled = true;
+      
+      // Re-enable convert button if file/text is already selected
+      updateConvertBtn();
+    });
+  }
 
   function updateConvertBtn() {
     if (isTextCard) {
@@ -46,7 +99,7 @@ document.querySelectorAll('.convert-card').forEach(card => {
   function resetCard() {
     selectedFile = null;
     hasTextInput = false;
-    convertedBlob = null; // Clear stored PDF
+    convertedBlob = null;
     convertedFilename = null;
 
     if (fileNameDisplay) {
@@ -63,7 +116,7 @@ document.querySelectorAll('.convert-card').forEach(card => {
     }
 
     convertBtn.disabled = true;
-    downloadBtn.disabled = true; // Disable download button
+    downloadBtn.disabled = true;
 
     // Reset progress bar
     progressBar.classList.remove('active');
@@ -97,7 +150,6 @@ document.querySelectorAll('.convert-card').forEach(card => {
 
     updateConvertBtn();
     showNotification(`File "${file.name}" selected successfully!`, 'success');
-
 
     // For text files, also show content in textarea
     if (isTextCard && textArea) {
@@ -164,7 +216,6 @@ document.querySelectorAll('.convert-card').forEach(card => {
         convertBtn.disabled = false;
       }
 
-
       // Visual feedback for typing
       if (hasTextInput) {
         textArea.style.borderColor = '#222';
@@ -173,12 +224,14 @@ document.querySelectorAll('.convert-card').forEach(card => {
         textArea.style.borderColor = '#aaa';
         textArea.style.background = '#fafafa';
       }
-
     });
   }
 
   // Enhanced convert button - NO AUTO DOWNLOAD
   convertBtn.addEventListener('click', async function () {
+    // Get current format name for display
+    const formatName = selectedOutputFormat.charAt(0).toUpperCase() + selectedOutputFormat.slice(1);
+    
     // Start conversion animation
     convertBtn.disabled = true;
     convertBtn.classList.add('converting');
@@ -196,12 +249,8 @@ document.querySelectorAll('.convert-card').forEach(card => {
     }, 500);
 
     try {
-      // Determine endpoint
-      let endpoint;
-      if (id === 'img2pdf') endpoint = '/convert/image';
-      else if (id === 'txt2pdf') endpoint = '/convert/text';
-      else if (id === 'doc2pdf') endpoint = '/convert/word';
-      else if (id === 'xls2pdf') endpoint = '/convert/excel';
+      // Determine endpoint based on input and output types
+      const endpoint = `/convert/${inputType}-to-${selectedOutputFormat}`;
 
       const formData = new FormData();
 
@@ -236,16 +285,17 @@ document.querySelectorAll('.convert-card').forEach(card => {
       if (response.ok) {
         const blob = await response.blob();
 
-        // Store the converted PDF (NO AUTO DOWNLOAD)
+        // Store the converted file
         convertedBlob = blob;
 
-        // Set filename
+        // Set filename with proper extension
+        const extension = formatExtensions[selectedOutputFormat];
         if (selectedFile) {
-          convertedFilename = selectedFile.name.replace(/\.[^.]+$/, '.pdf');
+          convertedFilename = selectedFile.name.replace(/\.[^.]+$/, extension);
         } else if (isTextCard) {
-          convertedFilename = 'text.pdf';
+          convertedFilename = `text${extension}`;
         } else {
-          convertedFilename = 'document.pdf';
+          convertedFilename = `document${extension}`;
         }
 
         // Success animation
@@ -254,22 +304,20 @@ document.querySelectorAll('.convert-card').forEach(card => {
         convertBtn.textContent = '✅ Ready to Download!';
 
         // Enable download button
-        // Enable download button
         downloadBtn.disabled = false;
         downloadBtn.style.background = '#f9f9f9';
         downloadBtn.style.borderStyle = 'solid';
-        downloadBtn.textContent = "Download PDF";
-
+        downloadBtn.textContent = isPowerPointCard ? 'Download PDF' : `Download ${formatName}`;
 
         setTimeout(() => {
           convertBtn.classList.remove('success-flash');
-          convertBtn.textContent = 'Convert to PDF';
+          convertBtn.textContent = isPowerPointCard ? 'Convert to PDF' : `Convert to ${formatName}`;
           convertBtn.disabled = false;
           progressBar.classList.remove('active');
           progressFill.style.width = '0%';
         }, 2000);
 
-        showNotification('PDF ready for download! Click the Download button.', 'success');
+        showNotification(`${formatName} ready for download! Click the Download button.`, 'success');
 
       } else {
         throw new Error('Conversion failed');
@@ -280,16 +328,15 @@ document.querySelectorAll('.convert-card').forEach(card => {
       clearInterval(progressInterval);
 
       // Error animation
-      // Error animation
       convertBtn.classList.remove('converting');
       convertBtn.style.background = '#f0f0f0';
       convertBtn.style.borderColor = '#666';
       convertBtn.style.opacity = '0.7';
       convertBtn.textContent = '❌ Failed';
 
-
       setTimeout(() => {
-        convertBtn.textContent = 'Convert to PDF';
+        const formatName = selectedOutputFormat.charAt(0).toUpperCase() + selectedOutputFormat.slice(1);
+        convertBtn.textContent = isPowerPointCard ? 'Convert to PDF' : `Convert to ${formatName}`;
         convertBtn.style.background = '';
         convertBtn.style.borderColor = '';
         convertBtn.style.opacity = '';
@@ -297,7 +344,6 @@ document.querySelectorAll('.convert-card').forEach(card => {
         progressBar.classList.remove('active');
         progressFill.style.width = '0%';
       }, 2000);
-
 
       if (error.name === 'AbortError') {
         showNotification('Conversion timed out. File may be too large.', 'error');
@@ -307,7 +353,7 @@ document.querySelectorAll('.convert-card').forEach(card => {
     }
   });
 
-  // NEW: Download button click handler
+  // Download button click handler
   downloadBtn.addEventListener('click', function () {
     if (!convertedBlob || !convertedFilename) {
       showNotification('No file ready for download. Please convert first.', 'warning');
@@ -322,7 +368,7 @@ document.querySelectorAll('.convert-card').forEach(card => {
     a.style.display = 'none';
 
     document.body.appendChild(a);
-    a.click(); // Only download when button is clicked
+    a.click();
 
     // Cleanup
     setTimeout(() => {
@@ -331,13 +377,13 @@ document.querySelectorAll('.convert-card').forEach(card => {
     }, 100);
 
     // Download button feedback
-    // Download button feedback
+    const formatName = selectedOutputFormat.charAt(0).toUpperCase() + selectedOutputFormat.slice(1);
     downloadBtn.textContent = '✅ Downloaded!';
     downloadBtn.style.background = '#f5f5f5';
     downloadBtn.style.transform = 'scale(1.05)';
 
     setTimeout(() => {
-      downloadBtn.textContent = "Download PDF";
+      downloadBtn.textContent = isPowerPointCard ? 'Download PDF' : `Download ${formatName}`;
       downloadBtn.style.background = '';
       downloadBtn.style.transform = '';
 
@@ -349,9 +395,6 @@ document.querySelectorAll('.convert-card').forEach(card => {
       convertedBlob = null;
       convertedFilename = null;
     }, 2000);
-
-
-
 
     showNotification(`${convertedFilename} downloaded successfully!`, 'success');
   });
@@ -375,13 +418,3 @@ function showNotification(message, type = 'success') {
     }, 300);
   }, 4000);
 }
-
-// Add CSS animations for fadeOut
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes fadeOut {
-    from { opacity: 1; transform: translateY(0); }
-    to { opacity: 0; transform: translateY(-10px); }
-  }
-`;
-document.head.appendChild(style);

@@ -26,16 +26,16 @@
 
     <!-- Subtitle Description -->
     <div class="sub-desc">
-        Convert your files to PDF format quickly and easily. Support for Text, Word, Excel, and Image files.
+        Convert your files between multiple formats. Support for Text, Word, Excel, PDF, PowerPoint, and Image files.
     </div>
 
     <!-- Converters Grid -->
     <div class="converters-grid">
         
-        <!-- Text to PDF Converter -->
-        <div class="convert-card" id="txt2pdf">
-            <div class="convert-title">Text to PDF</div>
-            <div class="convert-icons">📄 → 📕</div>
+        <!-- Text Converter -->
+        <div class="convert-card" id="txt2any" data-input-type="text">
+            <div class="convert-title">Text Converter</div>
+            <div class="convert-icons">📄 → <span class="output-icon">📕</span></div>
             
             <!-- Text Area for Manual Input -->
             <textarea class="text-upload-box" placeholder="Type your text here or upload a .txt file..."></textarea>
@@ -50,14 +50,25 @@
             <div class="accepted">Accepted: .txt files</div>
             <div class="file-name-display"></div>
             
-            <button class="convert-btn" disabled>Convert to PDF</button>
-            <button class="download-btn" disabled>Download PDF</button>
+            <!-- Output Format Dropdown -->
+            <div class="format-selector">
+                <label>Convert to:</label>
+                <select class="output-format">
+                    <option value="pdf">PDF</option>
+                    <option value="word">Word</option>
+                    <option value="excel">Excel</option>
+                    <option value="image">Image</option>
+                </select>
+            </div>
+            
+            <button class="convert-btn" disabled>Convert</button>
+            <button class="download-btn" disabled>Download</button>
         </div>
 
-        <!-- Word to PDF Converter -->
-        <div class="convert-card" id="doc2pdf">
-            <div class="convert-title">Word to PDF</div>
-            <div class="convert-icons">📘 → 📕</div>
+        <!-- Word Converter -->
+        <div class="convert-card" id="doc2any" data-input-type="word">
+            <div class="convert-title">Word Converter</div>
+            <div class="convert-icons">📘 → <span class="output-icon">📕</span></div>
             
             <div class="upload-area">
                 <input type="file" accept=".doc,.docx">
@@ -68,14 +79,25 @@
             <div class="accepted">Accepted: .doc, .docx files</div>
             <div class="file-name-display"></div>
             
-            <button class="convert-btn" disabled>Convert to PDF</button>
-            <button class="download-btn" disabled>Download PDF</button>
+            <!-- Output Format Dropdown -->
+            <div class="format-selector">
+                <label>Convert to:</label>
+                <select class="output-format">
+                    <option value="pdf">PDF</option>
+                    <option value="text">Text</option>
+                    <option value="excel">Excel</option>
+                    <option value="image">Image</option>
+                </select>
+            </div>
+            
+            <button class="convert-btn" disabled>Convert</button>
+            <button class="download-btn" disabled>Download</button>
         </div>
 
-        <!-- Excel to PDF Converter -->
-        <div class="convert-card" id="xls2pdf">
-            <div class="convert-title">Excel to PDF</div>
-            <div class="convert-icons">📗 → 📕</div>
+        <!-- Excel Converter -->
+        <div class="convert-card" id="xls2any" data-input-type="excel">
+            <div class="convert-title">Excel Converter</div>
+            <div class="convert-icons">📗 → <span class="output-icon">📕</span></div>
             
             <div class="upload-area">
                 <input type="file" accept=".xls,.xlsx,.xlsm,.csv">
@@ -86,14 +108,25 @@
             <div class="accepted">Accepted: .xls, .xlsx, .csv files</div>
             <div class="file-name-display"></div>
             
-            <button class="convert-btn" disabled>Convert to PDF</button>
-            <button class="download-btn" disabled>Download PDF</button>
+            <!-- Output Format Dropdown -->
+            <div class="format-selector">
+                <label>Convert to:</label>
+                <select class="output-format">
+                    <option value="pdf">PDF</option>
+                    <option value="text">Text</option>
+                    <option value="word">Word</option>
+                    <option value="image">Image</option>
+                </select>
+            </div>
+            
+            <button class="convert-btn" disabled>Convert</button>
+            <button class="download-btn" disabled>Download</button>
         </div>
 
-        <!-- Image to PDF Converter -->
-        <div class="convert-card" id="img2pdf">
-            <div class="convert-title">Image to PDF</div>
-            <div class="convert-icons">🖼️ → 📕</div>
+        <!-- Image Converter -->
+        <div class="convert-card" id="img2any" data-input-type="image">
+            <div class="convert-title">Image Converter</div>
+            <div class="convert-icons">🖼️ → <span class="output-icon">📕</span></div>
             
             <div class="upload-area">
                 <input type="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff,.webp">
@@ -103,6 +136,69 @@
             
             <div class="accepted">Accepted: .jpg, .png, .gif, .bmp files</div>
             <div class="file-name-display"></div>
+            
+            <!-- Output Format Dropdown -->
+            <div class="format-selector">
+                <label>Convert to:</label>
+                <select class="output-format">
+                    <option value="pdf">PDF</option>
+                    <option value="text">Text (OCR)</option>
+                    <option value="word">Word (OCR)</option>
+                    <option value="excel">Excel (OCR)</option>
+                </select>
+            </div>
+            
+            <button class="convert-btn" disabled>Convert</button>
+            <button class="download-btn" disabled>Download</button>
+        </div>
+
+        <!-- PDF Converter -->
+        <div class="convert-card" id="pdf2any" data-input-type="pdf">
+            <div class="convert-title">PDF Converter</div>
+            <div class="convert-icons">📕 → <span class="output-icon">📄</span></div>
+            
+            <div class="upload-area">
+                <input type="file" accept=".pdf">
+                <div>Drag & drop PDF file</div>
+                <button class="choose-btn">Choose File</button>
+            </div>
+            
+            <div class="accepted">Accepted: .pdf files</div>
+            <div class="file-name-display"></div>
+            
+            <!-- Output Format Dropdown -->
+            <div class="format-selector">
+                <label>Convert to:</label>
+                <select class="output-format">
+                    <option value="text">Text</option>
+                    <option value="word">Word</option>
+                    <option value="excel">Excel</option>
+                    <option value="image">Image</option>
+                </select>
+            </div>
+            
+            <button class="convert-btn" disabled>Convert</button>
+            <button class="download-btn" disabled>Download</button>
+        </div>
+
+        <!-- PowerPoint Converter -->
+        <div class="convert-card" id="ppt2pdf" data-input-type="powerpoint">
+            <div class="convert-title">PowerPoint Converter</div>
+            <div class="convert-icons">📊 → 📕</div>
+            
+            <div class="upload-area">
+                <input type="file" accept=".ppt,.pptx">
+                <div>Drag & drop PPT file</div>
+                <button class="choose-btn">Choose File</button>
+            </div>
+            
+            <div class="accepted">Accepted: .ppt, .pptx files</div>
+            <div class="file-name-display"></div>
+            
+            <!-- Fixed Output - PDF Only (No Dropdown) -->
+            <div class="format-selector">
+                <label>Convert to: <strong>PDF</strong></label>
+            </div>
             
             <button class="convert-btn" disabled>Convert to PDF</button>
             <button class="download-btn" disabled>Download PDF</button>
