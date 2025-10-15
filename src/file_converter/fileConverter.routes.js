@@ -4,250 +4,185 @@ const multer = require('multer');
 const path = require('path');
 const fileConverterController = require('./fileConverter.controller');
 
-// Enhanced debug logging middleware
+// Debug middleware
 router.use((req, res, next) => {
-  console.log('🔍 Route hit:', req.method, req.path);
-  console.log('🔍 Content-Type:', req.headers['content-type']);
-  console.log('🔍 User-Agent:', req.headers['user-agent']);
+  console.log('🔍 Route:', req.method, req.path);
   next();
 });
 
 const UPLOAD_DIR = path.join(__dirname, '../../uploads');
 
-// Enhanced multer storage configuration
+// Multer storage
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, UPLOAD_DIR);
-  },
+  destination: (req, file, cb) => cb(null, UPLOAD_DIR),
   filename: (req, file, cb) => {
-    // Sanitize filename and add timestamp
     const timestamp = Date.now();
     const sanitizedName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
     cb(null, `${timestamp}-${sanitizedName}`);
   },
 });
 
-// Enhanced file validation function
+// File type definitions
+const fileTypes = {
+  word: { 
+    extensions: ['.doc', '.docx'], 
+    mimetypes: ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'] 
+  },
+  excel: { 
+    extensions: ['.xls', '.xlsx', '.xlsm', '.csv'], 
+    mimetypes: ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv'] 
+  },
+  image: { 
+    extensions: ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.webp'], 
+    mimetypes: ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/tiff', 'image/webp'] 
+  },
+  text: { 
+    extensions: ['.txt', '.text'], 
+    mimetypes: ['text/plain'] 
+  },
+  pdf: {
+    extensions: ['.pdf'],
+    mimetypes: ['application/pdf']
+  },
+  powerpoint: {
+    extensions: ['.ppt', '.pptx'],
+    mimetypes: ['application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation']
+  }
+};
+
+// File filter
 const createFileFilter = (allowedTypes) => {
   return (req, file, cb) => {
-    console.log('🔍 File filter triggered for:', file.originalname);
-    console.log('🔍 File mimetype:', file.mimetype);
-    console.log('🔍 Request path:', req.path);
-
-    // File type validation based on route
-    const fileExtension = path.extname(file.originalname).toLowerCase();
-    
-    if (allowedTypes.extensions.includes(fileExtension) && 
-        allowedTypes.mimetypes.some(mime => file.mimetype.includes(mime))) {
-      console.log('✅ File type validation passed');
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (allowedTypes.extensions.includes(ext)) {
       cb(null, true);
     } else {
-      console.log('❌ File type validation failed');
       cb(new Error(`Invalid file type. Allowed: ${allowedTypes.extensions.join(', ')}`));
     }
   };
 };
 
-// File type definitions for each converter
-const fileTypes = {
-  word: {
-    extensions: ['.doc', '.docx'],
-    mimetypes: ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
-  },
-  excel: {
-    extensions: ['.xls', '.xlsx', '.xlsm', '.csv'],
-    mimetypes: ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv']
-  },
-  image: {
-    extensions: ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.webp'],
-    mimetypes: ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/tiff', 'image/webp']
-  },
-  text: {
-    extensions: ['.txt', '.text'],
-    mimetypes: ['text/plain']
-  }
-};
-
-// Single file upload configurations
-const createSingleUpload = (type, maxSize = 50 * 1024 * 1024) => {
+// Create upload middleware
+const createUpload = (type, maxSize = 50 * 1024 * 1024) => {
   return multer({
     storage: storage,
-    limits: { 
-      fileSize: maxSize,
-      files: 1
-    },
+    limits: { fileSize: maxSize, files: 1 },
     fileFilter: createFileFilter(fileTypes[type])
   }).single('file');
 };
 
-// Settings extraction middleware
-const extractSettings = (req, res, next) => {
-  req.conversionSettings = {
-    pageSize: req.body.pageSize || 'A4',
-    orientation: req.body.orientation || 'portrait',
-    quality: req.body.quality || 'high',
-    password: req.body.password || null,
-    margin: req.body.margin || 'normal',
-    compression: req.body.compression || 'auto'
-  };
-  
-  console.log('⚙️ Conversion settings:', req.conversionSettings);
-  next();
-};
-
-// Enhanced upload handler with better error handling
-const handleUpload = (uploadMiddleware, routeName) => {
+// Upload handler
+const handleUpload = (uploadMiddleware) => {
   return (req, res, next) => {
-    console.log(`📁 ${routeName} route hit`);
-    
     uploadMiddleware(req, res, (err) => {
       if (err) {
-        console.log('❌ Upload error:', err.message);
-        
-        // Enhanced error responses
-        if (err instanceof multer.MulterError) {
-          if (err.code === 'LIMIT_FILE_SIZE') {
-            return res.status(400).json({
-              error: 'File too large',
-              maxSize: '50MB',
-              details: 'Please choose a smaller file'
-            });
-          }
+        if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
+          return res.status(400).json({ error: 'File too large (max 50MB)' });
         }
-        
-        return res.status(400).json({
-          error: err.message,
-          details: 'Please check your file type and size'
-        });
+        return res.status(400).json({ error: err.message });
       }
-      
       if (!req.file) {
-        return res.status(400).json({
-          error: 'No file provided',
-          details: 'Please select a file to convert'
-        });
+        return res.status(400).json({ error: 'No file provided' });
       }
-      
-      console.log('📁 File after upload:', req.file);
       next();
     });
   };
 };
 
-// INDIVIDUAL CONVERSION ROUTES (Using your existing controller functions)
+// Text upload handler (allows both file and manual text)
+const handleTextUpload = (req, res, next) => {
+  const textUpload = createUpload('text', 5 * 1024 * 1024);
+  textUpload(req, res, (err) => {
+    if (err && !err.message.includes('Unexpected field') && err.code !== 'LIMIT_UNEXPECTED_FILE') {
+      return res.status(400).json({ error: err.message });
+    }
+    next();
+  });
+};
 
-// Word to PDF route - Enhanced
-router.post('/word', 
-  handleUpload(createSingleUpload('word'), 'Word'),
-  extractSettings,
-  fileConverterController.wordToPdf
-);
+// ==========================================
+// TEXT CONVERSION ROUTES
+// ==========================================
+router.post('/text-to-pdf', handleTextUpload, fileConverterController.textToPdf);
+router.post('/text-to-word', handleTextUpload, fileConverterController.textToWord);
+router.post('/text-to-excel', handleTextUpload, fileConverterController.textToExcel);
+router.post('/text-to-image', handleTextUpload, fileConverterController.textToImage);
 
-// Excel to PDF route - Enhanced  
-router.post('/excel',
-  handleUpload(createSingleUpload('excel', 100 * 1024 * 1024), 'Excel'), // 100MB for large spreadsheets
-  extractSettings,
-  fileConverterController.excelToPdf
-);
+// ==========================================
+// WORD CONVERSION ROUTES
+// ==========================================
+router.post('/word-to-pdf', handleUpload(createUpload('word')), fileConverterController.wordToPdf);
+router.post('/word-to-text', handleUpload(createUpload('word')), fileConverterController.wordToText);
+router.post('/word-to-excel', handleUpload(createUpload('word')), fileConverterController.wordToExcel);
+router.post('/word-to-image', handleUpload(createUpload('word')), fileConverterController.wordToImage);
 
-// Image to PDF route - Enhanced
-router.post('/image',
-  handleUpload(createSingleUpload('image', 20 * 1024 * 1024), 'Image'), // 20MB for high-res images
-  extractSettings,
-  fileConverterController.imageToPdf
-);
+// ==========================================
+// EXCEL CONVERSION ROUTES
+// ==========================================
+router.post('/excel-to-pdf', handleUpload(createUpload('excel', 100 * 1024 * 1024)), fileConverterController.excelToPdf);
+router.post('/excel-to-text', handleUpload(createUpload('excel', 100 * 1024 * 1024)), fileConverterController.excelToText);
+router.post('/excel-to-word', handleUpload(createUpload('excel', 100 * 1024 * 1024)), fileConverterController.excelToWord);
+router.post('/excel-to-image', handleUpload(createUpload('excel', 100 * 1024 * 1024)), fileConverterController.excelToImage);
 
-// Text to PDF route - Enhanced (Fixed for manual text input)
-router.post('/text',
-  // Custom middleware that handles BOTH file upload AND manual text
-  (req, res, next) => {
-    console.log('📁 Text route hit');
-    console.log('📁 Content-Type:', req.headers['content-type']);
-    console.log('📁 Checking for text input...');
-    
-    // Create multer instance for optional file upload
-    const textUpload = createSingleUpload('text', 5 * 1024 * 1024);
-    
-    textUpload(req, res, (err) => {
-      console.log('📁 Multer callback executed');
-      console.log('📁 Multer error:', err ? err.message : 'none');
-      console.log('📁 Has file after multer:', !!req.file);
-      console.log('📁 Body keys after multer:', Object.keys(req.body));
-      
-      // If there's a serious multer error (not just "no file"), handle it
-      if (err && !err.message.includes('Unexpected field') && err.code !== 'LIMIT_UNEXPECTED_FILE') {
-        console.log('❌ Serious upload error:', err.message);
-        return res.status(400).json({
-          error: err.message,
-          details: 'Please check your file type and size'
-        });
-      }
-      
-      // Continue regardless of whether file upload succeeded or failed
-      // The controller will handle both file and text scenarios
-      console.log('📁 Proceeding to controller...');
-      next();
-    });
-  },
-  extractSettings,
-  fileConverterController.textToPdf
-);
+// ==========================================
+// IMAGE CONVERSION ROUTES
+// ==========================================
+router.post('/image-to-pdf', handleUpload(createUpload('image', 20 * 1024 * 1024)), fileConverterController.imageToPdf);
+router.post('/image-to-text', handleUpload(createUpload('image', 20 * 1024 * 1024)), fileConverterController.imageToText);
+router.post('/image-to-word', handleUpload(createUpload('image', 20 * 1024 * 1024)), fileConverterController.imageToWord);
+router.post('/image-to-excel', handleUpload(createUpload('image', 20 * 1024 * 1024)), fileConverterController.imageToExcel);
 
-// UTILITY ROUTES (Using your existing controller functions)
+// ==========================================
+// PDF CONVERSION ROUTES
+// ==========================================
+router.post('/pdf-to-text', handleUpload(createUpload('pdf', 50 * 1024 * 1024)), fileConverterController.pdfToText);
+router.post('/pdf-to-word', handleUpload(createUpload('pdf', 50 * 1024 * 1024)), fileConverterController.pdfToWord);
+router.post('/pdf-to-excel', handleUpload(createUpload('pdf', 50 * 1024 * 1024)), fileConverterController.pdfToExcel);
+router.post('/pdf-to-image', handleUpload(createUpload('pdf', 50 * 1024 * 1024)), fileConverterController.pdfToImage);
 
-// Test route
+// ==========================================
+// POWERPOINT CONVERSION ROUTES
+// ==========================================
+router.post('/powerpoint-to-pdf', handleUpload(createUpload('powerpoint', 100 * 1024 * 1024)), fileConverterController.powerpointToPdf);
+
+// ==========================================
+// LEGACY ROUTES (Backward Compatibility)
+// ==========================================
+router.post('/text', handleTextUpload, fileConverterController.textToPdf);
+router.post('/word', handleUpload(createUpload('word')), fileConverterController.wordToPdf);
+router.post('/excel', handleUpload(createUpload('excel', 100 * 1024 * 1024)), fileConverterController.excelToPdf);
+router.post('/image', handleUpload(createUpload('image', 20 * 1024 * 1024)), fileConverterController.imageToPdf);
+
+// ==========================================
+// UTILITY ROUTES
+// ==========================================
 router.get('/test-api', fileConverterController.testConvertAPI);
 
-// Health check route
 router.get('/health', (req, res) => {
   res.json({
     status: 'healthy',
     uptime: process.uptime(),
-    timestamp: new Date().toISOString(),
-    services: {
-      convertAPI: 'active',
-      fileUpload: 'active',
-      storage: 'active'
-    }
-  });
-});
-
-// ENHANCED ERROR HANDLING MIDDLEWARE
-
-// 404 handler for unmatched routes
-router.use((req, res) => {
-  console.log('❌ Route not found:', req.method, req.path);
-  res.status(404).json({
-    error: 'Route not found',
-    availableRoutes: [
-      'POST /word',
-      'POST /excel', 
-      'POST /image',
-      'POST /text',
-      'GET /test-api',
-      'GET /health'
+    conversions: [
+      'text-to-pdf', 'text-to-word', 'text-to-excel', 'text-to-image',
+      'word-to-pdf', 'word-to-text', 'word-to-excel', 'word-to-image',
+      'excel-to-pdf', 'excel-to-text', 'excel-to-word', 'excel-to-image',
+      'image-to-pdf', 'image-to-text', 'image-to-word', 'image-to-excel',
+      'pdf-to-text', 'pdf-to-word', 'pdf-to-excel', 'pdf-to-image',
+      'powerpoint-to-pdf'
     ]
   });
 });
 
-// Global error handler for this router
+// ==========================================
+// ERROR HANDLERS (MUST BE LAST)
+// ==========================================
+router.use((req, res) => {
+  res.status(404).json({ error: 'Route not found', path: req.path });
+});
+
 router.use((err, req, res, next) => {
-  console.log('❌ Router error:', err.message);
-  
-  // Multer-specific errors
-  if (err instanceof multer.MulterError) {
-    return res.status(400).json({
-      error: 'File upload error',
-      details: err.message,
-      code: err.code
-    });
-  }
-  
-  // Generic errors
-  res.status(500).json({
-    error: 'Internal server error',
-    message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
-  });
+  console.log('❌ Error:', err.message);
+  res.status(500).json({ error: 'Internal error' });
 });
 
 module.exports = router;
