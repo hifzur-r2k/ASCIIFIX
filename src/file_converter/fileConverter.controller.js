@@ -755,7 +755,7 @@ exports.pdfToWord = async (req, res) => {
   const inPath = req.file.path;
 
   try {
-    console.log('📕 PDF → WORD (LibreOffice Enhanced)');
+    console.log('📕 PDF → WORD (pdf2docx - Professional Quality)');
 
     const outDir = path.dirname(inPath);
     const inputFileName = path.basename(inPath);
@@ -763,16 +763,17 @@ exports.pdfToWord = async (req, res) => {
     const expectedOutput = path.join(outDir, `${baseName}.docx`);
     const originalBaseName = path.parse(req.file.originalname).name;
 
-    const libreOfficePath = (process.platform === 'win32')
-      ? '"C:\\Program Files\\LibreOffice\\program\\soffice.exe"'
-      : 'libreoffice';
+    console.log('📂 Input file:', inPath);
+    console.log('📂 Expected output:', expectedOutput);
 
-    // Improved DPI settings for better quality
-    const dpi = 600; // Higher quality
-
-    const command = process.platform === 'win32'
-      ? `set PDFIMPORT_RESOLUTION_DPI=${dpi} && ${libreOfficePath} --headless --infilter="writer_pdf_import" --convert-to docx:"MS Word 2007 XML" --outdir "${outDir}" "${inPath}"`
-      : `PDFIMPORT_RESOLUTION_DPI=${dpi} ${libreOfficePath} --headless --infilter="writer_pdf_import" --convert-to docx:"MS Word 2007 XML" --outdir "${outDir}" "${inPath}"`;
+    // Platform-specific Python command
+    const pythonCmd = (process.platform === 'win32') ? 'python' : 'python3';
+    
+    // Path to Python script
+    const scriptPath = path.join(__dirname, 'pdf_to_word.py');
+    
+    // Build command
+    const command = `${pythonCmd} "${scriptPath}" "${inPath}" "${expectedOutput}"`;
 
     console.log('🔧 Command:', command);
 
@@ -780,30 +781,55 @@ exports.pdfToWord = async (req, res) => {
     const { promisify } = require('util');
     const execPromise = promisify(exec);
 
-    await execPromise(command);
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    try {
+      const { stdout, stderr } = await execPromise(command, {
+        timeout: 120000 // 2 minute timeout for large files
+      });
+      
+      if (stdout) console.log('✅ Python output:', stdout);
+      if (stderr) console.log('⚠️ Python stderr:', stderr);
 
-    if (!fs.existsSync(expectedOutput)) {
-      throw new Error('Conversion failed');
+    } catch (execError) {
+      console.log('❌ Python execution error:', execError.message);
+      throw new Error('PDF conversion failed');
     }
 
-    const filename = `${originalBaseName}.docx`;
-    console.log('✅ Converted with DPI:', dpi);
+    // Wait a bit for file to be fully written
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
+    // Check if output exists
+    if (!fs.existsSync(expectedOutput)) {
+      const files = fs.readdirSync(outDir);
+      console.log('📁 Files in directory:', files);
+      throw new Error('Conversion failed - output file not created');
+    }
+
+    const stats = fs.statSync(expectedOutput);
+    console.log('✅ Found DOCX at:', expectedOutput);
+    console.log('✅ DOCX created:', (stats.size / 1024).toFixed(2), 'KB');
+
+    const filename = `${originalBaseName}.docx`;
+
+    console.log('✅ PDF converted to Word successfully with full formatting!');
     logConversion('OK', 'PDF-TO-WORD', ip, req.file.originalname);
 
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-
+    
     const docxBuffer = fs.readFileSync(expectedOutput);
     res.end(docxBuffer);
 
+    // Cleanup
     if (fs.existsSync(expectedOutput)) fs.unlinkSync(expectedOutput);
 
   } catch (error) {
     console.log('❌ Error:', error.message);
+    
     logConversion('FAIL', 'PDF-TO-WORD', ip, req.file.originalname, error.message);
-    res.status(500).json({ error: 'Failed to convert PDF to Word.' });
+    res.status(500).json({ 
+      error: 'Failed to convert PDF to Word.',
+      details: error.message
+    });
   } finally {
     if (fs.existsSync(inPath)) fs.unlinkSync(inPath);
   }
