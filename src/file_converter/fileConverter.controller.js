@@ -28,7 +28,7 @@ const LOG_FILE = path.join(__dirname, '../../logs/conversions.log');
 
 function logConversion(status, type, ip, filename, msg = '') {
   const line = `${new Date().toISOString()} [${status}] [${type}] [${ip}] [${filename}] ${msg}\n`;
-  fs.appendFile(LOG_FILE, line, () => {});
+  fs.appendFile(LOG_FILE, line, () => { });
 }
 
 async function launchBrowser() {
@@ -732,7 +732,7 @@ exports.pdfToText = async (req, res) => {
     const pdfParse = require('pdf-parse');
     const dataBuffer = fs.readFileSync(inPath);
     const data = await pdfParse(dataBuffer);
-    
+
     const filename = `${path.parse(req.file.originalname).name}.txt`;
     logConversion('OK', 'PDF-TO-TEXT', ip, req.file.originalname);
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
@@ -749,63 +749,90 @@ exports.pdfToText = async (req, res) => {
 
 // PDF TO WORD using LibreOffice
 exports.pdfToWord = async (req, res) => {
-  if (!req.file) return res.status(400).json({ error: 'No file' });
-  console.log('📕 PDF → WORD (LibreOffice)');
+  if (!req.file) return res.status(400).json({ error: 'File missing or invalid.' });
+
   const ip = req.ip;
   const inPath = req.file.path;
 
   try {
-    const outDir = path.dirname(inPath);
-    const inputBaseName = path.basename(inPath, '.pdf');
-    const expectedOutput = path.join(outDir, `${inputBaseName}.docx`);
-
+    console.log('📕 PDF → WORD (LibreOffice)');
     console.log('📂 Converting with LibreOffice...');
 
-    const libreOfficePath = isProduction 
-      ? 'libreoffice' 
-      : '"C:\\Program Files\\LibreOffice\\program\\soffice.exe"';
-    
+    const outDir = path.dirname(inPath);
+    const inputFileName = path.basename(inPath); // Gets "1760623621448-The_Mesopotamians.pdf"
+    const baseName = path.parse(inputFileName).name; // Gets "1760623621448-The_Mesopotamians"
+    const expectedOutput = path.join(outDir, `${baseName}.docx`); // Creates "1760623621448-The_Mesopotamians.docx"
+    const originalBaseName = path.parse(req.file.originalname).name; // For download filename
+
+    console.log('📂 Input file:', inPath);
+    console.log('📂 Expected output:', expectedOutput);
+
+    // Platform-specific LibreOffice path
+    const libreOfficePath = (process.platform === 'win32')
+      ? '"C:\\Program Files\\LibreOffice\\program\\soffice.exe"'
+      : 'libreoffice';
+
     const command = `${libreOfficePath} --headless --infilter="writer_pdf_import" --convert-to docx:"MS Word 2007 XML" --outdir "${outDir}" "${inPath}"`;
 
-    execSync(command, { 
-      timeout: 120000,
-      windowsHide: true,
-      stdio: 'ignore'
-    });
+    console.log('🔧 Command:', command);
 
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    const { exec } = require('child_process');
+    const { promisify } = require('util');
+    const execPromise = promisify(exec);
 
-    if (!fs.existsSync(expectedOutput)) {
-      const altOutput = path.join(outDir, `${inputBaseName}.DOCX`);
-      if (fs.existsSync(altOutput)) {
-        fs.renameSync(altOutput, expectedOutput);
-      } else {
-        throw new Error('LibreOffice conversion failed');
+    try {
+      const { stdout, stderr } = await execPromise(command);
+
+      if (stderr) {
+        console.log('⚠️ LibreOffice stderr:', stderr);
       }
+      if (stdout) {
+        console.log('✅ LibreOffice stdout:', stdout);
+      }
+    } catch (execError) {
+      console.log('⚠️ LibreOffice command returned error, checking output...');
     }
 
-    const docxBuffer = fs.readFileSync(expectedOutput);
-    const filename = `${path.parse(req.file.originalname).name}.docx`;
+    // Wait for file to be written
+    console.log('⏳ Waiting for LibreOffice to finish writing file...');
+    await new Promise(resolve => setTimeout(resolve, 3000));
 
-    fs.unlinkSync(inPath);
-    fs.unlinkSync(expectedOutput);
+    // Check if output exists
+    if (!fs.existsSync(expectedOutput)) {
+      const files = fs.readdirSync(outDir);
+      console.log('📁 Files in directory:', files);
+      throw new Error('Word conversion failed - output file not created');
+    }
 
-    console.log('✅ PDF converted to Word!');
+    const stats = fs.statSync(expectedOutput);
+    console.log('✅ Found DOCX at:', expectedOutput);
+    console.log('✅ DOCX created:', (stats.size / 1024).toFixed(2), 'KB');
+
+    const filename = `${originalBaseName}.docx`; // User sees "The Mesopotamians.docx"
+
+
+    console.log('✅ PDF converted to Word successfully!');
     logConversion('OK', 'PDF-TO-WORD', ip, req.file.originalname);
-    
+
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+
+    const docxBuffer = fs.readFileSync(expectedOutput);
     res.end(docxBuffer);
+
+    // Cleanup
+    if (fs.existsSync(expectedOutput)) fs.unlinkSync(expectedOutput);
+
   } catch (error) {
     console.log('❌ Error:', error.message);
-    res.status(500).json({ 
-      error: 'Conversion failed',
+
+    logConversion('FAIL', 'PDF-TO-WORD', ip, req.file.originalname, error.message);
+    res.status(500).json({
+      error: 'Failed to convert PDF to Word.',
       details: error.message
     });
   } finally {
-    if (fs.existsSync(inPath)) {
-      try { fs.unlinkSync(inPath); } catch (e) {}
-    }
+    if (fs.existsSync(inPath)) fs.unlinkSync(inPath);
   }
 };
 
@@ -820,7 +847,7 @@ exports.pdfToExcel = async (req, res) => {
     const pdfParse = require('pdf-parse');
     const dataBuffer = fs.readFileSync(inPath);
     const data = await pdfParse(dataBuffer);
-    
+
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('PDF Content');
     data.text.split('\n').forEach(line => worksheet.addRow([line]));
@@ -828,7 +855,7 @@ exports.pdfToExcel = async (req, res) => {
 
     const buffer = await workbook.xlsx.writeBuffer();
     const filename = `${path.parse(req.file.originalname).name}.xlsx`;
-    
+
     logConversion('OK', 'PDF-TO-EXCEL', ip, req.file.originalname);
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
@@ -851,25 +878,25 @@ exports.pdfToImage = async (req, res) => {
   try {
     const pdfBuffer = fs.readFileSync(inPath);
     const base64Pdf = pdfBuffer.toString('base64');
-    
+
     browser = await launchBrowser();
     const page = await browser.newPage();
-    
+
     await page.setContent(`
       <html><body style="margin:0;padding:0;background:white;">
         <iframe src="data:application/pdf;base64,${base64Pdf}" 
                 style="width:100vw;height:100vh;border:none;"></iframe>
       </body></html>
     `);
-    
+
     await page.setViewport({ width: 850, height: 1100 });
     await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    const imageBuffer = await page.screenshot({ 
+
+    const imageBuffer = await page.screenshot({
       type: 'png',
       clip: { x: 0, y: 0, width: 850, height: 1100 }
     });
-    
+
     await browser.close();
 
     const filename = `${path.parse(req.file.originalname).name}.png`;
@@ -905,17 +932,17 @@ exports.powerpointToPdf = async (req, res) => {
     console.log('📂 Input file:', inPath);
     console.log('📂 Expected output:', expectedOutput);
 
-    const libreOfficePath = isProduction 
-      ? 'libreoffice' 
-      : '"C:\\Program Files\\LibreOffice\\program\\soffice.exe"';
+    const libreOfficePath = (process.platform === 'win32')
+      ? '"C:\\Program Files\\LibreOffice\\program\\soffice.exe"'
+      : 'libreoffice';
 
     const command = `${libreOfficePath} --headless --convert-to pdf --outdir "${outDir}" "${inPath}"`;
 
     console.log('📝 Running LibreOffice conversion...');
     console.log('🔧 Command:', command);
-    
+
     try {
-      execSync(command, { 
+      execSync(command, {
         timeout: 90000, // 90 seconds for large PowerPoints
         windowsHide: true,
         stdio: 'pipe'
@@ -974,15 +1001,15 @@ exports.powerpointToPdf = async (req, res) => {
   } catch (error) {
     console.log('❌ Conversion Error:', error.message);
     console.error('Stack trace:', error.stack);
-    
-    res.status(500).json({ 
+
+    res.status(500).json({
       error: 'PowerPoint to PDF conversion failed',
       details: error.message,
       solution: 'Make sure LibreOffice is installed at: C:\\Program Files\\LibreOffice\\'
     });
   } finally {
     if (fs.existsSync(inPath)) {
-      try { fs.unlinkSync(inPath); } catch (e) {}
+      try { fs.unlinkSync(inPath); } catch (e) { }
     }
   }
 };
