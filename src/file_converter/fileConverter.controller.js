@@ -755,24 +755,24 @@ exports.pdfToWord = async (req, res) => {
   const inPath = req.file.path;
 
   try {
-    console.log('📕 PDF → WORD (LibreOffice)');
-    console.log('📂 Converting with LibreOffice...');
+    console.log('📕 PDF → WORD (LibreOffice Enhanced)');
 
     const outDir = path.dirname(inPath);
-    const inputFileName = path.basename(inPath); // Gets "1760623621448-The_Mesopotamians.pdf"
-    const baseName = path.parse(inputFileName).name; // Gets "1760623621448-The_Mesopotamians"
-    const expectedOutput = path.join(outDir, `${baseName}.docx`); // Creates "1760623621448-The_Mesopotamians.docx"
-    const originalBaseName = path.parse(req.file.originalname).name; // For download filename
+    const inputFileName = path.basename(inPath);
+    const baseName = path.parse(inputFileName).name;
+    const expectedOutput = path.join(outDir, `${baseName}.docx`);
+    const originalBaseName = path.parse(req.file.originalname).name;
 
-    console.log('📂 Input file:', inPath);
-    console.log('📂 Expected output:', expectedOutput);
-
-    // Platform-specific LibreOffice path
     const libreOfficePath = (process.platform === 'win32')
       ? '"C:\\Program Files\\LibreOffice\\program\\soffice.exe"'
       : 'libreoffice';
 
-    const command = `${libreOfficePath} --headless --infilter="writer_pdf_import" --convert-to docx:"MS Word 2007 XML" --outdir "${outDir}" "${inPath}"`;
+    // Improved DPI settings for better quality
+    const dpi = 600; // Higher quality
+
+    const command = process.platform === 'win32'
+      ? `set PDFIMPORT_RESOLUTION_DPI=${dpi} && ${libreOfficePath} --headless --infilter="writer_pdf_import" --convert-to docx:"MS Word 2007 XML" --outdir "${outDir}" "${inPath}"`
+      : `PDFIMPORT_RESOLUTION_DPI=${dpi} ${libreOfficePath} --headless --infilter="writer_pdf_import" --convert-to docx:"MS Word 2007 XML" --outdir "${outDir}" "${inPath}"`;
 
     console.log('🔧 Command:', command);
 
@@ -780,38 +780,16 @@ exports.pdfToWord = async (req, res) => {
     const { promisify } = require('util');
     const execPromise = promisify(exec);
 
-    try {
-      const { stdout, stderr } = await execPromise(command);
-
-      if (stderr) {
-        console.log('⚠️ LibreOffice stderr:', stderr);
-      }
-      if (stdout) {
-        console.log('✅ LibreOffice stdout:', stdout);
-      }
-    } catch (execError) {
-      console.log('⚠️ LibreOffice command returned error, checking output...');
-    }
-
-    // Wait for file to be written
-    console.log('⏳ Waiting for LibreOffice to finish writing file...');
+    await execPromise(command);
     await new Promise(resolve => setTimeout(resolve, 3000));
 
-    // Check if output exists
     if (!fs.existsSync(expectedOutput)) {
-      const files = fs.readdirSync(outDir);
-      console.log('📁 Files in directory:', files);
-      throw new Error('Word conversion failed - output file not created');
+      throw new Error('Conversion failed');
     }
 
-    const stats = fs.statSync(expectedOutput);
-    console.log('✅ Found DOCX at:', expectedOutput);
-    console.log('✅ DOCX created:', (stats.size / 1024).toFixed(2), 'KB');
+    const filename = `${originalBaseName}.docx`;
+    console.log('✅ Converted with DPI:', dpi);
 
-    const filename = `${originalBaseName}.docx`; // User sees "The Mesopotamians.docx"
-
-
-    console.log('✅ PDF converted to Word successfully!');
     logConversion('OK', 'PDF-TO-WORD', ip, req.file.originalname);
 
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
@@ -820,17 +798,12 @@ exports.pdfToWord = async (req, res) => {
     const docxBuffer = fs.readFileSync(expectedOutput);
     res.end(docxBuffer);
 
-    // Cleanup
     if (fs.existsSync(expectedOutput)) fs.unlinkSync(expectedOutput);
 
   } catch (error) {
     console.log('❌ Error:', error.message);
-
     logConversion('FAIL', 'PDF-TO-WORD', ip, req.file.originalname, error.message);
-    res.status(500).json({
-      error: 'Failed to convert PDF to Word.',
-      details: error.message
-    });
+    res.status(500).json({ error: 'Failed to convert PDF to Word.' });
   } finally {
     if (fs.existsSync(inPath)) fs.unlinkSync(inPath);
   }
