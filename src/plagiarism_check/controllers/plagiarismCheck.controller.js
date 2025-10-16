@@ -36,26 +36,21 @@ const urlCache = new NodeCache({
 
 // Phrase-level cache for better performance
 const phraseCache = new NodeCache({ stdTTL: 86400 });
-const googleApiKeys = [
-  process.env.GOOGLE_API_KEY,
-  process.env.GOOGLE_API_KEY_2,
-  process.env.GOOGLE_API_KEY_3,
-  process.env.GOOGLE_API_KEY_4,
-  process.env.GOOGLE_API_KEY_5,
-  process.env.GOOGLE_API_KEY_6,
-  process.env.GOOGLE_API_KEY_7,
-  process.env.GOOGLE_API_KEY_8,
-  process.env.GOOGLE_API_KEY_9,
-  process.env.GOOGLE_API_KEY_10,
-].filter((key) => key && key.length > 0);
+// Load Google API keys from comma-separated environment variable
+const googleApiKeys = process.env.GOOGLE_API_KEY
+  ? process.env.GOOGLE_API_KEY.split(',')
+    .map(key => key.trim())
+    .filter(key => key.length > 0)
+  : [];
 
-// Load all 4 Brave API keys
-const braveApiKeys = [
-  process.env.BRAVE_API_KEY_1,
-  process.env.BRAVE_API_KEY_2,
-  process.env.BRAVE_API_KEY_3,
-  process.env.BRAVE_API_KEY_4,
-].filter((key) => key && key.length > 0);
+
+// Load Brave API keys from comma-separated environment variable
+const braveApiKeys = process.env.BRAVE_API_KEY
+  ? process.env.BRAVE_API_KEY.split(',')
+      .map(key => key.trim())
+      .filter(key => key.length > 0)
+  : [];
+
 
 // Combined API tracking
 const allApiKeys = [...googleApiKeys, ...braveApiKeys];
@@ -702,10 +697,10 @@ class EnhancedTextSimilarity {
 
     return matches > 0
       ? {
-          similarity: totalSimilarity / matches,
-          matches: matches,
-          isParaphrased: matches > 0,
-        }
+        similarity: totalSimilarity / matches,
+        matches: matches,
+        isParaphrased: matches > 0,
+      }
       : { similarity: 0, matches: 0, isParaphrased: false };
   }
 
@@ -1291,7 +1286,7 @@ class EnterpriseWebSearcher {
               url: idMatch[1].trim(),
               snippet: summaryMatch
                 ? summaryMatch[1].replace(/\n/g, " ").trim().substring(0, 200) +
-                  "..."
+                "..."
                 : "Academic paper from ArXiv",
               displayLink: "arxiv.org",
               source: "ArXiv",
@@ -1353,8 +1348,7 @@ class EnterpriseWebSearcher {
               (paper.authors && paper.authors[0]
                 ? `By ${paper.authors[0].name}. `
                 : "") +
-              `Published ${
-                paper.pubdate || "N/A"
+              `Published ${paper.pubdate || "N/A"
               }. Medical/scientific research paper.`,
             displayLink: "pubmed.ncbi.nlm.nih.gov",
             source: "PubMed",
@@ -1405,11 +1399,10 @@ class EnterpriseWebSearcher {
         results.push({
           title: title,
           url: item.URL || `https://doi.org/${item.DOI}`,
-          snippet: `By ${authors} (${year}). ${
-            item.abstract
+          snippet: `By ${authors} (${year}). ${item.abstract
               ? item.abstract.substring(0, 150) + "..."
               : "Academic publication with peer citations."
-          }`,
+            }`,
           displayLink: "crossref.org",
           source: "CrossRef",
         });
@@ -1446,13 +1439,11 @@ class EnterpriseWebSearcher {
         results.push({
           title: doc.title || "Untitled Archive Item",
           url: `https://archive.org/details/${doc.identifier}`,
-          snippet: `${
-            doc.description
+          snippet: `${doc.description
               ? doc.description.substring(0, 150) + "..."
               : "Historical document or media from Internet Archive."
-          } ${doc.creator ? `Created by ${doc.creator}.` : ""} ${
-            doc.date ? `Date: ${doc.date}` : ""
-          }`,
+            } ${doc.creator ? `Created by ${doc.creator}.` : ""} ${doc.date ? `Date: ${doc.date}` : ""
+            }`,
           displayLink: "archive.org",
           source: "Internet Archive",
         });
@@ -1684,8 +1675,7 @@ class BraveSearcher {
         if (attempt < 1) {
           const delay = 2000;
           console.log(
-            `🔄 Brave rate limit hit, waiting ${delay / 1000}s before retry ${
-              attempt + 1
+            `🔄 Brave rate limit hit, waiting ${delay / 1000}s before retry ${attempt + 1
             }...`
           );
           await new Promise((resolve) => setTimeout(resolve, delay));
@@ -1879,10 +1869,9 @@ class IntelligentSearchEngine {
         console.log(`❌ Search attempt ${attempt} failed: ${error.message}`);
         if (isAuthOrBadRequest(error)) {
           console.warn(
-            `🔒 API key error (non-retriable). Retiring key: ${
-              error.response?.config?.headers?.[
-                "X-Subscription-Token"
-              ]?.substring(0, 8) || "unknown"
+            `🔒 API key error (non-retriable). Retiring key: ${error.response?.config?.headers?.[
+              "X-Subscription-Token"
+            ]?.substring(0, 8) || "unknown"
             }...`
           );
           try {
@@ -1909,8 +1898,7 @@ class IntelligentSearchEngine {
           const finalDelay = delayMs + jitter;
 
           console.log(
-            `⏳ Attempt ${attempt} failed (transient). Waiting ${finalDelay}ms before retry ${
-              attempt + 1
+            `⏳ Attempt ${attempt} failed (transient). Waiting ${finalDelay}ms before retry ${attempt + 1
             }...`,
             {
               errMessage: error.message,
@@ -2074,8 +2062,7 @@ class IntelligentSearchEngine {
             return null;
           } catch (error) {
             console.log(
-              `   ❌ Fetch failed: ${result.url.substring(0, 50)}... - ${
-                error.message
+              `   ❌ Fetch failed: ${result.url.substring(0, 50)}... - ${error.message
               }`
             );
             return null;
@@ -2104,10 +2091,8 @@ class IntelligentSearchEngine {
       (a, b) => b.priorityScore - a.priorityScore
     );
     console.log(
-      `📊 Analysis complete: ${
-        sorted.length
-      } matches found for "${phrase.substring(0, 30)}..." (Early termination: ${
-        cumulativeConfidence >= EARLY_TERMINATION_THRESHOLD ? "YES" : "NO"
+      `📊 Analysis complete: ${sorted.length
+      } matches found for "${phrase.substring(0, 30)}..." (Early termination: ${cumulativeConfidence >= EARLY_TERMINATION_THRESHOLD ? "YES" : "NO"
       })`
     );
 
@@ -2383,29 +2368,29 @@ class IntelligentSearchEngine {
       const fetchPromises = batch.map((src) =>
         typeof fetchLimit === "function"
           ? fetchLimit(async () => {
-              try {
-                const content =
-                  await this.webSearcher.fetchPageContentOptimized(src.url);
-                return { src, content };
-              } catch (err) {
-                console.log(
-                  `⚠️ Fetch fail for freq analysis: ${src.url} — ${err.message}`
-                );
-                return null;
-              }
-            })
+            try {
+              const content =
+                await this.webSearcher.fetchPageContentOptimized(src.url);
+              return { src, content };
+            } catch (err) {
+              console.log(
+                `⚠️ Fetch fail for freq analysis: ${src.url} — ${err.message}`
+              );
+              return null;
+            }
+          })
           : (async () => {
-              try {
-                const content =
-                  await this.webSearcher.fetchPageContentOptimized(src.url);
-                return { src, content };
-              } catch (err) {
-                console.log(
-                  `⚠️ Fetch fail for freq analysis: ${src.url} — ${err.message}`
-                );
-                return null;
-              }
-            })()
+            try {
+              const content =
+                await this.webSearcher.fetchPageContentOptimized(src.url);
+              return { src, content };
+            } catch (err) {
+              console.log(
+                `⚠️ Fetch fail for freq analysis: ${src.url} — ${err.message}`
+              );
+              return null;
+            }
+          })()
       );
 
       const settled = await Promise.all(fetchPromises);
@@ -2608,8 +2593,7 @@ async function performTurboParallelSearch(
           );
         totalSuccessfulFetches += analyzed.length;
         console.log(
-          `✅ [${index + 1}/${keyPhrases.length}] Found ${
-            analyzed.length
+          `✅ [${index + 1}/${keyPhrases.length}] Found ${analyzed.length
           } matches for "${phrase.substring(0, 20)}..."`
         );
         return analyzed;
@@ -2631,8 +2615,7 @@ async function performTurboParallelSearch(
             );
           totalSuccessfulFetches += wikiAnalyzed.length;
           console.log(
-            `✅ [${index + 1}/${keyPhrases.length}] Wikipedia found ${
-              wikiAnalyzed.length
+            `✅ [${index + 1}/${keyPhrases.length}] Wikipedia found ${wikiAnalyzed.length
             } matches`
           );
           return wikiAnalyzed;
@@ -2659,8 +2642,7 @@ async function performTurboParallelSearch(
             );
           totalSuccessfulFetches += academicAnalyzed.length;
           console.log(
-            `✅ [${index + 1}/${keyPhrases.length}] Academic found ${
-              academicAnalyzed.length
+            `✅ [${index + 1}/${keyPhrases.length}] Academic found ${academicAnalyzed.length
             } matches`
           );
           return academicAnalyzed;
@@ -2672,8 +2654,7 @@ async function performTurboParallelSearch(
       }
 
       console.log(
-        `⚠️ [${index + 1}/${
-          keyPhrases.length
+        `⚠️ [${index + 1}/${keyPhrases.length
         }] No results for "${phrase.substring(0, 20)}..."`
       );
       return [];
@@ -2696,10 +2677,8 @@ async function performTurboParallelSearch(
   const flatResults = allResults.flat();
 
   console.log(
-    `✅ PARALLEL COMPLETE: ${
-      flatResults.length
-    } results from ${totalSuccessfulFetches} fetches in ${
-      Date.now() - startTime
+    `✅ PARALLEL COMPLETE: ${flatResults.length
+    } results from ${totalSuccessfulFetches} fetches in ${Date.now() - startTime
     }ms`
   );
   return flatResults;
@@ -2796,8 +2775,7 @@ const checkPlagiarism = async (req, res) => {
     };
 
     console.log(
-      `🎯 Using MAXIMUM ACCURACY mode: ${
-        config.maxSources
+      `🎯 Using MAXIMUM ACCURACY mode: ${config.maxSources
       } sources, ${Math.round(
         config.phraseMultiplier * 100
       )}% phrases, ${Math.round(config.academicChance * 100)}% academic`
@@ -2888,8 +2866,7 @@ const checkPlagiarism = async (req, res) => {
       }
 
       console.log(
-        `🔄 Deduplicated: ${phrases.length} → ${
-          uniquePhrases.length
+        `🔄 Deduplicated: ${phrases.length} → ${uniquePhrases.length
         } phrases (${Math.round(
           (1 - uniquePhrases.length / phrases.length) * 100
         )}% removed)`
@@ -2910,8 +2887,7 @@ const checkPlagiarism = async (req, res) => {
     tExtract.end();
 
     console.log(
-      `⚡ Processing ${keyPhrases.length} deduplicated phrases (saved ${
-        combinedPhrases.length - deduplicatedPhrases.length
+      `⚡ Processing ${keyPhrases.length} deduplicated phrases (saved ${combinedPhrases.length - deduplicatedPhrases.length
       } redundant searches)...`
     );
 
@@ -2936,25 +2912,21 @@ const checkPlagiarism = async (req, res) => {
     console.log(`Key phrases analyzed: ${keyPhrases.length}`);
     console.log(`Total sources found: ${searchResults.length}`);
     console.log(
-      `Successful web fetches: ${
-        searchResults.filter((r) => r.fetchedSuccessfully).length
+      `Successful web fetches: ${searchResults.filter((r) => r.fetchedSuccessfully).length
       }`
     );
     console.log(
-      `High similarity (>50%): ${
-        searchResults.filter((r) => r.similarity > 50).length
+      `High similarity (>50%): ${searchResults.filter((r) => r.similarity > 50).length
       }`
     );
     console.log(
-      `Medium similarity (20-50%): ${
-        searchResults.filter((r) => r.similarity >= 20 && r.similarity <= 50)
-          .length
+      `Medium similarity (20-50%): ${searchResults.filter((r) => r.similarity >= 20 && r.similarity <= 50)
+        .length
       }`
     );
     console.log(
-      `Low similarity (5-20%): ${
-        searchResults.filter((r) => r.similarity >= 5 && r.similarity < 20)
-          .length
+      `Low similarity (5-20%): ${searchResults.filter((r) => r.similarity >= 5 && r.similarity < 20)
+        .length
       }`
     );
     console.log(
@@ -3076,7 +3048,7 @@ const checkPlagiarism = async (req, res) => {
         cacheHitRate: Math.round(
           (cache.getStats().hits /
             Math.max(cache.getStats().hits + cache.getStats().misses, 1)) *
-            100
+          100
         ),
 
         // API status
@@ -3085,7 +3057,7 @@ const checkPlagiarism = async (req, res) => {
             used: quotaTracker.google?.used || 0,
             remaining: Math.max(
               (quotaTracker.google?.limit || 1000) -
-                (quotaTracker.google?.used || 0),
+              (quotaTracker.google?.used || 0),
               0
             ),
           },
@@ -3105,16 +3077,13 @@ const checkPlagiarism = async (req, res) => {
 
         recommendation: (() => {
           if (plagiarismPercentage > 60) {
-            return `Critical plagiarism detected (${plagiarismPercentage}%). ${
-              allMatches.filter((m) => m.isLikelyOriginal).length
-            } original sources found. Immediate review and proper citations required.`;
+            return `Critical plagiarism detected (${plagiarismPercentage}%). ${allMatches.filter((m) => m.isLikelyOriginal).length
+              } original sources found. Immediate review and proper citations required.`;
           }
           if (plagiarismPercentage > 40) {
-            return `High similarity detected across ${
-              allMatches.length
-            } sources (${
-              allMatches.filter((m) => m.isLikelyOriginal).length
-            } likely originals). Review all matches and ensure proper citations.`;
+            return `High similarity detected across ${allMatches.length
+              } sources (${allMatches.filter((m) => m.isLikelyOriginal).length
+              } likely originals). Review all matches and ensure proper citations.`;
           }
           if (plagiarismPercentage > 25) {
             return `Some similarities found in ${allMatches.length} sources. Verify citations and check highlighted matches, especially original sources.`;
@@ -3148,9 +3117,9 @@ const checkPlagiarism = async (req, res) => {
 
         accuracyScore: Math.min(
           85 +
-            allMatches.length +
-            keyPhrases.length +
-            allMatches.filter((m) => m.isLikelyOriginal).length * 2,
+          allMatches.length +
+          keyPhrases.length +
+          allMatches.filter((m) => m.isLikelyOriginal).length * 2,
           97
         ),
 
@@ -3159,8 +3128,7 @@ const checkPlagiarism = async (req, res) => {
           "⚡ TURBO intelligent similarity detection",
           `${keyPhrases.length}-phrase optimized extraction`,
           "Original source detection & prioritization",
-          `${
-            new Set(allMatches.map((m) => m.source)).size
+          `${new Set(allMatches.map((m) => m.source)).size
           } unique source types`,
           "8-algorithm similarity analysis with source scoring",
           webSearcher.hasGoogleAPI
@@ -3181,14 +3149,14 @@ const checkPlagiarism = async (req, res) => {
             Date.now() - startTime < 60000
               ? "Excellent"
               : Date.now() - startTime < 90000
-              ? "Good"
-              : "Acceptable",
+                ? "Good"
+                : "Acceptable",
           coverage:
             allMatches.length > 10
               ? "Comprehensive"
               : allMatches.length > 5
-              ? "Good"
-              : "Basic",
+                ? "Good"
+                : "Basic",
           efficiency: `${Math.round(
             allMatches.length / ((Date.now() - startTime) / 1000)
           )} sources/second`,
@@ -3209,10 +3177,8 @@ const checkPlagiarism = async (req, res) => {
     // FINAL COMPLETION LOG BEFORE RESPONSE
     console.log(`✅ ALL PROCESSING COMPLETE - Sending response now`);
     console.log(
-      `🚀 TURBO 10-key analysis complete: ${plagiarismPercentage}% plagiarized, ${
-        allMatches.length
-      } sources found (${
-        allMatches.filter((m) => m.isLikelyOriginal).length
+      `🚀 TURBO 10-key analysis complete: ${plagiarismPercentage}% plagiarized, ${allMatches.length
+      } sources found (${allMatches.filter((m) => m.isLikelyOriginal).length
       } originals) in ${Date.now() - startTime}ms`
     );
 

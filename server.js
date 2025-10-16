@@ -4,44 +4,45 @@ const app = express();
 app.set('trust proxy', true);
 const path = require('path');
 const fs = require('fs');
+
+// Import routes
 const fileConverterRoutes = require('./src/file_converter/fileConverter.routes');
 const plagiarismRoutes = require('./src/plagiarism_check/routes/plagiarismCheck.routes');
 const aiDetectorRoutes = require('./src/plagiarism_check/routes/aiDetector.routes');
-const PORT = process.env.PORT || 3000;
+const imageConverterRoutes = require('./src/image_converter/fileConverter.routes');
+
+// ✅ Render dynamically assigns a port
+const PORT = process.env.PORT || 10000;
 
 // Middleware
 app.use(express.json());
 
-// Serve homepage (adjust in case your homepage is elsewhere)
+// Serve static frontend if exists
 app.use('/', express.static(path.join(__dirname, 'public')));
-
-// Serve static frontend per tool (example)
 app.use('/file_converter', express.static(path.join(__dirname, 'public/file_converter')));
 app.use('/image_converter', express.static(path.join(__dirname, 'public/image_converter')));
 app.use('/plagiarism_check', express.static(path.join(__dirname, 'public/plagiarism_check')));
 
-// Mount File Converter API routes
+// Mount APIs
 app.use('/convert', fileConverterRoutes);
-
-// Mount Image Converter API routes
-const imageConverterRoutes = require('./src/image_converter/fileConverter.routes');
 app.use('/image-convert', imageConverterRoutes);
-
-// Mount Plagiarism Checker API routes
 app.use('/api/plagiarism', plagiarismRoutes);
 app.use('/api/ai-detector', aiDetectorRoutes);
 
-// Create necessary directories
-const UPLOAD_DIR = path.join(__dirname, 'uploads');
-const LOGS_DIR = path.join(__dirname, 'logs');
-const CACHE_DIR = path.join(__dirname, 'cache');
-const AI_CACHE_DIR = path.join(__dirname, 'cache/ai-detection');
+// Create required directories safely
+const dirs = [
+  path.join(__dirname, 'uploads'),
+  path.join(__dirname, 'logs'),
+  path.join(__dirname, 'cache'),
+  path.join(__dirname, 'cache/ai-detection'),
+];
 
-if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-if (!fs.existsSync(LOGS_DIR)) fs.mkdirSync(LOGS_DIR, { recursive: true });
-if (!fs.existsSync(CACHE_DIR)) fs.mkdirSync(CACHE_DIR, { recursive: true }); 
-if (!fs.existsSync(AI_CACHE_DIR)) fs.mkdirSync(AI_CACHE_DIR, { recursive: true }); 
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-    console.log(`🤖 AI Detection API available at: http://localhost:${PORT}/api/ai-detector`);
+dirs.forEach((dir) => {
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+});
+
+// ✅ Start the server
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 ASCIIFIX server live on port ${PORT}`);
+  console.log(`🤖 AI Detection API available at: /api/ai-detector`);
 });
