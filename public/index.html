@@ -1,126 +1,455 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-  <title>ASCIIFIX</title>
+  <title>ASCIIFIX - Free Online Content & File Toolkit | Plagiarism Checker, AI Detector & More</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Free online toolkit for students and professionals. Check plagiarism, detect AI content, convert images & files, resize images, and check grammar - all in one place.">
+  <meta name="keywords" content="plagiarism checker, ai detector, image converter, file converter, grammar checker, free online tools">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="images/ASCIIFIX_logo_Bot.png">
+  <link rel="shortcut icon" href="images/ASCIIFIX_logo_Bot.png">
+  
+  <!-- Google Fonts for Footer -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <div class="header-main">
-    ASCIIFIX
-  </div>
-  <div class="navbar">
-    <div class="navbar-left">
-      <a class="navbar-link" href="#">Home</a>
-      <div class="dropdown">
-        <a class="navbar-link" href="#">Tools</a>
-        <div class="dropdown-content">
-          <a href="#">Plagiarism Check</a>
-          <a href="#">Image Converter</a>
-          <a href="#">AI Detector</a>
-          <a href="#">Image Resizer</a>
-          <a href="#">Grammar Check</a>
-          <a href="/file_converter/">File Converter</a>
-
-        </div>
+  <!-- Combined Header + Navbar -->
+  <nav class="main-navbar" data-animate>
+    <div class="navbar-container">
+      <!-- Hamburger Menu Icon for Mobile (LEFT SIDE) -->
+      <div class="hamburger" id="hamburger">
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
-      <a class="navbar-link" href="#">About</a>
+      
+      <!-- Logo -->
+      <div class="navbar-logo">
+        <a href="/">
+          <img src="images/ASCIIFIX-Tool-LOGO.png" alt="ASCIIFIX Logo" class="logo-img">
+        </a>
+      </div>
+      
+      <!-- Navigation links in the center -->
+      <div class="navbar-center">
+        <div class="dropdown">
+          <a class="navbar-link dropdown-trigger" href="#">
+            Tools 
+            <span class="dropdown-arrow">▾</span>
+          </a>
+          <div class="dropdown-content">
+            <div class="dropdown-header">Content Analysis</div>
+            <a href="/plagiarism_check/" class="dropdown-item">
+              <div class="dropdown-icon">📝</div>
+              <span class="dropdown-title">Plagiarism Check</span>
+            </a>
+            <a href="/plagiarism_check/" class="dropdown-item">
+              <div class="dropdown-icon">🤖</div>
+              <span class="dropdown-title">AI Detector</span>
+            </a>
+            <a href="#" class="dropdown-item">
+              <div class="dropdown-icon">✓</div>
+              <span class="dropdown-title">Grammar Check</span>
+            </a>
+            
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-header">File & Image Tools</div>
+            
+            <a href="/image_converter/" class="dropdown-item">
+              <div class="dropdown-icon">🖼️</div>
+              <span class="dropdown-title">Image Converter</span>
+            </a>
+            <a href="#" class="dropdown-item">
+              <div class="dropdown-icon">📐</div>
+              <span class="dropdown-title">Image Resizer</span>
+            </a>
+            <a href="/file_converter/" class="dropdown-item">
+              <div class="dropdown-icon">📁</div>
+              <span class="dropdown-title">File Converter</span>
+            </a>
+          </div>
+        </div>
+        <a class="navbar-link" href="#footer">About</a>
+      </div>
+      
+      <!-- Login/Sign Up button on the right -->
+      <div class="navbar-right">
+        <span class="auth-button">Login / Sign Up</span>
+      </div>
     </div>
-    <!-- Hamburger Menu Icon for Mobile -->
-    <div class="hamburger" id="hamburger">
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
-    <div class="navbar-right">
-      <span style="font-weight: bold;">Login / Sign Up</span>
-    </div>
-  </div>
+  </nav>
+
   <!-- Mobile Menu -->
   <nav class="mobile-menu" id="mobileMenu">
-    <a href="#">Home</a>
-    <div class="submenu-toggle" id="submenuToggle">Tools</div>
+    <div class="submenu-toggle" id="submenuToggle">
+      Tools <span class="arrow">▾</span>
+    </div>
     <div class="submenu" id="submenu">
-      <a href="#">Plagiarism Check</a>
-      <a href="#">Image Converter</a>
-      <a href="#">AI Detector</a>
+      <a href="/plagiarism_check/">Plagiarism Check</a>
+      <a href="/image_converter/">Image Converter</a>
+      <a href="/plagiarism_check/">AI Detector</a>
       <a href="#">Image Resizer</a>
       <a href="#">Grammar Check</a>
       <a href="/file_converter/">File Converter</a>
     </div>
-    <a href="#">About</a>
+    <a href="#footer">About</a>
   </nav>
-  <div class="hero-box">
-    <h2>
-      YOUR ALL-IN-ONE CONTENT AND FILE TOOLKIT
-    </h2>
-    <p>
-      Instantly check for plagiarism, AI content, grammar; convert and <br>
-      resize any image, convert files &amp; text to all formats, and more—right <br>
-      here, for students and professionals.
-    </p>
-    <button>See All Tools</button>
-  </div>
-  <div class="tools-grid">
-    <div class="tool-card">
-      <h3>
-        Plagiarism Check
-        <img src="images/plagiarismcheck img.png" alt="Plagiarism Logo" class="tool-logo" />
-      </h3>
-      <p>Detect duplicate or copied content in text instantly.</p>
-      <button onclick="window.location.href='/plagiarism_check/'">Go to Tool</button>
-    </div>
-    <div class="tool-card">
-      <h3>
-        Image Converter
-        <img src="images/convertImg.png" alt="Image Converter Logo" class="tool-logo" />
-      </h3>
-      <p>Change images between all popular file formats.</p>
-      <button onclick="window.location.href='/image_converter/'">Go to Tool</button>
-    </div>
-    <div class="tool-card">
-      <h3>
-        AI Detector
-        <img src="images/ai detect bot img.png" alt="AI Detector Logo" class="tool-logo" />
-      </h3>
-      <p>Discern whether content was written by AI or human</p>
-      <a href="/ai-detection" class="tool-button-link">
-        <button>Go to Tool</button>
-      </a>
 
+  <!-- Hero Section -->
+  <div class="hero-box" data-animate>
+    <div class="hero-background-pattern"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        All-in-One Toolkit
+      </div>
+      <h1>YOUR ALL-IN-ONE CONTENT<br>AND FILE TOOLKIT</h1>
+      <p class="hero-description">
+        Instantly check for plagiarism, AI content, grammar; convert and 
+        resize any image, convert files &amp; text to all formats, and more—right 
+        here, for students and professionals.
+      </p>
+      <div class="hero-features">
+        <div class="hero-feature-item">
+          <span class="feature-check">✓</span>
+          <span>100% Free</span>
+        </div>
+        <div class="hero-feature-item">
+          <span class="feature-check">✓</span>
+          <span>No Sign-Up</span>
+        </div>
+        <div class="hero-feature-item">
+          <span class="feature-check">✓</span>
+          <span>Instant Results</span>
+        </div>
+      </div>
+      <button class="cta-button">
+        <span>Explore All Tools</span>
+        <span class="button-arrow">→</span>
+      </button>
     </div>
-    <div class="tool-card">
-      <h3>
-        Image Resizer
-        <img src="images/resizeIMGicon.png" alt="Image Resizer Logo" class="tool-logo" />
-      </h3>
+  </div>
+
+  <!-- Tools Grid -->
+  <div class="tools-grid">
+    <div class="tool-card tool-card-green" data-animate>
+      <div class="tool-header">
+        <h3>Plagiarism Check</h3>
+        <img src="images/plagiarismcheck img.png" alt="Plagiarism Logo" class="tool-logo" onerror="this.style.display='none'" />
+      </div>
+      <p>Detect duplicate or copied content in text instantly.</p>
+      <button class="tool-button" onclick="window.location.href='/plagiarism_check/'">
+        Go to Tool <span class="arrow">→</span>
+      </button>
+    </div>
+
+    <div class="tool-card tool-card-blue" data-animate>
+      <div class="tool-header">
+        <h3>Image Converter</h3>
+        <img src="images/convertImg.png" alt="Image Converter Logo" class="tool-logo" onerror="this.style.display='none'" />
+      </div>
+      <p>Change images between all popular file formats.</p>
+      <button class="tool-button" onclick="window.location.href='/image_converter/'">
+        Go to Tool <span class="arrow">→</span>
+      </button>
+    </div>
+
+    <div class="tool-card tool-card-purple" data-animate>
+      <div class="tool-header">
+        <h3>AI Detector</h3>
+        <img src="images/ai detect bot img.png" alt="AI Detector Logo" class="tool-logo" onerror="this.style.display='none'" />
+      </div>
+      <p>Discern whether content was written by AI or human</p>
+      <button class="tool-button" onclick="window.location.href='/plagiarism_check/'">
+        Go to Tool <span class="arrow">→</span>
+      </button>
+    </div>
+
+    <div class="tool-card tool-card-orange" data-animate>
+      <div class="tool-header">
+        <h3>Image Resizer</h3>
+        <img src="images/resizeIMGicon.png" alt="Image Resizer Logo" class="tool-logo" onerror="this.style.display='none'" />
+      </div>
       <p>Resize images to any dimensions quickly and easily.</p>
-      <button>Go to Tool</button>
+      <button class="tool-button">
+        Go to Tool <span class="arrow">→</span>
+      </button>
     </div>
-    <div class="tool-card">
-      <h3>
-        Grammar Check
-        <img src="images/grammarCheck_ICON.png" alt="Grammar Check Logo" class="tool-logo" />
-      </h3>
+
+    <div class="tool-card tool-card-teal" data-animate>
+      <div class="tool-header">
+        <h3>Grammar Check</h3>
+        <img src="images/grammarCheck_ICON.png" alt="Grammar Check Logo" class="tool-logo" onerror="this.style.display='none'" />
+      </div>
       <p>Fix grammar and spelling errors for clearer writing.</p>
-      <button>Go to Tool</button>
+      <button class="tool-button">
+        Go to Tool <span class="arrow">→</span>
+      </button>
     </div>
-    <div class="tool-card">
-      <h3>
-        File Converter
-        <img src="images/file_convert_img.png" alt="File Converter Logo" class="tool-logo" />
-      </h3>
+
+    <div class="tool-card tool-card-pink" data-animate>
+      <div class="tool-header">
+        <h3>File Converter</h3>
+        <img src="images/file_convert_img.png" alt="File Converter Logo" class="tool-logo" onerror="this.style.display='none'" />
+      </div>
       <p>Convert text or any file to a variety of document formats.</p>
-      <button onclick="window.location.href='/file_converter/'">Go to tool</button>
+      <button class="tool-button" onclick="window.location.href='/file_converter/'">
+        Go to Tool <span class="arrow">→</span>
+      </button>
     </div>
   </div>
-  <div class="footer">
-    &copy; 2025 AsciiFix | Minimal Wireframe UI
-  </div>
+
+  <!-- Features Section -->
+  <section class="features-section" data-animate>
+    <div class="features-container">
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Lightning Fast</h3>
+        <p>Process files and check content in seconds with our optimized online tools</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Privacy First</h3>
+        <p>Your files are processed securely and never stored on our servers</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✓</div>
+        <h3>100% Free</h3>
+        <p>Access all tools without registration, payments, or hidden fees</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3>Professional Quality</h3>
+        <p>Industry-standard accuracy for students, educators, and professionals</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose ASCIIFIX Section -->
+  <section class="why-choose-section" data-animate>
+    <div class="why-choose-container">
+      <div class="why-choose-content">
+        <div class="section-badge">Why ASCIIFIX</div>
+        <h2>The Complete Online Toolkit for Content & File Management</h2>
+        <p>ASCIIFIX provides a comprehensive suite of free online tools designed for students, educators, writers, and professionals. Our platform combines powerful plagiarism detection, AI content analysis, image manipulation, and file conversion capabilities in one seamless interface.</p>
+        
+        <div class="benefits-list">
+          <div class="benefit-item">
+            <span class="benefit-icon">✓</span>
+            <div>
+              <strong>Advanced Plagiarism Detection:</strong> Check essays, articles, and academic papers against billions of web pages with our free plagiarism checker
+            </div>
+          </div>
+          <div class="benefit-item">
+            <span class="benefit-icon">✓</span>
+            <div>
+              <strong>AI Content Detector:</strong> Identify AI-generated text from ChatGPT, GPT-4, and other language models with high accuracy
+            </div>
+          </div>
+          <div class="benefit-item">
+            <span class="benefit-icon">✓</span>
+            <div>
+              <strong>Universal File Converter:</strong> Convert images (JPG, PNG, WebP, SVG) and documents (PDF, DOCX, TXT) between all popular formats
+            </div>
+          </div>
+          <div class="benefit-item">
+            <span class="benefit-icon">✓</span>
+            <div>
+              <strong>Grammar & Spell Check:</strong> Improve your writing with intelligent grammar correction and style suggestions
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="why-choose-stats">
+        <div class="stat-card" data-animate>
+          <div class="stat-number">6+</div>
+          <div class="stat-label">Professional Tools</div>
+        </div>
+        <div class="stat-card" data-animate>
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Free Forever</div>
+        </div>
+        <div class="stat-card" data-animate>
+          <div class="stat-number">24/7</div>
+          <div class="stat-label">Available Online</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use Cases Grid Section -->
+  <section class="use-cases-section" data-animate>
+    <div class="use-cases-header">
+      <h2>Trusted by Students, Professionals & Educators</h2>
+      <p>Discover how ASCIIFIX helps different users achieve their goals</p>
+    </div>
+    
+    <div class="use-cases-grid">
+      <div class="use-case-card card-large" data-animate>
+        <div class="use-case-icon">🎓</div>
+        <h3>For Students</h3>
+        <p>Check your essays and research papers for plagiarism before submission. Use our grammar checker to polish your assignments and ensure academic integrity with our free plagiarism detector tool.</p>
+        <ul class="use-case-features">
+          <li>Essay plagiarism checker</li>
+          <li>Citation verification</li>
+          <li>Grammar correction</li>
+        </ul>
+      </div>
+      
+      <div class="use-case-card" data-animate>
+        <div class="use-case-icon">✍️</div>
+        <h3>For Writers</h3>
+        <p>Verify content originality and detect AI-generated text in articles and blog posts.</p>
+      </div>
+      
+      <div class="use-case-card" data-animate>
+        <div class="use-case-icon">👨‍🏫</div>
+        <h3>For Educators</h3>
+        <p>Quickly check student submissions for plagiarism and AI-written content.</p>
+      </div>
+      
+      <div class="use-case-card" data-animate>
+        <div class="use-case-icon">🎨</div>
+        <h3>For Designers</h3>
+        <p>Convert and resize images for web, print, and social media projects instantly.</p>
+      </div>
+      
+      <div class="use-case-card card-wide" data-animate>
+        <div class="use-case-icon">💼</div>
+        <h3>For Professionals</h3>
+        <p>Convert business documents, verify content authenticity, and maintain professional standards with our suite of online tools. Perfect for content managers, marketers, and business analysts.</p>
+      </div>
+      
+      <div class="use-case-card" data-animate>
+        <div class="use-case-icon">🔬</div>
+        <h3>For Researchers</h3>
+        <p>Ensure research integrity with plagiarism checking and document conversion tools.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Popular Tools Showcase -->
+  <section class="popular-tools-section" data-animate>
+    <div class="popular-tools-container">
+      <h2>Popular Free Online Tools</h2>
+      <div class="popular-tools-grid">
+        <a href="/plagiarism_check/" class="popular-tool-link">
+          <span class="tool-tag">Most Used</span>
+          <strong>Free Plagiarism Checker Online</strong>
+          <p>Check text for plagiarism with our advanced detection algorithm</p>
+        </a>
+        <a href="/plagiarism_check/" class="popular-tool-link">
+          <span class="tool-tag trending">Trending</span>
+          <strong>AI Content Detector</strong>
+          <p>Detect ChatGPT and AI-generated content accurately</p>
+        </a>
+        <a href="/image_converter/" class="popular-tool-link">
+          <strong>Image Format Converter</strong>
+          <p>Convert JPG to PNG, WebP to JPG, and more formats</p>
+        </a>
+        <a href="/file_converter/" class="popular-tool-link">
+          <strong>PDF to Word Converter</strong>
+          <p>Convert PDF documents to editable Word files online</p>
+        </a>
+        <a href="#" class="popular-tool-link">
+          <strong>Online Grammar Checker</strong>
+          <p>Fix grammar, spelling, and punctuation errors instantly</p>
+        </a>
+        <a href="#" class="popular-tool-link">
+          <strong>Image Resizer Tool</strong>
+          <p>Resize images for web, email, and social media</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust Section -->
+  <section class="trust-section" data-animate>
+    <div class="trust-container">
+      <h2>Trusted by Thousands Daily</h2>
+      <p class="trust-subtitle">Join students, professionals, and educators who rely on ASCIIFIX for accurate content analysis and file conversion</p>
+      <div class="trust-badges">
+        <div class="trust-badge">
+          <span class="badge-icon">🔒</span>
+          <span>Secure & Private</span>
+        </div>
+        <div class="trust-badge">
+          <span class="badge-icon">⚡</span>
+          <span>Instant Results</span>
+        </div>
+        <div class="trust-badge">
+          <span class="badge-icon">✓</span>
+          <span>No Registration</span>
+        </div>
+        <div class="trust-badge">
+          <span class="badge-icon">🌐</span>
+          <span>Works Everywhere</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer" id="footer">
+    <div class="footer-content">
+      <div class="footer-main">
+        <div class="footer-brand">
+          <h3>ASCIIFIX</h3>
+          <p>Your complete online toolkit for content analysis, plagiarism detection, AI detection, and file conversion. Free tools for students and professionals.</p>
+        </div>
+        
+        <div class="footer-links-group">
+          <div class="footer-column">
+            <h4>Tools</h4>
+            <a href="/plagiarism_check/">Plagiarism Checker</a>
+            <a href="/plagiarism_check/">AI Detector</a>
+            <a href="/image_converter/">Image Converter</a>
+            <a href="#">Grammar Check</a>
+          </div>
+          
+          <div class="footer-column">
+            <h4>Resources</h4>
+            <a href="#">About Us</a>
+            <a href="#">Blog</a>
+            <a href="#">FAQ</a>
+            <a href="#">Contact</a>
+          </div>
+          
+          <div class="footer-column">
+            <h4>Legal</h4>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Cookie Policy</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2025 AsciiFix. All rights reserved.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Twitter">Twitter</a>
+          <span>•</span>
+          <a href="#" aria-label="Facebook">Facebook</a>
+          <span>•</span>
+          <a href="#" aria-label="LinkedIn">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to Top Button - Blue Style -->
+  <button id="backToTop" class="back-to-top" aria-label="Back to top">
+    <span class="back-to-top-icon">↑</span>
+  </button>
+
   <script src="script.js"></script>
 </body>
-
 </html>
