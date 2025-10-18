@@ -1,3 +1,6 @@
+// ========================================
+// PLAGIARISM CHECKER CLASS (Enhanced)
+// ========================================
 class PlagiarismChecker {
   constructor() {
     this.currentMethod = "text";
@@ -6,6 +9,9 @@ class PlagiarismChecker {
     this.currentContent = "";
     this.currentMode = "plagiarism";
     this.uploadedFile = null;
+    this.chartImageData = null;
+    this.lastResults = null;
+
     this.modeConfig = {
       plagiarism: {
         title: "PLAGIARISM CHECKER",
@@ -69,6 +75,8 @@ class PlagiarismChecker {
         this.switchInputMethod(e.target.dataset.method)
       );
     });
+
+    // Mode buttons
     const modeButtons = document.querySelectorAll(".mode-btn");
     modeButtons.forEach((button) => {
       button.addEventListener("click", (e) => {
@@ -84,11 +92,11 @@ class PlagiarismChecker {
     });
 
     this.chooseFileBtn.addEventListener("click", (e) => {
-      e.stopPropagation(); // Prevent event bubbling
+      e.stopPropagation();
       this.fileInput.click();
     });
+
     this.uploadArea.addEventListener("click", (e) => {
-      // Only trigger if user didn't click the choose button
       if (!e.target.closest(".choose-file-button")) {
         this.fileInput.click();
       }
@@ -203,7 +211,7 @@ class PlagiarismChecker {
       return;
     }
 
-    // ✅ FIXED: Store the actual file object
+    // Store the actual file object
     this.uploadedFile = file;
 
     // For TXT files, also read content for preview
@@ -221,13 +229,11 @@ class PlagiarismChecker {
     this.updateFileUploadDisplay(file.name);
   }
 
-  readFile(file) {
+  readTextFile(file) {
     const reader = new FileReader();
 
     reader.onload = (e) => {
-      // For demo purposes, we'll treat all files as plain text
       this.currentContent = e.target.result;
-      this.updateFileUploadDisplay(file.name);
       this.updateWordCount();
     };
 
@@ -238,21 +244,23 @@ class PlagiarismChecker {
     reader.readAsText(file);
   }
 
+  estimateWordCount(file) {
+    const estimatedWords = Math.floor(file.size / 6);
+    this.currentContent = `[File contains approximately ${estimatedWords.toLocaleString()} words]`;
+    this.updateWordCount();
+  }
+
   updateFileUploadDisplay(filename) {
-    // Don't destroy the file input - just update the display
     const uploadArea = this.uploadArea;
     const existingText = uploadArea.querySelector("p");
 
-    // Update only the display text, keep the file input intact
     if (existingText) {
       existingText.innerHTML = `✓ File uploaded: <strong>${filename}</strong>`;
     }
 
-    // Add a small success indicator
     uploadArea.style.borderColor = "#00aa00";
     uploadArea.style.backgroundColor = "#f0fff0";
 
-    // Reset visual style after 2 seconds
     setTimeout(() => {
       uploadArea.style.borderColor = "#cccccc";
       uploadArea.style.backgroundColor = "#fafafa";
@@ -300,13 +308,9 @@ class PlagiarismChecker {
     this.fetchUrlBtn.textContent = "Fetching...";
 
     try {
-      // For demo purposes, simulate URL content fetching
       await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Simulate fetched content
       this.currentContent = `Sample content from ${url}\n\nThis is a demo of fetched content. In a real implementation, this would contain the actual text content from the webpage.`;
       this.updateWordCount();
-
       alert("Content fetched successfully!");
     } catch (error) {
       alert(
@@ -332,7 +336,6 @@ class PlagiarismChecker {
 
     const config = this.modeConfig[this.currentMode];
 
-    // Get content based on current method
     let textContent = "";
     switch (this.currentMethod) {
       case "text":
@@ -344,13 +347,11 @@ class PlagiarismChecker {
         break;
     }
 
-    // Validate content
     if (!textContent) {
       alert(
-        `Please enter text to ${
-          this.currentMode === "plagiarism"
-            ? "check for plagiarism"
-            : "detect AI content"
+        `Please enter text to ${this.currentMode === "plagiarism"
+          ? "check for plagiarism"
+          : "detect AI content"
         }`
       );
       return;
@@ -368,7 +369,6 @@ class PlagiarismChecker {
     this.showProgress(true);
     this.loadingOverlay.style.display = "flex";
 
-    // Calculate timing
     const wordCount = textContent
       .split(/\s+/)
       .filter((word) => word.length > 0).length;
@@ -380,32 +380,30 @@ class PlagiarismChecker {
       config.loadingMessage;
     document.getElementById(
       "loadingTip"
-    ).textContent = `Estimated time: ${expectedMinutes} minute${
-      expectedMinutes > 1 ? "s" : ""
+    ).textContent = `Estimated time: ${expectedMinutes} minute${expectedMinutes > 1 ? "s" : ""
     }. Please wait.`;
 
     const expectedTimeSeconds = this.calculateExpectedTime(wordCount);
     const stepDuration = expectedTimeSeconds / 6;
 
-    // Dynamic progress steps
     const progressSteps =
       this.currentMode === "plagiarism"
         ? [
-            { text: "Initializing analysis...", percent: 5 },
-            { text: "Extracting key phrases...", percent: 15 },
-            { text: "Searching web sources...", percent: 40 },
-            { text: "Analyzing similarities...", percent: 70 },
-            { text: "Comparing with sources...", percent: 85 },
-            { text: "Finalizing report...", percent: 95 },
-          ]
+          { text: "Initializing analysis...", percent: 5 },
+          { text: "Extracting key phrases...", percent: 15 },
+          { text: "Searching web sources...", percent: 40 },
+          { text: "Analyzing similarities...", percent: 70 },
+          { text: "Comparing with sources...", percent: 85 },
+          { text: "Finalizing report...", percent: 95 },
+        ]
         : [
-            { text: "Analyzing text patterns...", percent: 15 },
-            { text: "Checking vocabulary complexity...", percent: 35 },
-            { text: "Examining sentence structure...", percent: 55 },
-            { text: "Detecting AI signatures...", percent: 75 },
-            { text: "Calculating probability...", percent: 90 },
-            { text: "Generating results...", percent: 95 },
-          ];
+          { text: "Analyzing text patterns...", percent: 15 },
+          { text: "Checking vocabulary complexity...", percent: 35 },
+          { text: "Examining sentence structure...", percent: 55 },
+          { text: "Detecting AI signatures...", percent: 75 },
+          { text: "Calculating probability...", percent: 90 },
+          { text: "Generating results...", percent: 95 },
+        ];
 
     let currentStep = 0;
     const progressInterval = setInterval(() => {
@@ -427,23 +425,20 @@ class PlagiarismChecker {
     try {
       let response;
 
-      // ✅ DIFFERENT API CALLS BASED ON MODE
       if (this.currentMode === "ai-detection") {
-        // 🤖 AI DETECTION - SEND JSON
         console.log("📤 Sending AI detection request as JSON");
 
         response = await fetch(config.apiEndpoint, {
           method: "POST",
           headers: {
-            "Content-Type": "application/json", // ✅ JSON for AI
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            text: textContent, // ✅ Simple JSON object
+            text: textContent,
           }),
           signal: AbortSignal.timeout(300000),
         });
       } else {
-        // 🔍 PLAGIARISM - SEND FORMDATA (for file support)
         console.log("📤 Sending plagiarism request as FormData");
 
         let formData = new FormData();
@@ -453,7 +448,6 @@ class PlagiarismChecker {
             formData.append("text", textContent);
             break;
           case "file":
-            // Use the saved file instead of trying to read from input
             if (this.uploadedFile) {
               console.log("📎 Sending file:", this.uploadedFile.name);
               formData.append(
@@ -474,7 +468,7 @@ class PlagiarismChecker {
 
         response = await fetch(config.apiEndpoint, {
           method: "POST",
-          body: formData, // ✅ FormData for plagiarism
+          body: formData,
           signal: AbortSignal.timeout(300000),
           headers: {
             Connection: "keep-alive",
@@ -491,11 +485,10 @@ class PlagiarismChecker {
       if (result.success) {
         await new Promise((resolve) => setTimeout(resolve, 500));
 
-        // ✅ ROUTE TO CORRECT DISPLAY METHOD
         if (this.currentMode === "ai-detection") {
-          this.displayAIResults(result); // AI results
+          this.displayAIResults(result);
         } else {
-          this.displayPlagiarismResults(result.results || result); // Plagiarism results
+          this.displayPlagiarismResults(result.results || result);
         }
 
         this.hideLoadingOverlay();
@@ -503,11 +496,10 @@ class PlagiarismChecker {
         console.error("Backend error:", result.error);
         alert(
           result.error ||
-            `Error during ${
-              this.currentMode === "plagiarism"
-                ? "plagiarism check"
-                : "AI detection"
-            }`
+          `Error during ${this.currentMode === "plagiarism"
+            ? "plagiarism check"
+            : "AI detection"
+          }`
         );
         this.hideLoadingOverlay();
       }
@@ -534,7 +526,6 @@ class PlagiarismChecker {
       this.hideLoadingOverlay();
     }
 
-    // Reset UI state
     this.isChecking = false;
     this.updateCheckButtonState(true);
     this.showProgress(false);
@@ -542,66 +533,47 @@ class PlagiarismChecker {
   }
 
   calculateExpectedTime(wordCount) {
-    // Based on your timing data
     let expectedSeconds;
     if (wordCount <= 250) expectedSeconds = 65;
     else if (wordCount <= 500) expectedSeconds = 100;
     else if (wordCount <= 750) expectedSeconds = 220;
     else if (wordCount <= 1000) expectedSeconds = 350;
-    else expectedSeconds = Math.min(wordCount * 0.35, 600); // Max 10 minutes
+    else expectedSeconds = Math.min(wordCount * 0.35, 600);
 
     return expectedSeconds;
   }
 
-  displayResults(results) {
-    if (this.currentMode === "plagiarism") {
-      this.displayPlagiarismResults(results);
-    } else {
-      this.displayAIResults(results);
-    }
-  }
-
   displayPlagiarismResults(results) {
-    // Keep your existing plagiarism results display code
     const riskColor =
       results.plagiarismPercentage > 30
         ? "#ff4444"
         : results.plagiarismPercentage > 15
-        ? "#ff8800"
-        : "#00aa00";
+          ? "#ff8800"
+          : "#00aa00";
     const uniqueColor =
       results.uniquePercentage >= 80
         ? "#00aa00"
         : results.uniquePercentage >= 60
-        ? "#ff8800"
-        : "#ff4444";
-
-    // Create the chart
-    this.createPlagiarismChart(
-      results.uniquePercentage,
-      results.plagiarismPercentage
-    );
+          ? "#ff8800"
+          : "#ff4444";
 
     const dashboard = `
         <div class="modern-results-dashboard">
             <div class="results-header-modern">
                 <h3>Plagiarism Analysis Complete</h3>
-                <div class="analysis-time">Completed in ${
-                  Math.round(results.analysis?.processingTimeMs / 1000) || 0
-                }s</div>
+                <div class="analysis-time">Completed in ${Math.round(results.analysis?.processingTimeMs / 1000) || 0
+      }s</div>
             </div>
             
             <div class="score-summary">
                 <div class="score-card original">
-                    <div class="score-number" style="color: ${uniqueColor}">${
-      results.uniquePercentage
-    }%</div>
+                    <div class="score-number" style="color: ${uniqueColor}">${results.uniquePercentage
+      }%</div>
                     <div class="score-label">Original</div>
                 </div>
                 <div class="score-card plagiarized">
-                    <div class="score-number" style="color: ${riskColor}">${
-      results.plagiarismPercentage
-    }%</div>
+                    <div class="score-number" style="color: ${riskColor}">${results.plagiarismPercentage
+      }%</div>
                     <div class="score-label">Similar</div>
                 </div>
             </div>
@@ -620,18 +592,17 @@ class PlagiarismChecker {
                     <span class="stat-label">Words Analyzed</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">${
-                      results.analysis?.searchesPerformed || 0
-                    }</span>
+                    <span class="stat-number">${results.analysis?.searchesPerformed || 0
+      }</span>
                     <span class="stat-label">Searches</span>
                 </div>
             </div>
 
             ${this.createMatchesList(results.matches)}
             ${this.createRecommendation(
-              results.summary?.recommendation,
-              riskColor
-            )}
+        results.summary?.recommendation,
+        riskColor
+      )}
         </div>
     `;
 
@@ -641,14 +612,11 @@ class PlagiarismChecker {
       results.plagiarismPercentage
     );
 
-    // Wait for chart to fully render, then save image
     setTimeout(() => {
       const canvas = document.getElementById("plagiarismChart");
       if (canvas) {
         this.chartImageData = canvas.toDataURL("image/png");
         console.log("✅ Chart image saved successfully");
-      } else {
-        console.error("❌ Chart canvas not found");
       }
     }, 500);
 
@@ -657,20 +625,19 @@ class PlagiarismChecker {
   }
 
   displayAIResults(results) {
-    // NEW METHOD for AI detection results
     const aiData = results.data || results;
     const probability = aiData.aiProbability || 0;
 
-    let resultColor = "#00aa00"; // Green for human
+    let resultColor = "#00aa00";
     let resultLabel = "Human Written";
     let resultIcon = "👤";
 
     if (probability >= 70) {
-      resultColor = "#ff4444"; // Red for AI
+      resultColor = "#ff4444";
       resultLabel = "AI Generated";
       resultIcon = "🤖";
     } else if (probability >= 30) {
-      resultColor = "#ff8800"; // Orange for mixed
+      resultColor = "#ff8800";
       resultLabel = "Mixed/Uncertain";
       resultIcon = "❓";
     }
@@ -679,22 +646,21 @@ class PlagiarismChecker {
         <div class="modern-results-dashboard">
             <div class="results-header-modern">
                 <h3>AI Detection Analysis Complete</h3>
-                <div class="analysis-time">Completed in ${
-                  aiData.processingTime || 0
-                }ms</div>
+                <div class="analysis-time">Completed in ${aiData.processingTime || 0
+      }ms</div>
             </div>
             
             <div class="score-summary">
                 <div class="score-card original">
                     <div class="score-number" style="color: #00aa00">${Math.round(
-                      100 - probability
-                    )}%</div>
+        100 - probability
+      )}%</div>
                     <div class="score-label">Human</div>
                 </div>
                 <div class="score-card plagiarized">
                     <div class="score-number" style="color: ${resultColor}">${Math.round(
-      probability
-    )}%</div>
+        probability
+      )}%</div>
                     <div class="score-label">AI Generated</div>
                 </div>
             </div>
@@ -702,9 +668,8 @@ class PlagiarismChecker {
             <div class="ai-interpretation" style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 10px; margin: 20px 0;">
                 <div style="font-size: 2rem; margin-bottom: 10px;">${resultIcon}</div>
                 <h4 style="color: ${resultColor}; margin-bottom: 10px;">${resultLabel}</h4>
-                <p style="color: #666;">Confidence: ${
-                  aiData.confidence || "Medium"
-                }</p>
+                <p style="color: #666;">Confidence: ${aiData.confidence || "Medium"
+      }</p>
             </div>
             
             <div class="stats-grid">
@@ -713,15 +678,13 @@ class PlagiarismChecker {
                     <span class="stat-label">AI Probability</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">${
-                      aiData.confidence || "Medium"
-                    }</span>
+                    <span class="stat-number">${aiData.confidence || "Medium"
+      }</span>
                     <span class="stat-label">Confidence</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">${
-                      Object.keys(aiData.breakdown || {}).length || 5
-                    }</span>
+                    <span class="stat-number">${Object.keys(aiData.breakdown || {}).length || 5
+      }</span>
                     <span class="stat-label">Factors Analyzed</span>
                 </div>
             </div>
@@ -729,7 +692,9 @@ class PlagiarismChecker {
             ${this.createAIBreakdown(aiData.breakdown)}
         </div>
     `;
+
     this.resultsContent.innerHTML = dashboard;
+    this.lastResults = results;
     document.getElementById("downloadReportBtn").style.display = "inline-block";
   }
 
@@ -742,8 +707,8 @@ class PlagiarismChecker {
             <div class="matches-list">
                 <div class="match-card">
                     <div class="match-similarity">${Math.round(
-                      breakdown.repetitionPatterns || 0
-                    )*100}%</div>
+      (breakdown.repetitionPatterns || 0) * 100
+    )}%</div>
                     <div class="match-details">
                         <div class="match-title">Repetition Patterns</div>
                         <div class="match-url">Repeated phrases detection</div>
@@ -751,8 +716,8 @@ class PlagiarismChecker {
                 </div>
                 <div class="match-card">
                     <div class="match-similarity">${Math.round(
-                      breakdown.vocabularyComplexity || 0
-                    )*100}%</div>
+      (breakdown.vocabularyComplexity || 0) * 100
+    )}%</div>
                     <div class="match-details">
                         <div class="match-title">Vocabulary Complexity</div>
                         <div class="match-url">Word choice analysis</div>
@@ -760,8 +725,8 @@ class PlagiarismChecker {
                 </div>
                 <div class="match-card">
                     <div class="match-similarity">${Math.round(
-                      breakdown.sentenceUniformity || 0
-                    )*100}%</div>
+      (breakdown.sentenceUniformity || 0) * 100
+    )}%</div>
                     <div class="match-details">
                         <div class="match-title">Sentence Structure</div>
                         <div class="match-url">Uniformity measurement</div>
@@ -772,7 +737,6 @@ class PlagiarismChecker {
     `;
   }
 
-  // ADD THIS NEW METHOD TO YOUR PlagiarismChecker CLASS
   hideLoadingOverlay() {
     console.log("🔄 Hiding loading overlay...");
     this.loadingOverlay.style.display = "none";
@@ -791,23 +755,22 @@ class PlagiarismChecker {
             <h4>📚 Similar Sources Found</h4>
             <div class="matches-list">
                 ${matches
-                  .slice(0, 3)
-                  .map(
-                    (match) => `
+        .slice(0, 3)
+        .map(
+          (match) => `
                     <div class="match-card">
                         <div class="match-similarity">${match.similarity}%</div>
                         <div class="match-details">
                             <div class="match-title">${match.title}</div>
-                            <a href="${
-                              match.url
-                            }" target="_blank" class="match-url">
+                            <a href="${match.url
+            }" target="_blank" class="match-url">
                                 ${match.source || match.url} →
                             </a>
                         </div>
                     </div>
                 `
-                  )
-                  .join("")}
+        )
+        .join("")}
             </div>
         </div>
     `;
@@ -828,7 +791,6 @@ class PlagiarismChecker {
     const canvas = document.getElementById("plagiarismChart");
     const ctx = canvas.getContext("2d");
 
-    // Destroy existing chart if it exists
     if (this.chart) {
       this.chart.destroy();
     }
@@ -840,10 +802,7 @@ class PlagiarismChecker {
         datasets: [
           {
             data: [originalPercent, plagiarizedPercent],
-            backgroundColor: [
-              "#00aa00", // Green for original
-              "#ff4444", // Red for plagiarized
-            ],
+            backgroundColor: ["#00aa00", "#ff4444"],
             borderWidth: 0,
             cutout: "70%",
           },
@@ -884,12 +843,10 @@ class PlagiarismChecker {
         this.textArea.value = "";
         break;
       case "file":
-        // Clear file input value to prevent change event issues
         this.fileInput.value = "";
         this.uploadedFile = null;
         this.currentContent = "";
 
-        // Reset upload area without destroying file input
         const uploadArea = this.uploadArea;
         uploadArea.style.borderColor = "#cccccc";
         uploadArea.style.backgroundColor = "#fafafa";
@@ -900,21 +857,19 @@ class PlagiarismChecker {
             'Drag & Drop or <span class="choose-file-button">Choose File</span>';
         }
         break;
-
       case "url":
         this.urlInput.value = "";
         this.currentContent = "";
         break;
     }
 
-    // Clear results
     this.resultsContent.innerHTML =
       '<div class="no-results"><p>Results will appear here after checking</p></div>';
     this.updateWordCount();
     document.getElementById("downloadReportBtn").style.display = "none";
   }
+
   showNotification(message, type = "info") {
-    // Remove existing notifications
     const existing = document.querySelector(".notification");
     if (existing) existing.remove();
 
@@ -929,149 +884,458 @@ class PlagiarismChecker {
 
     document.body.appendChild(notification);
 
-    // Auto-remove after 5 seconds
     setTimeout(() => {
       if (notification.parentElement) {
         notification.remove();
       }
     }, 5000);
   }
-  // Action button functions (placeholders for future implementation)
-  exportReport() {
-    alert(
-      "Export functionality coming soon! This will generate a detailed PDF report."
-    );
-  }
 
-  viewSources() {
-    alert(
-      "View Sources functionality coming soon! This will show detailed source matches."
-    );
-  }
-
-  getSuggestions() {
-    alert(
-      "Get Suggestions functionality coming soon! This will provide rewriting suggestions."
-    );
-  }
-  // Method to read text files only
-  readTextFile(file) {
-    const reader = new FileReader();
-
-    reader.onload = (e) => {
-      this.currentContent = e.target.result;
-      this.updateWordCount();
-    };
-
-    reader.onerror = () => {
-      alert("Error reading file. Please try again.");
-    };
-
-    reader.readAsText(file);
-  }
-
-  // Method to estimate word count for binary files
-  estimateWordCount(file) {
-    const estimatedWords = Math.floor(file.size / 6); // Conservative estimate
-    this.currentContent = `[File contains approximately ${estimatedWords.toLocaleString()} words]`;
-    this.updateWordCount();
-  }
   switchMode(mode) {
-    // Don't switch if already in this mode
     if (this.currentMode === mode) return;
 
-    // Update current mode
     this.currentMode = mode;
     const config = this.modeConfig[mode];
 
-    // Update active button
     document.querySelectorAll(".mode-btn").forEach((btn) => {
       btn.classList.remove("active");
     });
     document.querySelector(`[data-mode="${mode}"]`).classList.add("active");
 
-    // Update UI elements
     document.getElementById("main-title").textContent = config.title;
     document.getElementById("main-subtitle").textContent = config.subtitle;
     document.getElementById("textArea").placeholder = config.placeholder;
     document.getElementById("checkPlagiarismBtn").textContent =
       config.buttonText;
 
-    // Clear any existing results
+    // Toggle SEO sections
+    const plagiarismSeo = document.getElementById("plagiarism-seo");
+    const aiDetectorSeo = document.getElementById("ai-detector-seo");
+
+    if (plagiarismSeo && aiDetectorSeo) {
+      if (mode === "plagiarism") {
+        plagiarismSeo.style.display = "block";
+        aiDetectorSeo.style.display = "none";
+      } else {
+        plagiarismSeo.style.display = "none";
+        aiDetectorSeo.style.display = "block";
+      }
+    }
+
     this.resultsContent.innerHTML =
       '<div class="no-results"><p>Results will appear here after checking</p></div>';
 
-    // Hide progress if visible
     this.showProgress(false);
-
-    // Update word count display
     this.updateWordCount();
   }
 }
 
+// ========================================
+// INITIALIZE ON DOM LOAD
+// ========================================
 let plagiarismChecker;
+
 document.addEventListener("DOMContentLoaded", () => {
   plagiarismChecker = new PlagiarismChecker();
 
-  // Wait a moment for libraries to load
+  // ========================================
+  // FINAL PERFECT PDF - BIGGER CHART + CLEAN TEXT
+  // ========================================
   setTimeout(() => {
     const downloadBtn = document.getElementById("downloadReportBtn");
     if (downloadBtn) {
-      downloadBtn.onclick = () => {
-        if (!window.jspdf || !window.html2canvas) {
-          alert("PDF libraries not loaded. Please refresh the page.");
-          return;
-        }
+      downloadBtn.onclick = async () => {
+        try {
+          if (!window.jspdf || !window.html2canvas) {
+            alert("PDF libraries not loaded. Please refresh the page and try again.");
+            return;
+          }
 
-        // ✅ Only check for chart if in plagiarism mode
-        if (
-          plagiarismChecker.currentMode === "plagiarism" &&
-          !plagiarismChecker.chartImageData
-        ) {
-          alert("Chart is still loading. Please wait a moment and try again.");
-          return;
-        }
+          const resultsContent = document.getElementById("resultsContent");
+          if (!resultsContent || resultsContent.innerHTML.includes("no-results")) {
+            alert("No results to export. Please run a check first.");
+            return;
+          }
 
-        const { jsPDF } = window.jspdf;
-        const results = document.getElementById("resultsContent");
+          downloadBtn.textContent = "Generating PDF...";
+          downloadBtn.disabled = true;
+          downloadBtn.style.opacity = "0.6";
 
-        html2canvas(results, {
-          useCORS: true,
-          allowTaint: true,
-          scale: 2,
-        })
-          .then((canvas) => {
-            const doc = new jsPDF("p", "pt", "a4");
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF({
+            orientation: "portrait",
+            unit: "mm",
+            format: "a4",
+            compress: true
+          });
 
-            const imgData = canvas.toDataURL("image/png");
-            const imgWidth = doc.internal.pageSize.getWidth();
-            const pageHeight = doc.internal.pageSize.getHeight();
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+          const pageWidth = doc.internal.pageSize.getWidth();
+          const pageHeight = doc.internal.pageSize.getHeight();
+          const margin = 12;
+          const contentWidth = pageWidth - (2 * margin);
 
-            let heightLeft = imgHeight;
-            let position = 0;
+          const dashboard = resultsContent.querySelector(".modern-results-dashboard");
+          if (!dashboard) throw new Error("Dashboard not found");
 
-            doc.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
+          const matchCards = dashboard.querySelectorAll(".match-card");
+          const matchCount = matchCards.length;
 
-            while (heightLeft > 0) {
-              position = heightLeft - imgHeight;
-              doc.addPage();
-              doc.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-              heightLeft -= pageHeight;
+          // Create temp container
+          const tempContainer = document.createElement("div");
+          tempContainer.style.cssText = `
+          position: fixed;
+          left: -9999px;
+          top: 0;
+          width: ${contentWidth}mm;
+          background: white;
+          padding: 5mm;
+          font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+        `;
+          document.body.appendChild(tempContainer);
+
+          // Helper to capture sections
+          const captureSection = async (element, hideHeader = false) => {
+            if (!element) return null;
+
+            const clone = element.cloneNode(true);
+
+            // Hide section header if requested (to avoid duplicate)
+            if (hideHeader) {
+              const headers = clone.querySelectorAll('h4');
+              headers.forEach(h => h.style.display = 'none');
             }
 
-            doc.save(`${plagiarismChecker.currentMode}-report.pdf`);
-          })
-          .catch((error) => {
-            console.error("PDF generation error:", error);
-            alert("Failed to generate PDF. Please try again.");
+            // Special chart handling with BIGGER size AND BIGGER LEGEND TEXT
+            if (element.classList.contains("chart-container")) {
+              const chartCanvas = element.querySelector("#plagiarismChart");
+              if (chartCanvas && chartCanvas.style.display !== "none") {
+                try {
+                  const chartImg = clone.querySelector("#plagiarismChart");
+                  if (chartImg) {
+                    const imgElement = document.createElement("img");
+                    imgElement.src = chartCanvas.toDataURL("image/png", 1.0);
+                    imgElement.style.cssText = `
+          width: 100%;
+          max-width: 125mm;
+          height: auto;
+          display: block;
+          margin: 4mm auto;
+        `;
+                    chartImg.replaceWith(imgElement);
+                  }
+
+                  // INCREASE LEGEND TEXT SIZE
+                  const legendItems = clone.querySelectorAll('.chart-container *');
+                  legendItems.forEach(item => {
+                    const computedStyle = window.getComputedStyle(item);
+                    if (computedStyle.fontSize) {
+                      const currentSize = parseFloat(computedStyle.fontSize);
+                      // Increase font size by 30%
+                      item.style.fontSize = (currentSize * 1.3) + 'px';
+                      item.style.fontWeight = '600'; // Make it slightly bolder
+                    }
+                  });
+
+                } catch (e) {
+                  console.warn("Chart capture failed:", e);
+                }
+              }
+            }
+
+            tempContainer.innerHTML = "";
+            tempContainer.appendChild(clone);
+
+            await new Promise(resolve => setTimeout(resolve, 80));
+
+            const canvas = await html2canvas(tempContainer, {
+              useCORS: true,
+              allowTaint: true,
+              scale: 2.2,
+              backgroundColor: "#ffffff",
+              logging: false,
+              windowWidth: contentWidth * 3.78
+            });
+
+            return {
+              data: canvas.toDataURL("image/jpeg", 0.93),
+              width: contentWidth,
+              height: (canvas.height * contentWidth) / canvas.width
+            };
+          };
+
+          // ============================================
+          // PAGE 1
+          // ============================================
+          let yPosition = margin;
+
+          // Header
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(22);
+          doc.setTextColor(17, 17, 17);
+          doc.text(
+            plagiarismChecker.currentMode === "plagiarism"
+              ? "PLAGIARISM CHECK REPORT"
+              : "AI DETECTION REPORT",
+            pageWidth / 2,
+            yPosition + 6,
+            { align: "center" }
+          );
+
+          yPosition += 14;
+
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(10);
+          doc.setTextColor(100, 116, 139);
+          doc.text(
+            `Generated: ${new Date().toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit"
+            })}`,
+            pageWidth / 2,
+            yPosition,
+            { align: "center" }
+          );
+
+          yPosition += 5;
+          doc.setFontSize(8);
+          doc.text(
+            "Powered by ASCIIFIX | Professional Content Analysis",
+            pageWidth / 2,
+            yPosition,
+            { align: "center" }
+          );
+
+          yPosition += 4;
+          doc.setLineWidth(0.6);
+          doc.setDrawColor(17, 17, 17);
+          doc.line(margin, yPosition, pageWidth - margin, yPosition);
+          yPosition += 8;
+
+          // Score Cards (Horizontal)
+          const scoreSection = dashboard.querySelector(".score-summary");
+          if (scoreSection) {
+            const scoreSectionClone = scoreSection.cloneNode(true);
+
+            scoreSectionClone.style.cssText = `
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 8mm !important;
+            margin-bottom: 5mm !important;
+          `;
+
+            const cards = scoreSectionClone.querySelectorAll('.score-card');
+            cards.forEach(card => {
+              card.style.cssText = `
+              padding: 12mm 8mm !important;
+              text-align: center !important;
+              border: 2px solid #111111 !important;
+              border-radius: 10px !important;
+              background: ${card.classList.contains('original') ? '#f0fdf4' : '#fff7ed'} !important;
+            `;
+            });
+
+            const img = await captureSection(scoreSectionClone);
+            if (img) {
+              doc.addImage(img.data, "JPEG", margin, yPosition, img.width, img.height);
+              yPosition += img.height + 3;
+            }
+          }
+
+          // Chart (BIGGER - 125mm)
+          const chartSection = dashboard.querySelector(".chart-container");
+          if (chartSection) {
+            const img = await captureSection(chartSection);
+            if (img) {
+              doc.addImage(img.data, "JPEG", margin, yPosition, img.width, img.height);
+              yPosition += img.height + 3;
+            }
+          }
+
+          // Stats Grid
+          const statsSection = dashboard.querySelector(".stats-grid");
+          if (statsSection) {
+            const statsSectionClone = statsSection.cloneNode(true);
+
+            statsSectionClone.style.cssText = `
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 5mm !important;
+            margin-bottom: 0 !important;
+          `;
+
+            const statItems = statsSectionClone.querySelectorAll('.stat-item');
+            statItems.forEach(item => {
+              item.style.cssText = `
+              padding: 8mm 6mm !important;
+              border: 2px solid #111111 !important;
+              border-radius: 8px !important;
+              text-align: center !important;
+              background: #ffffff !important;
+            `;
+            });
+
+            const img = await captureSection(statsSectionClone);
+            if (img) {
+              doc.addImage(img.data, "JPEG", margin, yPosition, img.width, img.height);
+            }
+          }
+
+          // ============================================
+          // PAGE 2
+          // ============================================
+          doc.addPage();
+          yPosition = margin;
+
+          // Page 2 Title (PLAIN TEXT - NO EMOJI)
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(14);
+          doc.setTextColor(17, 17, 17);
+          doc.text("Similar Sources Found", margin, yPosition + 5);
+          yPosition += 10;
+
+          // First 3 matches (HIDE INTERNAL HEADING)
+          const matchesSection = dashboard.querySelector(".matches-section");
+
+          if (matchesSection && matchCount > 0) {
+            const matchesClone = matchesSection.cloneNode(true);
+
+            // REMOVE the h4 heading to avoid duplicate
+            const heading = matchesClone.querySelector('h4');
+            if (heading) heading.remove();
+
+            const allMatchCards = matchesClone.querySelectorAll(".match-card");
+
+            // Keep only first 3
+            allMatchCards.forEach((card, index) => {
+              if (index >= 3) card.remove();
+            });
+
+            const img = await captureSection(matchesClone, true);
+            if (img) {
+              doc.addImage(img.data, "JPEG", margin, yPosition, img.width, img.height);
+              yPosition += img.height + 5;
+            }
+          }
+
+          // Recommendation
+          const recommendationSection = dashboard.querySelector(".recommendation-card");
+          if (recommendationSection) {
+            const img = await captureSection(recommendationSection);
+            if (img) {
+              if (yPosition + img.height > pageHeight - margin - 15) {
+                doc.addPage();
+                yPosition = margin;
+              }
+              doc.addImage(img.data, "JPEG", margin, yPosition, img.width, img.height);
+            }
+          }
+
+          // ============================================
+          // PAGE 3 (if 4+ matches)
+          // ============================================
+          if (matchCount > 3) {
+            doc.addPage();
+            yPosition = margin;
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(14);
+            doc.setTextColor(17, 17, 17);
+            doc.text("Additional Sources (Continued)", margin, yPosition + 5);
+            yPosition += 10;
+
+            const remainingMatchesSection = matchesSection.cloneNode(true);
+
+            // REMOVE heading
+            const heading = remainingMatchesSection.querySelector('h4');
+            if (heading) heading.remove();
+
+            const remainingCards = remainingMatchesSection.querySelectorAll(".match-card");
+
+            remainingCards.forEach((card, index) => {
+              if (index < 3) card.remove();
+            });
+
+            const img = await captureSection(remainingMatchesSection, true);
+            if (img) {
+              doc.addImage(img.data, "JPEG", margin, yPosition, img.width, img.height);
+            }
+          }
+
+          document.body.removeChild(tempContainer);
+
+          // ============================================
+          // Footer
+          // ============================================
+          const totalPages = doc.internal.getNumberOfPages();
+
+          doc.setProperties({
+            title: plagiarismChecker.currentMode === "plagiarism"
+              ? "Plagiarism Check Report - ASCIIFIX"
+              : "AI Detection Report - ASCIIFIX",
+            subject: "Content Analysis Report",
+            author: "ASCIIFIX",
+            creator: "ASCIIFIX Professional Tools"
           });
+
+          for (let i = 1; i <= totalPages; i++) {
+            doc.setPage(i);
+
+            doc.setLineWidth(0.3);
+            doc.setDrawColor(226, 232, 240);
+            doc.line(margin, pageHeight - 15, pageWidth - margin, pageHeight - 15);
+
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(7);
+            doc.setTextColor(148, 163, 184);
+            doc.text(
+              "Generated by ASCIIFIX Professional Tools | www.asciifix.com",
+              pageWidth / 2,
+              pageHeight - 10,
+              { align: "center" }
+            );
+
+            doc.setFontSize(8);
+            doc.setTextColor(150, 150, 150);
+            doc.text(
+              `Page ${i} of ${totalPages}`,
+              pageWidth / 2,
+              pageHeight - 5,
+              { align: "center" }
+            );
+          }
+
+          // Save
+          const timestamp = new Date().getTime();
+          const filename = plagiarismChecker.currentMode === "plagiarism"
+            ? `ASCIIFIX-Plagiarism-Report-${timestamp}.pdf`
+            : `ASCIIFIX-AI-Detection-Report-${timestamp}.pdf`;
+
+          doc.save(filename);
+
+          console.log(`✅ PERFECT PDF Generated: ${filename}`);
+          console.log(`📊 Chart size: 125mm (BIGGER)`);
+          console.log(`📄 Clean text headings (no emoji issues)`);
+          console.log(`✨ Total pages: ${totalPages}`);
+
+        } catch (error) {
+          console.error("❌ PDF Error:", error);
+          alert("Failed to generate PDF: " + error.message);
+        } finally {
+          downloadBtn.textContent = "Download Report as PDF";
+          downloadBtn.disabled = false;
+          downloadBtn.style.opacity = "1";
+        }
       };
     }
   }, 500);
 
-  // Initialize mobile menu
+
+  // ========================================
+  // MOBILE MENU
+  // ========================================
   const hamburgerBtn = document.getElementById("hamburgerBtn");
   const mobileMenu = document.getElementById("mobileMenu");
 
@@ -1081,7 +1345,6 @@ document.addEventListener("DOMContentLoaded", () => {
       mobileMenu.classList.toggle("active");
     });
 
-    // Close menu when clicking on a link
     mobileMenu.addEventListener("click", (e) => {
       if (e.target.tagName === "A") {
         hamburgerBtn.classList.remove("active");
@@ -1089,12 +1352,72 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Close menu when clicking outside
     document.addEventListener("click", (e) => {
       if (!hamburgerBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
         hamburgerBtn.classList.remove("active");
         mobileMenu.classList.remove("active");
       }
+    });
+  }
+
+  // ========================================
+  // SCROLL-REVEAL ANIMATIONS
+  // ========================================
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-in');
+      }
+    });
+  }, observerOptions);
+
+  const animatedElements = document.querySelectorAll('[data-animate]');
+  animatedElements.forEach((el) => observer.observe(el));
+
+  // ========================================
+  // SMOOTH SCROLL FOR ANCHOR LINKS
+  // ========================================
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      const href = this.getAttribute('href');
+      if (href !== '#' && href !== '') {
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      }
+    });
+  });
+
+  // ========================================
+  // BACK TO TOP BUTTON
+  // ========================================
+  const backToTopButton = document.getElementById('backToTop');
+
+  if (backToTopButton) {
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTopButton.style.display = 'flex';
+      } else {
+        backToTopButton.style.display = 'none';
+      }
+    });
+
+    backToTopButton.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
     });
   }
 });
