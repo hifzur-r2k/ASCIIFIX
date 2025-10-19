@@ -1360,6 +1360,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // ===================================
+  // MOBILE TOOLS DROPDOWN
+  // ===================================
+  const mobileToolsHeader = document.getElementById('mobileToolsHeader');
+  const mobileToolsContent = document.getElementById('mobileToolsContent');
+
+  if (mobileToolsHeader && mobileToolsContent) {
+    mobileToolsHeader.addEventListener('click', function () {
+      mobileToolsHeader.classList.toggle('active');
+      mobileToolsContent.classList.toggle('active');
+    });
+  }
+
   // ========================================
   // SCROLL-REVEAL ANIMATIONS
   // ========================================

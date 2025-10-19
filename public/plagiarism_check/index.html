@@ -1,472 +1,543 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Free Plagiarism Checker & AI Detector - ASCIIFIX | Check for Duplicate Content Online</title>
-    <meta name="description" content="Free online plagiarism checker and AI content detector. Check essays, articles, and documents for plagiarism and AI-generated text. Instant results, no sign-up required." />
-    <meta name="keywords" content="plagiarism checker, free plagiarism checker, AI detector, AI content detector, duplicate content checker, essay plagiarism checker, academic integrity, content originality" />
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="../favicon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  </head>
 
-  <body>
-    <!-- Mobile-First Header -->
-    <header class="mobile-header" data-animate>
-      <!-- Hamburger Menu (Left Side) -->
-      <button class="hamburger-btn" id="hamburgerBtn">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Plagiarism Checker & AI Detector - ASCIIFIX | Check for Duplicate Content Online</title>
+  <meta name="description"
+    content="Free online plagiarism checker and AI content detector. Check essays, articles, and documents for plagiarism and AI-generated text. Instant results, no sign-up required." />
+  <meta name="keywords"
+    content="plagiarism checker, free plagiarism checker, AI detector, AI content detector, duplicate content checker, essay plagiarism checker, academic integrity, content originality" />
 
-      <a href="../index.html" class="brand-name">
-        <img
-          src="../images/ASCIIFIX-Tool-LOGO.png"
-          alt="ASCIIFIX Logo"
-          class="logo-image"
-        />
-      </a>
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 
-      <!-- Desktop Menu (Hidden on Mobile) -->
-      <nav class="desktop-menu">
-        <a href="../index.html">Home</a>
-        <a href="#">Tools</a>
-        <a href="#footer">About</a>
-        <span class="separator">|</span>
-        <span class="auth-link">Login/Signup</span>
-      </nav>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-      <!-- Mobile Menu (Hidden by Default) -->
-      <nav class="mobile-menu" id="mobileMenu">
-        <a href="../index.html">Home</a>
-        <a href="#">Tools</a>
-        <a href="#footer">About</a>
-        <a href="#">Login/Signup</a>
-      </nav>
-    </header>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
 
-    <div class="title-container-box" data-animate>
-      <!-- Toggle Tabs -->
-      <div class="mode-toggle">
-        <button class="mode-btn active" data-mode="plagiarism">
-          <i class="icon">🔍</i>
-          <span>Plagiarism Check</span>
-        </button>
-        <button class="mode-btn" data-mode="ai-detection">
-          <i class="icon">🤖</i>
-          <span>AI Detection</span>
-        </button>
-      </div>
-
-      <!-- Dynamic Title -->
-      <h1 id="main-title">PLAGIARISM CHECKER</h1>
-      <p id="main-subtitle">Detect copied content and ensure originality</p>
-    </div>
-
-    <p class="subtitle">Checks for duplicate content all over the web</p>
-
-    <div class="feature-pills-container" data-animate>
-      <div class="feature-pills">
-        <span class="pill">✓ Checks 10B+ sources</span>
-        <span class="pill">✓ Multiple languages</span>
-        <span class="pill">✓ Instant results</span>
-      </div>
-    </div>
-
-    <!-- Main Dashed Container -->
-    <div class="main-dashed-container" data-animate>
-      <!-- Left Section -->
-      <div class="left-content-section">
-        <!-- Input Methods Tabs -->
-        <div class="input-methods-section">
-          <div class="method-tabs">
-            <button class="tab active" data-method="text">Paste Text</button>
-            <button class="tab" data-method="file">Upload File</button>
-            <button class="tab" data-method="url">Enter URL</button>
-          </div>
-        </div>
-
-        <!-- Input Area -->
-        <div class="input-area-container">
-          <!-- Text Input -->
-          <div class="input-method active" id="text-input">
-            <textarea
-              id="textArea"
-              placeholder="Enter your text here and click on Check Plagiarism"
-            ></textarea>
-            <div class="word-counter">
-              <span id="wordCount">0</span> / 25,000 words
-              <span id="charCount">0 characters</span>
-            </div>
-          </div>
-
-          <!-- File Upload -->
-          <div class="input-method" id="file-input">
-            <div class="upload-drop-area" id="fileUploadArea">
-              <p>
-                Drag & Drop or
-                <span class="choose-file-button">Choose File</span>
-              </p>
-              <input
-                type="file"
-                id="fileInput"
-                accept=".txt,.doc,.docx,.pdf"
-                style="display: none"
-              />
-              <p class="accepted-text">Accepted: TXT, DOC, DOCX, PDF</p>
-            </div>
-          </div>
-
-          <!-- URL Input -->
-          <div class="input-method" id="url-input">
-            <div class="url-input-container">
-              <input
-                type="url"
-                id="urlInput"
-                placeholder="https://example.com/article-to-check"
-              />
-              <button id="fetchUrlBtn" class="fetch-url-btn">
-                Fetch Content
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="buttons-section">
-          <div class="check-button-box">
-            <button id="checkPlagiarismBtn">Check Plagiarism</button>
-          </div>
-          <div class="clear-button-box">
-            <button id="clearBtn">Clear</button>
-          </div>
-        </div>
-        <!-- Download button -->
-        <button id="downloadReportBtn" style="display: none; margin-top: 10px">
-          Download Report as PDF
-        </button>
-
-        <!-- Progress Bar -->
-        <div
-          class="progress-container"
-          id="progressContainer"
-          style="display: none"
-        >
-          <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
-          </div>
-          <p class="progress-text" id="progressText">Analyzing content...</p>
-        </div>
-      </div>
-
-      <!-- Right Section -->
-      <div class="right-content-section">
-        <!-- Results Dashboard -->
-        <div class="results-section">
-          <div class="results-header">Analysis Results</div>
-          <div class="results-content" id="resultsContent">
-            <div class="no-results">
-              <p>Results will appear here after checking</p>
-            </div>
-            <canvas
-              id="plagiarismChart"
-              style="display: none; max-height: 200px"
-            ></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Usage Stats -->
-    <div class="usage-stats-container" data-animate>
-      <div class="usage-stats">
-        <span
-          >Free: 1,000 words/day remaining |
-          <strong>Upgrade for unlimited checks</strong></span
-        >
-      </div>
-    </div>
-
-    <!-- ===================================== -->
-    <!-- SEO SECTIONS START -->
-    <!-- ===================================== -->
-
-    <!-- Why Use Section (Conditional) -->
-    <section class="why-use-section" id="plagiarism-seo" data-animate>
-      <div class="why-use-container">
-        <div class="section-badge">Why Choose Our Tool</div>
-        <h2>Why Use Our Free Plagiarism Checker?</h2>
-        <p class="intro-text">Our advanced plagiarism detection tool helps students, educators, writers, and professionals maintain content integrity. Check essays, articles, research papers, and web content against billions of sources instantly.</p>
-        
-        <div class="benefits-grid">
-          <div class="benefit-card">
-            <div class="benefit-icon">⚡</div>
-            <h3>Instant Results</h3>
-            <p>Get plagiarism reports in seconds. Our fast online checker analyzes your text against billions of web pages and academic databases.</p>
-          </div>
-          <div class="benefit-card">
-            <div class="benefit-icon">🔒</div>
-            <h3>100% Secure</h3>
-            <p>Your documents are never stored. All files are processed securely and deleted immediately after checking for complete privacy.</p>
-          </div>
-          <div class="benefit-card">
-            <div class="benefit-icon">🎯</div>
-            <h3>Accurate Detection</h3>
-            <p>Advanced algorithms detect even paraphrased content. Find duplicate text across websites, journals, and academic papers.</p>
-          </div>
-          <div class="benefit-card">
-            <div class="benefit-icon">💰</div>
-            <h3>Free to Use</h3>
-            <p>No registration required. Check up to 25,000 words per submission absolutely free with unlimited daily checks.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- AI Detector SEO Section (Hidden by default) -->
-    <section class="why-use-section" id="ai-detector-seo" style="display: none;" data-animate>
-      <div class="why-use-container">
-        <div class="section-badge">AI Content Detection</div>
-        <h2>Why Use Our AI Content Detector?</h2>
-        <p class="intro-text">Detect AI-generated text from ChatGPT, GPT-4, Bard, and other language models with our advanced AI detector. Perfect for educators verifying student work and content managers ensuring authentic writing.</p>
-        
-        <div class="benefits-grid">
-          <div class="benefit-card">
-            <div class="benefit-icon">🤖</div>
-            <h3>Advanced AI Detection</h3>
-            <p>Identifies content from ChatGPT, GPT-4, Jasper, and other AI writing tools using machine learning algorithms trained on millions of samples.</p>
-          </div>
-          <div class="benefit-card">
-            <div class="benefit-icon">📊</div>
-            <h3>Detailed Analysis</h3>
-            <p>Get comprehensive reports showing AI probability, sentence-level analysis, and patterns that indicate machine-generated text.</p>
-          </div>
-          <div class="benefit-card">
-            <div class="benefit-icon">✅</div>
-            <h3>High Accuracy</h3>
-            <p>Our AI detector analyzes vocabulary, sentence structure, and writing patterns to accurately distinguish human from AI-generated content.</p>
-          </div>
-          <div class="benefit-card">
-            <div class="benefit-icon">🎓</div>
-            <h3>For Everyone</h3>
-            <p>Ideal for teachers checking essays, content managers verifying authenticity, and writers ensuring original human-written content.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section class="how-it-works-section" data-animate>
-      <div class="how-it-works-container">
-        <h2>How It Works</h2>
-        <p class="section-subtitle">Check your content in 3 simple steps</p>
-        
-        <div class="steps-grid">
-          <div class="step-card">
-            <div class="step-number">1</div>
-            <h3>Upload Content</h3>
-            <p>Paste text, upload a document (TXT, DOC, DOCX, PDF), or enter a URL to analyze web content directly.</p>
-          </div>
-          <div class="step-card">
-            <div class="step-number">2</div>
-            <h3>Analyze</h3>
-            <p>Our system scans billions of web pages, academic papers, and databases to find matching content and AI patterns.</p>
-          </div>
-          <div class="step-card">
-            <div class="step-number">3</div>
-            <h3>Get Results</h3>
-            <p>Receive a detailed report showing plagiarism percentage, source matches, and recommendations for improvement.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Use Cases Section -->
-    <section class="use-cases-section" data-animate>
-      <div class="use-cases-container">
-        <h2>Who Can Use This Tool?</h2>
-        <div class="use-cases-grid">
-          <div class="use-case-card">
-            <div class="use-case-icon">🎓</div>
-            <h3>Students</h3>
-            <p>Check essays, research papers, and assignments for plagiarism before submission. Ensure academic integrity and avoid accidental plagiarism.</p>
-            <ul class="use-case-list">
-              <li>Essay plagiarism detection</li>
-              <li>Research paper verification</li>
-              <li>Citation checking</li>
-            </ul>
-          </div>
-          <div class="use-case-card">
-            <div class="use-case-icon">👨‍🏫</div>
-            <h3>Teachers & Educators</h3>
-            <p>Verify student submissions for originality. Detect copied content and AI-generated essays quickly and accurately.</p>
-            <ul class="use-case-list">
-              <li>Batch assignment checking</li>
-              <li>AI-written essay detection</li>
-              <li>Academic honesty verification</li>
-            </ul>
-          </div>
-          <div class="use-case-card">
-            <div class="use-case-icon">✍️</div>
-            <h3>Writers & Bloggers</h3>
-            <p>Ensure your articles and blog posts are 100% original. Check for duplicate content that could harm SEO rankings.</p>
-            <ul class="use-case-list">
-              <li>Content originality check</li>
-              <li>SEO duplicate content detection</li>
-              <li>Article verification</li>
-            </ul>
-          </div>
-          <div class="use-case-card">
-            <div class="use-case-icon">💼</div>
-            <h3>Businesses</h3>
-            <p>Verify content authenticity for websites, marketing materials, and reports. Protect brand reputation with original content.</p>
-            <ul class="use-case-list">
-              <li>Website content checking</li>
-              <li>Marketing material verification</li>
-              <li>Employee work validation</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section class="faq-section" data-animate>
-      <div class="faq-container">
-        <h2>Frequently Asked Questions</h2>
-        <div class="faq-grid">
-          <div class="faq-item">
-            <h3>Is this plagiarism checker free?</h3>
-            <p>Yes! Our plagiarism checker is completely free to use. You can check up to 25,000 words per submission without any registration or payment required.</p>
-          </div>
-          <div class="faq-item">
-            <h3>How accurate is the plagiarism detection?</h3>
-            <p>Our tool uses advanced algorithms to scan billions of web pages and academic databases. It detects exact matches, paraphrased content, and similar text with high accuracy.</p>
-          </div>
-          <div class="faq-item">
-            <h3>Can this detect AI-generated content?</h3>
-            <p>Yes! Switch to AI Detection mode to analyze text for AI-generated patterns from ChatGPT, GPT-4, and other language models.</p>
-          </div>
-          <div class="faq-item">
-            <h3>What file formats are supported?</h3>
-            <p>You can upload TXT, DOC, DOCX, and PDF files up to 10MB in size. Alternatively, paste text directly or enter a URL to check web content.</p>
-          </div>
-          <div class="faq-item">
-            <h3>Is my content stored or shared?</h3>
-            <p>No. Your privacy is our priority. All uploaded files and text are processed securely and deleted immediately after analysis. We never store or share your content.</p>
-          </div>
-          <div class="faq-item">
-            <h3>How long does checking take?</h3>
-            <p>Most checks complete in 30-120 seconds depending on content length. Short texts (under 500 words) typically process in under a minute.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Trust Badges Section -->
-    <section class="trust-section" data-animate>
-      <div class="trust-container">
-        <h2>Trusted by Thousands Daily</h2>
-        <div class="trust-stats">
-          <div class="trust-stat">
-            <div class="trust-number">10B+</div>
-            <div class="trust-label">Sources Checked</div>
-          </div>
-          <div class="trust-stat">
-            <div class="trust-number">100%</div>
-            <div class="trust-label">Free & Secure</div>
-          </div>
-          <div class="trust-stat">
-            <div class="trust-number">24/7</div>
-            <div class="trust-label">Available</div>
-          </div>
-          <div class="trust-stat">
-            <div class="trust-number">50+ Languages</div>
-            <div class="trust-label">Supported</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================================== -->
-    <!-- SEO SECTIONS END -->
-    <!-- ===================================== -->
-
-    <!-- Footer -->
-    <footer class="footer-section" id="footer" data-animate>
-      <div class="footer-content">
-        <div class="footer-main">
-          <div class="footer-brand">
-            <h3>ASCIIFIX</h3>
-            <p>Free online plagiarism checker and AI content detector. Check essays, articles, and documents for duplicate content and AI-generated text. Professional tools for students, educators, and writers.</p>
-          </div>
-          
-          <div class="footer-links-group">
-            <div class="footer-column">
-              <h4>Tools</h4>
-              <a href="/plagiarism_check/">Plagiarism Checker</a>
-              <a href="/plagiarism_check/">AI Detector</a>
-              <a href="/image_converter/">Image Converter</a>
-              <a href="#">Grammar Checker</a>
-            </div>
-            
-            <div class="footer-column">
-              <h4>Resources</h4>
-              <a href="../index.html">Home</a>
-              <a href="#">Blog</a>
-              <a href="#">FAQ</a>
-              <a href="#">Contact</a>
-            </div>
-            
-            <div class="footer-column">
-              <h4>Legal</h4>
-              <a href="#">Privacy Policy</a>
-              <a href="#">Terms of Service</a>
-              <a href="#">Cookie Policy</a>
-            </div>
-          </div>
-        </div>
-        
-        <div class="footer-bottom">
-          <p>&copy; 2025 AsciiFix. All rights reserved.</p>
-          <div class="footer-social">
-            <a href="#">Twitter</a>
-            <span>•</span>
-            <a href="#">Facebook</a>
-            <span>•</span>
-            <a href="#">LinkedIn</a>
-          </div>
-        </div>
-      </div>
-    </footer>
-
-    <!-- Back to Top Button -->
-    <button id="backToTop" class="back-to-top" aria-label="Back to top" style="display: none;">
-      <span class="back-to-top-icon">↑</span>
+<body>
+  <!-- Mobile-First Header -->
+  <header class="mobile-header" data-animate>
+    <!-- Hamburger Menu (Left Side) -->
+    <button class="hamburger-btn" id="hamburgerBtn">
+      <span></span>
+      <span></span>
+      <span></span>
     </button>
 
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay" style="display: none">
-      <div class="loading-box">
-        <div class="loading-spinner"></div>
-        <p id="loadingMessage">Checking for plagiarism...</p>
-        <small id="loadingTip" style="color: #666; margin-top: 10px"></small>
+    <a href="../index.html" class="brand-name">
+      <img src="../images/ASCIIFIX-Tool-LOGO.png" alt="ASCIIFIX Logo" class="logo-image" />
+    </a>
+
+    <!-- Desktop Menu (Hidden on Mobile) -->
+    <!-- Desktop Menu (Hidden on Mobile) -->
+    <!-- Desktop Menu (Hidden on Mobile) -->
+    <nav class="desktop-menu">
+      <a href="../index.html">Home</a>
+
+      <!-- Tools Dropdown -->
+      <div class="tools-dropdown">
+        <a href="#" class="tools-link">Tools <span class="dropdown-arrow">.</span></a>
+        <div class="dropdown-content">
+          <!-- Content Analysis Section -->
+          <div class="dropdown-category">
+            <div class="category-label">CONTENT ANALYSIS</div>
+            <a href="/plagiarism_check/" class="dropdown-item">
+              <span class="item-icon">📝</span>
+              <span class="item-text">Plagiarism Check</span>
+            </a>
+            <a href="/plagiarism_check/" class="dropdown-item">
+              <span class="item-icon">🤖</span>
+              <span class="item-text">AI Detector</span>
+            </a>
+            <a href="#" class="dropdown-item">
+              <span class="item-icon">✓</span>
+              <span class="item-text">Grammar Check</span>
+            </a>
+          </div>
+
+          <!-- Divider -->
+          <div class="dropdown-divider"></div>
+
+          <!-- File & Image Tools Section -->
+          <div class="dropdown-category">
+            <div class="category-label">FILE & IMAGE TOOLS</div>
+            <a href="/image_converter/" class="dropdown-item">
+              <span class="item-icon">🖼️</span>
+              <span class="item-text">Image Converter</span>
+            </a>
+            <a href="#" class="dropdown-item">
+              <span class="item-icon">📐</span>
+              <span class="item-text">Image Resizer</span>
+            </a>
+            <a href="#" class="dropdown-item">
+              <span class="item-icon">📁</span>
+              <span class="item-text">File Converter</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <a href="#footer">About</a>
+      <span class="separator">|</span>
+      <span class="auth-link">Login/Signup</span>
+    </nav>
+
+    <!-- Mobile Menu (Hidden by Default) -->
+    <nav class="mobile-menu" id="mobileMenu">
+      <a href="../index.html">Home</a>
+
+      <!-- Mobile Tools Dropdown -->
+      <div class="mobile-tools-section">
+        <div class="mobile-tools-header" id="mobileToolsHeader">
+          <span>Tools</span>
+          <span class="mobile-arrow">▼</span>
+        </div>
+        <div class="mobile-tools-content" id="mobileToolsContent">
+          <!-- Content Analysis -->
+          <div class="mobile-category-label">CONTENT ANALYSIS</div>
+          <a href="/plagiarism_check/">📝 Plagiarism Check</a>
+          <a href="/plagiarism_check/">🤖 AI Detector</a>
+          <a href="#">✓ Grammar Check</a>
+
+          <!-- File & Image Tools -->
+          <div class="mobile-category-label">FILE & IMAGE TOOLS</div>
+          <a href="/image_converter/">🖼️ Image Converter</a>
+          <a href="#">📐 Image Resizer</a>
+          <a href="#">📁 File Converter</a>
+        </div>
+      </div>
+
+      <a href="#footer">About</a>
+      <a href="#">Login/Signup</a>
+    </nav>
+
+  </header>
+
+  <div class="title-container-box" data-animate>
+    <!-- Toggle Tabs -->
+    <div class="mode-toggle">
+      <button class="mode-btn active" data-mode="plagiarism">
+        <i class="icon">🔍</i>
+        <span>Plagiarism Check</span>
+      </button>
+      <button class="mode-btn" data-mode="ai-detection">
+        <i class="icon">🤖</i>
+        <span>AI Detection</span>
+      </button>
+    </div>
+
+    <!-- Dynamic Title -->
+    <h1 id="main-title">PLAGIARISM CHECKER</h1>
+    <p id="main-subtitle">Detect copied content and ensure originality</p>
+  </div>
+
+  <p class="subtitle">Checks for duplicate content all over the web</p>
+
+  <div class="feature-pills-container" data-animate>
+    <div class="feature-pills">
+      <span class="pill">✓ Checks 10B+ sources</span>
+      <span class="pill">✓ Multiple languages</span>
+      <span class="pill">✓ Instant results</span>
+    </div>
+  </div>
+
+  <!-- Main Dashed Container -->
+  <div class="main-dashed-container" data-animate>
+    <!-- Left Section -->
+    <div class="left-content-section">
+      <!-- Input Methods Tabs -->
+      <div class="input-methods-section">
+        <div class="method-tabs">
+          <button class="tab active" data-method="text">Paste Text</button>
+          <button class="tab" data-method="file">Upload File</button>
+          <button class="tab" data-method="url">Enter URL</button>
+        </div>
+      </div>
+
+      <!-- Input Area -->
+      <div class="input-area-container">
+        <!-- Text Input -->
+        <div class="input-method active" id="text-input">
+          <textarea id="textArea" placeholder="Enter your text here and click on Check Plagiarism"></textarea>
+          <div class="word-counter">
+            <span id="wordCount">0</span> / 25,000 words
+            <span id="charCount">0 characters</span>
+          </div>
+        </div>
+
+        <!-- File Upload -->
+        <div class="input-method" id="file-input">
+          <div class="upload-drop-area" id="fileUploadArea">
+            <p>
+              Drag & Drop or
+              <span class="choose-file-button">Choose File</span>
+            </p>
+            <input type="file" id="fileInput" accept=".txt,.doc,.docx,.pdf" style="display: none" />
+            <p class="accepted-text">Accepted: TXT, DOC, DOCX, PDF</p>
+          </div>
+        </div>
+
+        <!-- URL Input -->
+        <div class="input-method" id="url-input">
+          <div class="url-input-container">
+            <input type="url" id="urlInput" placeholder="https://example.com/article-to-check" />
+            <button id="fetchUrlBtn" class="fetch-url-btn">
+              Fetch Content
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="buttons-section">
+        <div class="check-button-box">
+          <button id="checkPlagiarismBtn">Check Plagiarism</button>
+        </div>
+        <div class="clear-button-box">
+          <button id="clearBtn">Clear</button>
+        </div>
+      </div>
+      <!-- Download button -->
+      <button id="downloadReportBtn" style="display: none; margin-top: 10px">
+        Download Report as PDF
+      </button>
+
+      <!-- Progress Bar -->
+      <div class="progress-container" id="progressContainer" style="display: none">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p class="progress-text" id="progressText">Analyzing content...</p>
       </div>
     </div>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="script.js"></script>
-  </body>
+
+    <!-- Right Section -->
+    <div class="right-content-section">
+      <!-- Results Dashboard -->
+      <div class="results-section">
+        <div class="results-header">Analysis Results</div>
+        <div class="results-content" id="resultsContent">
+          <div class="no-results">
+            <p>Results will appear here after checking</p>
+          </div>
+          <canvas id="plagiarismChart" style="display: none; max-height: 200px"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Usage Stats -->
+  <div class="usage-stats-container" data-animate>
+    <div class="usage-stats">
+      <span>Free: 1,000 words/day remaining |
+        <strong>Upgrade for unlimited checks</strong></span>
+    </div>
+  </div>
+
+  <!-- ===================================== -->
+  <!-- SEO SECTIONS START -->
+  <!-- ===================================== -->
+
+  <!-- Why Use Section (Conditional) -->
+  <section class="why-use-section" id="plagiarism-seo" data-animate>
+    <div class="why-use-container">
+      <div class="section-badge">Why Choose Our Tool</div>
+      <h2>Why Use Our Free Plagiarism Checker?</h2>
+      <p class="intro-text">Our advanced plagiarism detection tool helps students, educators, writers, and professionals
+        maintain content integrity. Check essays, articles, research papers, and web content against billions of sources
+        instantly.</p>
+
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">⚡</div>
+          <h3>Instant Results</h3>
+          <p>Get plagiarism reports in seconds. Our fast online checker analyzes your text against billions of web pages
+            and academic databases.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🔒</div>
+          <h3>100% Secure</h3>
+          <p>Your documents are never stored. All files are processed securely and deleted immediately after checking
+            for complete privacy.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🎯</div>
+          <h3>Accurate Detection</h3>
+          <p>Advanced algorithms detect even paraphrased content. Find duplicate text across websites, journals, and
+            academic papers.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">💰</div>
+          <h3>Free to Use</h3>
+          <p>No registration required. Check up to 25,000 words per submission absolutely free with unlimited daily
+            checks.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Detector SEO Section (Hidden by default) -->
+  <section class="why-use-section" id="ai-detector-seo" style="display: none;" data-animate>
+    <div class="why-use-container">
+      <div class="section-badge">AI Content Detection</div>
+      <h2>Why Use Our AI Content Detector?</h2>
+      <p class="intro-text">Detect AI-generated text from ChatGPT, GPT-4, Bard, and other language models with our
+        advanced AI detector. Perfect for educators verifying student work and content managers ensuring authentic
+        writing.</p>
+
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">🤖</div>
+          <h3>Advanced AI Detection</h3>
+          <p>Identifies content from ChatGPT, GPT-4, Jasper, and other AI writing tools using machine learning
+            algorithms trained on millions of samples.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">📊</div>
+          <h3>Detailed Analysis</h3>
+          <p>Get comprehensive reports showing AI probability, sentence-level analysis, and patterns that indicate
+            machine-generated text.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">✅</div>
+          <h3>High Accuracy</h3>
+          <p>Our AI detector analyzes vocabulary, sentence structure, and writing patterns to accurately distinguish
+            human from AI-generated content.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🎓</div>
+          <h3>For Everyone</h3>
+          <p>Ideal for teachers checking essays, content managers verifying authenticity, and writers ensuring original
+            human-written content.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="how-it-works-section" data-animate>
+    <div class="how-it-works-container">
+      <h2>How It Works</h2>
+      <p class="section-subtitle">Check your content in 3 simple steps</p>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3>Upload Content</h3>
+          <p>Paste text, upload a document (TXT, DOC, DOCX, PDF), or enter a URL to analyze web content directly.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3>Analyze</h3>
+          <p>Our system scans billions of web pages, academic papers, and databases to find matching content and AI
+            patterns.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3>Get Results</h3>
+          <p>Receive a detailed report showing plagiarism percentage, source matches, and recommendations for
+            improvement.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use Cases Section -->
+  <section class="use-cases-section" data-animate>
+    <div class="use-cases-container">
+      <h2>Who Can Use This Tool?</h2>
+      <div class="use-cases-grid">
+        <div class="use-case-card">
+          <div class="use-case-icon">🎓</div>
+          <h3>Students</h3>
+          <p>Check essays, research papers, and assignments for plagiarism before submission. Ensure academic integrity
+            and avoid accidental plagiarism.</p>
+          <ul class="use-case-list">
+            <li>Essay plagiarism detection</li>
+            <li>Research paper verification</li>
+            <li>Citation checking</li>
+          </ul>
+        </div>
+        <div class="use-case-card">
+          <div class="use-case-icon">👨‍🏫</div>
+          <h3>Teachers & Educators</h3>
+          <p>Verify student submissions for originality. Detect copied content and AI-generated essays quickly and
+            accurately.</p>
+          <ul class="use-case-list">
+            <li>Batch assignment checking</li>
+            <li>AI-written essay detection</li>
+            <li>Academic honesty verification</li>
+          </ul>
+        </div>
+        <div class="use-case-card">
+          <div class="use-case-icon">✍️</div>
+          <h3>Writers & Bloggers</h3>
+          <p>Ensure your articles and blog posts are 100% original. Check for duplicate content that could harm SEO
+            rankings.</p>
+          <ul class="use-case-list">
+            <li>Content originality check</li>
+            <li>SEO duplicate content detection</li>
+            <li>Article verification</li>
+          </ul>
+        </div>
+        <div class="use-case-card">
+          <div class="use-case-icon">💼</div>
+          <h3>Businesses</h3>
+          <p>Verify content authenticity for websites, marketing materials, and reports. Protect brand reputation with
+            original content.</p>
+          <ul class="use-case-list">
+            <li>Website content checking</li>
+            <li>Marketing material verification</li>
+            <li>Employee work validation</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq-section" data-animate>
+    <div class="faq-container">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h3>Is this plagiarism checker free?</h3>
+          <p>Yes! Our plagiarism checker is completely free to use. You can check up to 25,000 words per submission
+            without any registration or payment required.</p>
+        </div>
+        <div class="faq-item">
+          <h3>How accurate is the plagiarism detection?</h3>
+          <p>Our tool uses advanced algorithms to scan billions of web pages and academic databases. It detects exact
+            matches, paraphrased content, and similar text with high accuracy.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Can this detect AI-generated content?</h3>
+          <p>Yes! Switch to AI Detection mode to analyze text for AI-generated patterns from ChatGPT, GPT-4, and other
+            language models.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What file formats are supported?</h3>
+          <p>You can upload TXT, DOC, DOCX, and PDF files up to 10MB in size. Alternatively, paste text directly or
+            enter a URL to check web content.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Is my content stored or shared?</h3>
+          <p>No. Your privacy is our priority. All uploaded files and text are processed securely and deleted
+            immediately after analysis. We never store or share your content.</p>
+        </div>
+        <div class="faq-item">
+          <h3>How long does checking take?</h3>
+          <p>Most checks complete in 30-120 seconds depending on content length. Short texts (under 500 words) typically
+            process in under a minute.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust Badges Section -->
+  <section class="trust-section" data-animate>
+    <div class="trust-container">
+      <h2>Trusted by Thousands Daily</h2>
+      <div class="trust-stats">
+        <div class="trust-stat">
+          <div class="trust-number">10B+</div>
+          <div class="trust-label">Sources Checked</div>
+        </div>
+        <div class="trust-stat">
+          <div class="trust-number">100%</div>
+          <div class="trust-label">Free & Secure</div>
+        </div>
+        <div class="trust-stat">
+          <div class="trust-number">24/7</div>
+          <div class="trust-label">Available</div>
+        </div>
+        <div class="trust-stat">
+          <div class="trust-number">50+ Languages</div>
+          <div class="trust-label">Supported</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================== -->
+  <!-- SEO SECTIONS END -->
+  <!-- ===================================== -->
+
+  <!-- Footer -->
+  <footer class="footer-section" id="footer" data-animate>
+    <div class="footer-content">
+      <div class="footer-main">
+        <div class="footer-brand">
+          <h3>ASCIIFIX</h3>
+          <p>Free online plagiarism checker and AI content detector. Check essays, articles, and documents for duplicate
+            content and AI-generated text. Professional tools for students, educators, and writers.</p>
+        </div>
+
+        <div class="footer-links-group">
+          <div class="footer-column">
+            <h4>Tools</h4>
+            <a href="/plagiarism_check/">Plagiarism Checker</a>
+            <a href="/plagiarism_check/">AI Detector</a>
+            <a href="/image_converter/">Image Converter</a>
+            <a href="#">Grammar Checker</a>
+          </div>
+
+          <div class="footer-column">
+            <h4>Resources</h4>
+            <a href="../index.html">Home</a>
+            <a href="#">Blog</a>
+            <a href="#">FAQ</a>
+            <a href="#">Contact</a>
+          </div>
+
+          <div class="footer-column">
+            <h4>Legal</h4>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Cookie Policy</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2025 AsciiFix. All rights reserved.</p>
+        <div class="footer-social">
+          <a href="#">Twitter</a>
+          <span>•</span>
+          <a href="#">Facebook</a>
+          <span>•</span>
+          <a href="#">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to Top Button -->
+  <button id="backToTop" class="back-to-top" aria-label="Back to top" style="display: none;">
+    <span class="back-to-top-icon">↑</span>
+  </button>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay" style="display: none">
+    <div class="loading-box">
+      <div class="loading-spinner"></div>
+      <p id="loadingMessage">Checking for plagiarism...</p>
+      <small id="loadingTip" style="color: #666; margin-top: 10px"></small>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="script.js"></script>
+</body>
+
 </html>
