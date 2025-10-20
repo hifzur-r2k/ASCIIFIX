@@ -1144,13 +1144,32 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           }
 
-          // Chart (BIGGER - 125mm)
+          // Chart Section – Auto-size based on screen width (Fixes mobile overflow)
           const chartSection = dashboard.querySelector(".chart-container");
           if (chartSection) {
+            // Fix chart canvas width for small screens
+            const viewportWidth = window.innerWidth || 768; // fallback
+            const chartScale = viewportWidth < 600 ? 0.7 : 1; // reduce size on mobiles
+
+            // Temporarily adjust chart style for scaling before capture
+            const chartCanvas = chartSection.querySelector("#plagiarismChart");
+            if (chartCanvas) {
+              chartCanvas.style.maxWidth = `${125 * chartScale}mm`;
+              chartCanvas.style.height = "auto";
+              chartCanvas.style.objectFit = "contain";
+              chartCanvas.style.margin = "0 auto";
+              chartCanvas.style.display = "block";
+            }
+
             const img = await captureSection(chartSection);
             if (img) {
-              doc.addImage(img.data, "JPEG", margin, yPosition, img.width, img.height);
-              yPosition += img.height + 3;
+              // Limit maximum width to avoid overflow in PDF
+              const finalWidth = Math.min(img.width, pageWidth - margin * 2);
+              const scale = finalWidth / img.width;
+              const finalHeight = img.height * scale;
+
+              doc.addImage(img.data, "JPEG", margin, yPosition, finalWidth, finalHeight);
+              yPosition += finalHeight + 3;
             }
           }
 

@@ -2004,6 +2004,7 @@ button:focus {
   color: #333;
   text-decoration: none;
   font-size: 14px;
+  font-weight: bold;
   transition: background-color 0.2s ease;
 }
 
@@ -2660,5 +2661,14 @@ button:focus {
 
   .match-url {
     font-size: 12px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  #plagiarismChart {
+    max-width: 90% !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    display: block !important;
   }
 }
