@@ -253,18 +253,24 @@ class PlagiarismChecker {
   updateFileUploadDisplay(filename) {
     const uploadArea = this.uploadArea;
     const existingText = uploadArea.querySelector("p");
-
     if (existingText) {
-      existingText.innerHTML = `✓ File uploaded: <strong>${filename}</strong>`;
+      // Truncate long filenames on mobile
+      let displayName = filename;
+      if (window.innerWidth <= 768 && filename.length > 40) {
+        const extension = filename.split('.').pop();
+        const nameWithoutExt = filename.substring(0, filename.lastIndexOf('.'));
+        displayName = nameWithoutExt.substring(0, 30) + '...' + extension;
+      }
+
+      existingText.innerHTML = `✓ File uploaded: <strong title="${filename}">${displayName}</strong>`;
+      uploadArea.style.borderColor = "#00aa00";
+      uploadArea.style.backgroundColor = "#f0fff0";
+
+      setTimeout(() => {
+        uploadArea.style.borderColor = "#cccccc";
+        uploadArea.style.backgroundColor = "#fafafa";
+      }, 2000);
     }
-
-    uploadArea.style.borderColor = "#00aa00";
-    uploadArea.style.backgroundColor = "#f0fff0";
-
-    setTimeout(() => {
-      uploadArea.style.borderColor = "#cccccc";
-      uploadArea.style.backgroundColor = "#fafafa";
-    }, 2000);
   }
 
   handleDragOver(e) {
@@ -1147,28 +1153,23 @@ document.addEventListener("DOMContentLoaded", () => {
           // Chart Section – Auto-size based on screen width (Fixes mobile overflow)
           const chartSection = dashboard.querySelector(".chart-container");
           if (chartSection) {
-            // Fix chart canvas width for small screens
-            const viewportWidth = window.innerWidth || 768; // fallback
-            const chartScale = viewportWidth < 600 ? 0.7 : 1; // reduce size on mobiles
-
-            // Temporarily adjust chart style for scaling before capture
-            const chartCanvas = chartSection.querySelector("#plagiarismChart");
-            if (chartCanvas) {
-              chartCanvas.style.maxWidth = `${125 * chartScale}mm`;
-              chartCanvas.style.height = "auto";
-              chartCanvas.style.objectFit = "contain";
-              chartCanvas.style.margin = "0 auto";
-              chartCanvas.style.display = "block";
-            }
-
             const img = await captureSection(chartSection);
             if (img) {
-              // Limit maximum width to avoid overflow in PDF
-              const finalWidth = Math.min(img.width, pageWidth - margin * 2);
-              const scale = finalWidth / img.width;
-              const finalHeight = img.height * scale;
+              // Calculate maximum width based on page width (mobile responsive)
+              const maxWidth = contentWidth - 10; // Leave 10mm total padding
+              let finalWidth = img.width;
+              let finalHeight = img.height;
 
-              doc.addImage(img.data, "JPEG", margin, yPosition, finalWidth, finalHeight);
+              // Scale down if image is too wide
+              if (img.width > maxWidth) {
+                const scale = maxWidth / img.width;
+                finalWidth = maxWidth;
+                finalHeight = img.height * scale;
+              }
+
+              // Center the chart
+              const xPosition = margin + (contentWidth - finalWidth) / 2;
+              doc.addImage(img.data, "JPEG", xPosition, yPosition, finalWidth, finalHeight);
               yPosition += finalHeight + 3;
             }
           }

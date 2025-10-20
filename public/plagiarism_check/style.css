@@ -2672,3 +2672,50 @@ button:focus {
     display: block !important;
   }
 }
+
+/* ===================================== */
+/* FIX LONG FILENAME ON MOBILE */
+/* ===================================== */
+
+@media (max-width: 768px) {
+  /* File upload area - wrap long filenames */
+  .upload-drop-area {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+  
+  .upload-drop-area p {
+    max-width: 100%;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.6;
+  }
+  
+  .upload-drop-area strong {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+    margin-top: 4px;
+  }
+  
+  /* Also fix for file confirmation box */
+  .input-method {
+    overflow-x: hidden;
+  }
+  
+  #file-input .upload-drop-area {
+    padding: 20px 12px;
+  }
+}
+
+/* Extra small phones - more aggressive truncation */
+@media (max-width: 480px) {
+  .upload-drop-area strong {
+    font-size: 12px;
+    max-width: 90%;
+  }
+}
