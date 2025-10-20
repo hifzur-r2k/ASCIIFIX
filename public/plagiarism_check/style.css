@@ -2678,7 +2678,6 @@ button:focus {
 /* ===================================== */
 
 @media (max-width: 768px) {
-  /* File upload area - wrap long filenames */
   .upload-drop-area {
     word-break: break-word;
     overflow-wrap: break-word;
@@ -2717,5 +2716,24 @@ button:focus {
   .upload-drop-area strong {
     font-size: 12px;
     max-width: 90%;
+  }
+}
+
+/* PDF Chart Fix for Mobile */
+@media (max-width: 768px) {
+  .chart-container {
+    max-width: 100% !important;
+    overflow: hidden !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  
+  #plagiarismChart {
+    max-width: 90% !important;
+    max-height: 300px !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 auto !important;
   }
 }
