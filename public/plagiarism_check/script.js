@@ -1151,78 +1151,12 @@ document.addEventListener("DOMContentLoaded", () => {
           }
 
           // Chart Section - MOBILE RESPONSIVE FIX
+          // Chart BIGGER - 125mm
           const chartSection = dashboard.querySelector(".chart-container");
           if (chartSection) {
-            // Detect if mobile device
-            const isMobile = window.innerWidth <= 768;
-
-            // Create a temporary container with proper sizing
-            const chartClone = chartSection.cloneNode(true);
-            chartClone.style.cssText = `
-    width: ${isMobile ? '85mm' : '125mm'} !important;
-    max-width: ${isMobile ? '85mm' : '125mm'} !important;
-    height: auto !important;
-    margin: 0 auto !important;
-    display: block !important;
-    padding: 5mm !important;
-  `;
-
-            // Find canvas inside and resize it
-            const canvasInClone = chartClone.querySelector('#plagiarismChart');
-            if (canvasInClone) {
-              canvasInClone.style.cssText = `
-      max-width: 100% !important;
-      max-height: ${isMobile ? '85mm' : '100mm'} !important;
-      height: auto !important;
-      width: auto !important;
-      margin: 0 auto !important;
-      display: block !important;
-    `;
-            }
-
-            // Append to temp container for capture
-            const tempDiv = document.createElement('div');
-            tempDiv.style.cssText = `
-    position: fixed;
-    left: -9999px;
-    top: 0;
-    width: ${isMobile ? '85mm' : '125mm'};
-    background: white;
-  `;
-            tempDiv.appendChild(chartClone);
-            document.body.appendChild(tempDiv);
-
-            // Wait for render
-            await new Promise(resolve => setTimeout(resolve, 100));
-
-            // Capture with proper scale
-            const canvas = await html2canvas(tempDiv, {
-              useCORS: true,
-              allowTaint: true,
-              scale: isMobile ? 1.8 : 2.2,
-              backgroundColor: '#ffffff',
-              logging: false,
-              windowWidth: isMobile ? 320 : 800
-            });
-
-            // Remove temp container
-            document.body.removeChild(tempDiv);
-
-            // Calculate final dimensions for PDF
-            const capturedWidth = (canvas.width / (isMobile ? 1.8 : 2.2)) / 3.78; // Convert to mm
-            const capturedHeight = (canvas.height / (isMobile ? 1.8 : 2.2)) / 3.78;
-
-            // Ensure it fits within page width
-            let finalWidth = Math.min(capturedWidth, contentWidth - 10);
-            let finalHeight = capturedHeight * (finalWidth / capturedWidth);
-
-            // Center the chart on page
-            const xPosition = margin + (contentWidth - finalWidth) / 2;
-
-            // Add to PDF
-            const imageData = canvas.toDataURL('image/jpeg', 0.93);
-            doc.addImage(imageData, 'JPEG', xPosition, yPosition, finalWidth, finalHeight);
-            yPosition += finalHeight + 3;
+            const img = await captureSection(chartSection);
+            if (img) doc.addImage(img.data, "JPEG", margin, yPosition, img.width, img.height);
+            yPosition += img.height + 3;
           }
 
           // Stats Grid
