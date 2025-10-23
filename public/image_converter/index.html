@@ -1,106 +1,376 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Converter - AsciiFix</title>
+    <title>Image Converter - ASCIIFIX | Convert JPG, PNG, WEBP, TIFF & More</title>
+    <meta name="description" content="Free online image converter. Convert images between JPG, PNG, WEBP, TIFF, and other formats instantly. Fast, secure, and easy to use. No registration required.">
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <!-- Header Navigation Box -->
-    <div class="header-nav-box">
-        <div class="nav-left-section">
-            <div class="logo-section">
-                <div class="logo-circle">A</div>
-                <span class="logo-text">ASCIIFIX</span>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <div class="nav-brand">
+                <a href="/" class="logo">
+                    <img src="/images/ASCIIFIX-Tool-LOGO.png" alt="ASCIIFIX Logo" class="logo-image">
+                </a>
             </div>
-            <div class="nav-menu">
-                <a href="../index.html">Home</a>
-                <a href="#">Tools</a>
-                <a href="#">About</a>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="/" class="nav-link">Home</a>
+                
+                <div class="dropdown">
+                    <a href="#" class="nav-link dropdown-toggle">Tools</a>
+                    <div class="dropdown-menu">
+                        <a href="/plagiarism_check" class="dropdown-item">
+                            <span class="dropdown-icon">📝</span>
+                            <div class="dropdown-content">
+                                <span class="dropdown-title">Plagiarism Checker</span>
+                                <span class="dropdown-desc">Detect copied content</span>
+                            </div>
+                        </a>
+                        <a href="/plagiarism_check" class="dropdown-item">
+                            <span class="dropdown-icon">🤖</span>
+                            <div class="dropdown-content">
+                                <span class="dropdown-title">AI Detector</span>
+                                <span class="dropdown-desc">Identify AI-written text</span>
+                            </div>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <span class="dropdown-icon">✍️</span>
+                            <div class="dropdown-content">
+                                <span class="dropdown-title">Grammar Checker</span>
+                                <span class="dropdown-desc">Fix grammar errors</span>
+                            </div>
+                        </a>
+                        <a href="/image_converter/" class="dropdown-item active">
+                            <span class="dropdown-icon">🖼️</span>
+                            <div class="dropdown-content">
+                                <span class="dropdown-title">Image Converter</span>
+                                <span class="dropdown-desc">Convert image formats</span>
+                            </div>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <span class="dropdown-icon">📐</span>
+                            <div class="dropdown-content">
+                                <span class="dropdown-title">Image Resizer</span>
+                                <span class="dropdown-desc">Resize images easily</span>
+                            </div>
+                        </a>
+                        <a href="/file_converter/" class="dropdown-item">
+                            <span class="dropdown-icon">📄</span>
+                            <div class="dropdown-content">
+                                <span class="dropdown-title">File Converter</span>
+                                <span class="dropdown-desc">Convert any file type</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <a href="#footer" class="nav-link">About</a>
             </div>
+
+            <div class="nav-right">
+                <a href="/login" class="login-link">Login / Signup</a>
+            </div>
+
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
-        <div class="vertical-separator"></div>
-        <div class="nav-right-section">
-            <span>Login/Signup</span>
-        </div>
-    </div>
+    </nav>
 
-    <!-- Title Box -->
-    <div class="title-container-box">
-        <h1>IMAGE CONVERTER</h1>
-    </div>
-
-    <!-- Main Dashed Container -->
-    <div class="main-dashed-container">
-        <!-- Left Section -->
-        <div class="left-content-section">
-            <!-- Upload Area -->
-            <div class="upload-drop-area" id="uploadArea">
-                <p>Drag & Drop or <span class="choose-file-button" id="chooseFileBtn">Choose File</span></p>
-                <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.webp,.tiff,.heic,.bmp" multiple
-                    style="display: none;">
-                <p class="accepted-text">Upload: JPG, PNG, WEBP, TIFF, HEIC, BMP → Convert to: JPG, PNG, WEBP, TIFF</p>
-
+    <!-- Hero Section (Single Box) -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-badge scroll-reveal">
+                <span class="badge-dot"></span>
+                FREE IMAGE CONVERTER
             </div>
+            <h1 class="hero-title scroll-reveal">Convert Images to Any Format</h1>
+            <p class="hero-subtitle scroll-reveal">Transform your images between JPG, PNG, WEBP, TIFF, and more instantly. Fast, secure, and completely free with professional-grade quality.</p>
+        </div>
+    </section>
 
-            <!-- Convert To Section -->
-            <div class="convert-to-section">
-                <div class="convert-to-row">
-                    <span class="convert-to-label">Convert to:</span>
-                    <div class="dropdown-box">
-                        <select id="formatDropdown">
-                            <option value="">--Select Format--</option>
-                        </select>
+    <!-- Main Converter Tool -->
+    <section class="tool-section">
+        <div class="container">
+            <div class="converter-card scroll-reveal">
+                <!-- Batch Mode Toggle -->
+                <div class="batch-toggle-section">
+                    <button id="batchButton" class="batch-toggle-btn">
+                        <span class="batch-icon">📁</span>
+                        <span class="batch-text">Batch Mode: OFF</span>
+                    </button>
+                    <p class="batch-hint">Enable batch mode to convert up to 10 images at once</p>
+                </div>
+
+                <div class="converter-grid">
+                    <!-- Left: Upload Section -->
+                    <div class="upload-section">
+                        <div class="upload-area" id="uploadArea">
+                            <input type="file" id="fileInput" accept="image/*" multiple hidden>
+                            <div class="upload-icon">📤</div>
+                            <h3>Drag & Drop Images</h3>
+                            <p class="upload-hint">or</p>
+                            <button id="chooseFileBtn" class="choose-file-btn">Choose Files</button>
+                            <p class="upload-formats">Supported: JPG, PNG, WEBP, GIF, TIFF, HEIC, BMP</p>
+                        </div>
+
+                        <!-- Format Selection -->
+                        <div class="format-section">
+                            <label class="format-label">
+                                <span class="format-icon">🎨</span>
+                                Convert to:
+                            </label>
+                            <div class="format-select-wrapper">
+                                <select id="formatDropdown" class="format-select">
+                                    <option value="">Select output format</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="action-buttons">
+                            <button id="convertButton" class="btn btn-primary" disabled>
+                                <span class="btn-icon">⚡</span>
+                                Convert Images
+                            </button>
+                            <button id="downloadButton" class="btn btn-success" style="display: none;">
+                                <span class="btn-icon">⬇</span>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Preview Section -->
+                    <div class="preview-section">
+                        <h3 class="preview-title">
+                            <span class="preview-icon">👁️</span>
+                            Preview
+                        </h3>
+                        <div class="preview-box" id="previewArea">
+                            <div class="preview-placeholder">
+                                <div class="placeholder-icon">🖼️</div>
+                                <p>No images selected</p>
+                                <p class="placeholder-hint">Upload images to see preview</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <!-- Action Buttons Section -->
-            <div class="buttons-section">
-                <div class="convert-button-box">
-                    <button id="convertButton">Convert</button>
+    <!-- Why Use Section -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title scroll-reveal">Why Use Our Image Converter?</h2>
+            <p class="section-subtitle scroll-reveal">Professional image conversion with cutting-edge technology</p>
+            <div class="features-grid">
+                <div class="feature-card scroll-reveal">
+                    <div class="feature-icon-wrapper">
+                        <div class="feature-icon">⚡</div>
+                    </div>
+                    <h3>Lightning Fast</h3>
+                    <p>Convert images in seconds with our optimized conversion engine. Process single or multiple files instantly without any delays.</p>
                 </div>
-                <div class="download-button-box" style="display: none;">
-                    <button id="downloadButton">Download</button>
+                <div class="feature-card scroll-reveal">
+                    <div class="feature-icon-wrapper">
+                        <div class="feature-icon">🔒</div>
+                    </div>
+                    <h3>100% Secure</h3>
+                    <p>Your images are processed locally in your browser and never stored on our servers. Complete privacy and security guaranteed.</p>
+                </div>
+                <div class="feature-card scroll-reveal">
+                    <div class="feature-icon-wrapper">
+                        <div class="feature-icon">🎨</div>
+                    </div>
+                    <h3>All Formats</h3>
+                    <p>Support for all major image formats: JPG, PNG, WEBP, TIFF, GIF, HEIC, BMP, and more. Universal compatibility assured.</p>
+                </div>
+                <div class="feature-card scroll-reveal">
+                    <div class="feature-icon-wrapper">
+                        <div class="feature-icon">📦</div>
+                    </div>
+                    <h3>Batch Processing</h3>
+                    <p>Convert up to 10 images simultaneously. Save valuable time with our powerful bulk conversion capabilities.</p>
+                </div>
+                <div class="feature-card scroll-reveal">
+                    <div class="feature-icon-wrapper">
+                        <div class="feature-icon">💎</div>
+                    </div>
+                    <h3>Premium Quality</h3>
+                    <p>Maintain original image quality with our advanced algorithms. No compression or quality loss during conversion.</p>
+                </div>
+                <div class="feature-card scroll-reveal">
+                    <div class="feature-icon-wrapper">
+                        <div class="feature-icon">🌐</div>
+                    </div>
+                    <h3>Cross-Platform</h3>
+                    <p>Works seamlessly on Windows, Mac, Linux, iOS, and Android. Access from any device with a modern browser.</p>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- Right Section -->
-        <div class="right-content-section">
-            <div class="preview-section">
-                <div class="preview-header">Preview</div>
-                <div class="preview-dotted-box" id="previewArea">
-                    <!-- Preview content goes here -->
+    <!-- How It Works Section -->
+    <section class="how-it-works-section">
+        <div class="container">
+            <h2 class="section-title scroll-reveal">How It Works</h2>
+            <p class="section-subtitle scroll-reveal">Simple three-step process to convert your images</p>
+            <div class="steps-grid">
+                <div class="step-card scroll-reveal">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">📤</div>
+                    <h3>Upload Images</h3>
+                    <p>Drag and drop your images or click to browse. Support for single or batch uploads with instant preview.</p>
+                </div>
+                <div class="step-card scroll-reveal">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">🎯</div>
+                    <h3>Choose Format</h3>
+                    <p>Select your desired output format from our comprehensive dropdown menu of supported image formats.</p>
+                </div>
+                <div class="step-card scroll-reveal">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">⬇️</div>
+                    <h3>Convert & Download</h3>
+                    <p>Click convert and download your transformed images instantly. High-quality results in seconds!</p>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Batch Upload Button -->
-    <div class="batch-upload-section">
-        <div class="batch-button-box">
-            <button id="batchButton">Batch Upload</button>
+    <!-- Use Cases Section -->
+    <section class="use-cases-section">
+        <div class="container">
+            <h2 class="section-title scroll-reveal">Perfect For</h2>
+            <p class="section-subtitle scroll-reveal">Trusted by professionals across industries</p>
+            <div class="use-cases-grid">
+                <div class="use-case-card scroll-reveal">
+                    <div class="use-case-icon-wrapper">
+                        <div class="use-case-icon">👨‍💻</div>
+                    </div>
+                    <h3>Web Developers</h3>
+                    <p>Optimize images for web performance by converting to modern formats like WEBP for faster load times.</p>
+                </div>
+                <div class="use-case-card scroll-reveal">
+                    <div class="use-case-icon-wrapper">
+                        <div class="use-case-icon">🎨</div>
+                    </div>
+                    <h3>Designers</h3>
+                    <p>Quickly convert design assets between formats for different project requirements and client needs.</p>
+                </div>
+                <div class="use-case-card scroll-reveal">
+                    <div class="use-case-icon-wrapper">
+                        <div class="use-case-icon">📸</div>
+                    </div>
+                    <h3>Photographers</h3>
+                    <p>Convert RAW images and photos to standard formats for easy sharing, printing, and online distribution.</p>
+                </div>
+                <div class="use-case-card scroll-reveal">
+                    <div class="use-case-icon-wrapper">
+                        <div class="use-case-icon">📱</div>
+                    </div>
+                    <h3>Social Media</h3>
+                    <p>Prepare images in the right format and specifications for various social media platforms and campaigns.</p>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Trust Section -->
+    <section class="trust-section">
+        <div class="container">
+            <div class="trust-grid scroll-reveal">
+                <div class="trust-item">
+                    <div class="trust-icon">✨</div>
+                    <div class="trust-number">100%</div>
+                    <div class="trust-label">Free Forever</div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon">🎯</div>
+                    <div class="trust-number">10+</div>
+                    <div class="trust-label">Supported Formats</div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon">♾️</div>
+                    <div class="trust-number">∞</div>
+                    <div class="trust-label">Unlimited Conversions</div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon">🔒</div>
+                    <div class="trust-number">0s</div>
+                    <div class="trust-label">Storage Time</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Footer -->
-    <div class="footer-section">
-        <p>© 2025 AsciiFix | Minimal Wireframe UI</p>
-    </div>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">
+                        <img src="/images/ASCIIFIX-Tool-LOGO.png" alt="ASCIIFIX Logo" class="footer-logo">S
+                    </div>
+                    <p class="footer-description">Your complete suite of free online tools for document processing, content analysis, and image manipulation.</p>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Tools</h4>
+                    <ul class="footer-links">
+                        <li><a href="/plagiarism">Plagiarism Checker</a></li>
+                        <li><a href="/ai-detector">AI Detector</a></li>
+                        <li><a href="/grammar-checker">Grammar Checker</a></li>
+                        <li><a href="/image-converter">Image Converter</a></li>
+                        <li><a href="/file-converter">File Converter</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="#" aria-label="Twitter">𝕏</a>
+                        <a href="#" aria-label="LinkedIn">in</a>
+                        <a href="#" aria-label="GitHub">⚙</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 ASCIIFIX. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
     <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
-        <div class="loading-box">
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-content">
             <div class="loading-spinner"></div>
-            <p>Converting images...</p>
+            <p class="loading-text">Converting images...</p>
+            <p class="loading-subtext">Please wait</p>
         </div>
     </div>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">↑</button>
 
     <script src="script.js"></script>
 </body>
-
 </html>
