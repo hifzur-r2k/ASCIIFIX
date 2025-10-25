@@ -148,7 +148,6 @@ body {
 
 .main-navbar {
     background: var(--bg-primary);
-    border-bottom: 2px solid var(--color-black);
     position: sticky;
     top: 0;
     z-index: 1000;
