@@ -3,28 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASCIIFIX - File Converter</title>
+    <meta name="description" content="Free online file converter. Convert between PDF, Word, Excel, PowerPoint, Text, and Image formats instantly.">
+    <title>File Converter - Convert PDF, Word, Excel, Powerpoint | ASCIIFIX</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Top Navigation Bar -->
-    <div class="top-bar">
-        <div class="logo">ASCIIFIX</div>
-        <nav class="nav">
-            <a href="/">Home</a>
-            <a href="/tools">Tools</a>
-            <a href="/about">About</a>
-            <a href="/contact">Contact</a>
-            <a href="/login" class="login">Login</a>
-        </nav>
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="main-navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">
+                <a href="index.html">
+                    <img src="../images/ASCIIFIX-Tool-LOGO.png" alt="ASCIIFIX" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                    <span class="logo-text" style="display:none;">ASCIIFIX</span>
+                </a>
+            </div>
+
+            <div class="navbar-center">
+                <a href="index.html" class="navbar-link">Home</a>
+                
+                <div class="dropdown">
+                    <a href="#" class="navbar-link">
+                        Tools <span class="dropdown-arrow">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <div class="dropdown-header">TOOLS</div>
+                        <a href="/plagiarism_check/" class="dropdown-item">
+                            <span class="dropdown-icon">🔍</span>
+                            <span class="dropdown-title">Plagiarism Checker</span>
+                        </a>
+                        <a href="/image_converter/" class="dropdown-item">
+                            <span class="dropdown-icon">🖼️</span>
+                            <span class="dropdown-title">Image Converter</span>
+                        </a>
+                        <a href="file_converter/" class="dropdown-item">
+                            <span class="dropdown-icon">📁</span>
+                            <span class="dropdown-title">File Converter</span>
+                        </a>
+                        <a href="/plagiarism_check/" class="dropdown-item">
+                            <span class="dropdown-icon">🤖</span>
+                            <span class="dropdown-title">AI Content Detector</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <span class="dropdown-icon">📐</span>
+                            <span class="dropdown-title">Image Resizer</span>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <span class="dropdown-icon">✍️</span>
+                            <span class="dropdown-title">Grammar Checker</span>
+                        </a>
+                    </div>
+                </div>
+
+                <a href="about.html" class="navbar-link">About</a>
+                <a href="contact.html" class="navbar-link">Contact</a>
+            </div>
+
+            <div class="navbar-right">
+                <a href="login.html" class="auth-button">Login/Signup</a>
+            </div>
+
+            <div class="hamburger" id="hamburger">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Home</a>
+        <div class="submenu-toggle">
+            Tools <span class="arrow">▼</span>
+        </div>
+        <div class="submenu">
+            <a href="plagiarism-checker.html">🔍 Plagiarism Checker</a>
+            <a href="image-converter.html">🖼️ Image Converter</a>
+            <a href="file-converter.html">📁 File Converter</a>
+            <a href="ai-detector.html">🤖 AI Content Detector</a>
+            <a href="image-resizer.html">📐 Image Resizer</a>
+            <a href="grammar-checker.html">✍️ Grammar Checker</a>
+        </div>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="login.html">Login</a>
     </div>
 
-    <!-- File Converter Header -->
+    <!-- Hero Section -->
     <div class="file-converter-header">
         <button>FILE CONVERTER</button>
     </div>
 
-    <!-- Subtitle Description -->
     <div class="sub-desc">
         Convert your files between multiple formats. Support for Text, Word, Excel, PDF, PowerPoint, and Image files.
     </div>
@@ -33,185 +106,365 @@
     <div class="converters-grid">
         
         <!-- Text Converter -->
-        <div class="convert-card" id="txt2any" data-input-type="text">
+        <div class="convert-card" id="text-converter" data-input-type="text">
+            <div class="card-badge">TEXT</div>
             <div class="convert-title">Text Converter</div>
-            <div class="convert-icons">📄 → <span class="output-icon">📕</span></div>
+            <div class="convert-icons">
+                <span>📄</span>
+                <span>→</span>
+                <span class="output-icon">📕</span>
+            </div>
             
-            <!-- Text Area for Manual Input -->
-            <textarea class="text-upload-box" placeholder="Type your text here or upload a .txt file..."></textarea>
+            <textarea class="text-upload-box" placeholder="Paste or type your text here..."></textarea>
             
-            <!-- File Upload Area -->
             <div class="upload-area">
-                <input type="file" accept=".txt">
-                <div>Drag & drop .txt file</div>
+                <input type="file" accept=".txt" aria-label="Upload text file">
+                <div class="upload-icon">📤</div>
+                <div class="upload-text">Drag & drop .txt file</div>
                 <button class="choose-btn">Choose File</button>
             </div>
             
-            <div class="accepted">Accepted: .txt files</div>
+            <div class="accepted">✓ Accepted: .txt files</div>
             <div class="file-name-display"></div>
             
-            <!-- Output Format Dropdown -->
             <div class="format-selector">
-                <label>Convert to:</label>
-                <select class="output-format">
-                    <option value="pdf">PDF</option>
-                    <option value="word">Word</option>
-                    <option value="excel">Excel</option>
-                    <option value="image">Image</option>
+                <label for="text-output">🔄 Convert to:</label>
+                <select id="text-output" class="output-format">
+                    <option value="pdf">📕 PDF</option>
+                    <option value="word">📘 Word</option>
+                    <option value="excel">📗 Excel</option>
+                    <option value="image">🖼️ Image</option>
                 </select>
             </div>
             
-            <button class="convert-btn" disabled>Convert</button>
-            <button class="download-btn" disabled>Download</button>
+            <button class="convert-btn" disabled>⚡ Convert to PDF</button>
+            <button class="download-btn" disabled>⬇️ Download</button>
         </div>
 
         <!-- Word Converter -->
-        <div class="convert-card" id="doc2any" data-input-type="word">
+        <div class="convert-card" id="word-converter" data-input-type="word">
+            <div class="card-badge">WORD</div>
             <div class="convert-title">Word Converter</div>
-            <div class="convert-icons">📘 → <span class="output-icon">📕</span></div>
+            <div class="convert-icons">
+                <span>📘</span>
+                <span>→</span>
+                <span class="output-icon">📕</span>
+            </div>
             
             <div class="upload-area">
-                <input type="file" accept=".doc,.docx">
-                <div>Drag & drop Word file</div>
+                <input type="file" accept=".doc,.docx" aria-label="Upload Word file">
+                <div class="upload-icon">📤</div>
+                <div class="upload-text">Drag & drop Word file</div>
                 <button class="choose-btn">Choose File</button>
             </div>
             
-            <div class="accepted">Accepted: .doc, .docx files</div>
+            <div class="accepted">✓ Accepted: .doc, .docx</div>
             <div class="file-name-display"></div>
             
-            <!-- Output Format Dropdown -->
             <div class="format-selector">
-                <label>Convert to:</label>
-                <select class="output-format">
-                    <option value="pdf">PDF</option>
-                    <option value="text">Text</option>
-                    <option value="excel">Excel</option>
-                    <option value="image">Image</option>
+                <label for="word-output">🔄 Convert to:</label>
+                <select id="word-output" class="output-format">
+                    <option value="pdf">📕 PDF</option>
+                    <option value="text">📄 Text</option>
+                    <option value="excel">📗 Excel</option>
+                    <option value="image">🖼️ Image</option>
                 </select>
             </div>
             
-            <button class="convert-btn" disabled>Convert</button>
-            <button class="download-btn" disabled>Download</button>
+            <button class="convert-btn" disabled>⚡ Convert to PDF</button>
+            <button class="download-btn" disabled>⬇️ Download</button>
         </div>
 
         <!-- Excel Converter -->
-        <div class="convert-card" id="xls2any" data-input-type="excel">
+        <div class="convert-card" id="excel-converter" data-input-type="excel">
+            <div class="card-badge">EXCEL</div>
             <div class="convert-title">Excel Converter</div>
-            <div class="convert-icons">📗 → <span class="output-icon">📕</span></div>
+            <div class="convert-icons">
+                <span>📗</span>
+                <span>→</span>
+                <span class="output-icon">📕</span>
+            </div>
             
             <div class="upload-area">
-                <input type="file" accept=".xls,.xlsx,.xlsm,.csv">
-                <div>Drag & drop Excel file</div>
+                <input type="file" accept=".xls,.xlsx,.csv" aria-label="Upload Excel file">
+                <div class="upload-icon">📤</div>
+                <div class="upload-text">Drag & drop Excel file</div>
                 <button class="choose-btn">Choose File</button>
             </div>
             
-            <div class="accepted">Accepted: .xls, .xlsx, .csv files</div>
+            <div class="accepted">✓ Accepted: .xls, .xlsx, .csv</div>
             <div class="file-name-display"></div>
             
-            <!-- Output Format Dropdown -->
             <div class="format-selector">
-                <label>Convert to:</label>
-                <select class="output-format">
-                    <option value="pdf">PDF</option>
-                    <option value="text">Text</option>
-                    <option value="word">Word</option>
-                    <option value="image">Image</option>
+                <label for="excel-output">🔄 Convert to:</label>
+                <select id="excel-output" class="output-format">
+                    <option value="pdf">📕 PDF</option>
+                    <option value="text">📄 Text</option>
+                    <option value="word">📘 Word</option>
+                    <option value="image">🖼️ Image</option>
                 </select>
             </div>
             
-            <button class="convert-btn" disabled>Convert</button>
-            <button class="download-btn" disabled>Download</button>
+            <button class="convert-btn" disabled>⚡ Convert to PDF</button>
+            <button class="download-btn" disabled>⬇️ Download</button>
         </div>
 
         <!-- Image Converter -->
-        <div class="convert-card" id="img2any" data-input-type="image">
+        <div class="convert-card" id="image-converter" data-input-type="image">
+            <div class="card-badge">IMAGE</div>
             <div class="convert-title">Image Converter</div>
-            <div class="convert-icons">🖼️ → <span class="output-icon">📕</span></div>
+            <div class="convert-icons">
+                <span>🖼️</span>
+                <span>→</span>
+                <span class="output-icon">📕</span>
+            </div>
             
             <div class="upload-area">
-                <input type="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff,.webp">
-                <div>Drag & drop image file</div>
+                <input type="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.webp" aria-label="Upload image file">
+                <div class="upload-icon">📤</div>
+                <div class="upload-text">Drag & drop image</div>
                 <button class="choose-btn">Choose File</button>
             </div>
             
-            <div class="accepted">Accepted: .jpg, .png, .gif, .bmp files</div>
+            <div class="accepted">✓ Accepted: .jpg, .png, .gif, .bmp</div>
             <div class="file-name-display"></div>
             
-            <!-- Output Format Dropdown -->
             <div class="format-selector">
-                <label>Convert to:</label>
-                <select class="output-format">
-                    <option value="pdf">PDF</option>
-                    <option value="text">Text (OCR)</option>
-                    <option value="word">Word (OCR)</option>
-                    <option value="excel">Excel (OCR)</option>
+                <label for="image-output">🔄 Convert to:</label>
+                <select id="image-output" class="output-format">
+                    <option value="pdf">📕 PDF</option>
+                    <option value="text">📄 Text (OCR)</option>
+                    <option value="word">📘 Word (OCR)</option>
+                    <option value="excel">📗 Excel (OCR)</option>
                 </select>
             </div>
             
-            <button class="convert-btn" disabled>Convert</button>
-            <button class="download-btn" disabled>Download</button>
+            <button class="convert-btn" disabled>⚡ Convert to PDF</button>
+            <button class="download-btn" disabled>⬇️ Download</button>
         </div>
 
         <!-- PDF Converter -->
-        <div class="convert-card" id="pdf2any" data-input-type="pdf">
+        <div class="convert-card" id="pdf-converter" data-input-type="pdf">
+            <div class="card-badge">PDF</div>
             <div class="convert-title">PDF Converter</div>
-            <div class="convert-icons">📕 → <span class="output-icon">📄</span></div>
+            <div class="convert-icons">
+                <span>📕</span>
+                <span>→</span>
+                <span class="output-icon">📄</span>
+            </div>
             
             <div class="upload-area">
-                <input type="file" accept=".pdf">
-                <div>Drag & drop PDF file</div>
+                <input type="file" accept=".pdf" aria-label="Upload PDF file">
+                <div class="upload-icon">📤</div>
+                <div class="upload-text">Drag & drop PDF file</div>
                 <button class="choose-btn">Choose File</button>
             </div>
             
-            <div class="accepted">Accepted: .pdf files</div>
+            <div class="accepted">✓ Accepted: .pdf files</div>
             <div class="file-name-display"></div>
             
-            <!-- Output Format Dropdown -->
             <div class="format-selector">
-                <label>Convert to:</label>
-                <select class="output-format">
-                    <option value="text">Text</option>
-                    <option value="word">Word</option>
-                    <option value="excel">Excel</option>
-                    <option value="image">Image</option>
+                <label for="pdf-output">🔄 Convert to:</label>
+                <select id="pdf-output" class="output-format">
+                    <option value="text">📄 Text</option>
+                    <option value="word">📘 Word</option>
+                    <option value="excel">📗 Excel</option>
+                    <option value="image">🖼️ Image</option>
                 </select>
             </div>
             
-            <button class="convert-btn" disabled>Convert</button>
-            <button class="download-btn" disabled>Download</button>
+            <button class="convert-btn" disabled>⚡ Convert to Text</button>
+            <button class="download-btn" disabled>⬇️ Download</button>
         </div>
 
         <!-- PowerPoint Converter -->
-        <div class="convert-card" id="ppt2pdf" data-input-type="powerpoint">
+        <div class="convert-card" id="powerpoint-converter" data-input-type="powerpoint">
+            <div class="card-badge">PPT</div>
             <div class="convert-title">PowerPoint Converter</div>
-            <div class="convert-icons">📊 → 📕</div>
+            <div class="convert-icons">
+                <span>📊</span>
+                <span>→</span>
+                <span>📕</span>
+            </div>
             
             <div class="upload-area">
-                <input type="file" accept=".ppt,.pptx">
-                <div>Drag & drop PPT file</div>
+                <input type="file" accept=".ppt,.pptx" aria-label="Upload PowerPoint file">
+                <div class="upload-icon">📤</div>
+                <div class="upload-text">Drag & drop PPT file</div>
                 <button class="choose-btn">Choose File</button>
             </div>
             
-            <div class="accepted">Accepted: .ppt, .pptx files</div>
+            <div class="accepted">✓ Accepted: .ppt, .pptx</div>
             <div class="file-name-display"></div>
             
-            <!-- Fixed Output - PDF Only (No Dropdown) -->
             <div class="format-selector">
-                <label>Convert to: <strong>PDF</strong></label>
+                <label>🔄 Convert to:</label>
+                <span style="font-weight: bold; color: #14b8a6;">📕 PDF</span>
             </div>
             
-            <button class="convert-btn" disabled>Convert to PDF</button>
-            <button class="download-btn" disabled>Download PDF</button>
+            <button class="convert-btn" disabled>⚡ Convert to PDF</button>
+            <button class="download-btn" disabled>⬇️ Download PDF</button>
+        </div>
+
+    </div>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works-section">
+        <div class="section-header-animated">
+            <h2>How It Works</h2>
+            <p>Convert any file in three simple steps</p>
         </div>
         
-    </div>
+        <div class="steps-grid">
+            <div class="step-card zoom-tilt">
+                <div class="step-number">1</div>
+                <div class="step-icon">📤</div>
+                <h3>Upload Your File</h3>
+                <p>Drag and drop your file or click to browse from your device. All major formats supported.</p>
+            </div>
+
+            <div class="step-card zoom-tilt">
+                <div class="step-number">2</div>
+                <div class="step-icon">🎯</div>
+                <h3>Select Format</h3>
+                <p>Choose your desired output format from the dropdown menu. Multiple options available.</p>
+            </div>
+
+            <div class="step-card zoom-tilt">
+                <div class="step-number">3</div>
+                <div class="step-icon">⬇️</div>
+                <h3>Download Result</h3>
+                <p>Click convert and download your transformed file instantly. High-quality results guaranteed!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Perfect For Section -->
+    <section class="perfect-for-section">
+        <div class="section-header-animated">
+            <h2>Perfect For</h2>
+            <p>Trusted by professionals across all industries</p>
+        </div>
+        
+        <div class="perfect-for-grid">
+            <div class="perfect-card zoom-tilt">
+                <div class="perfect-icon">💼</div>
+                <h3>Business Professionals</h3>
+                <p>Convert contracts, reports, and presentations for seamless business communication.</p>
+            </div>
+
+            <div class="perfect-card zoom-tilt">
+                <div class="perfect-icon">🎓</div>
+                <h3>Students & Educators</h3>
+                <p>Transform assignments, research papers, and study materials into required formats.</p>
+            </div>
+
+            <div class="perfect-card zoom-tilt">
+                <div class="perfect-icon">✍️</div>
+                <h3>Content Creators</h3>
+                <p>Convert articles, ebooks, and manuscripts between different publishing formats.</p>
+            </div>
+
+            <div class="perfect-card zoom-tilt">
+                <div class="perfect-icon">💻</div>
+                <h3>Developers & Designers</h3>
+                <p>Convert technical documentation, specifications, and design files efficiently.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="seo-section">
+        <div class="section-header-animated">
+            <h2>Why Choose Our File Converter?</h2>
+            <p>Professional-grade conversion with zero compromises</p>
+        </div>
+        
+        <div class="seo-grid">
+            <div class="seo-card">
+                <div class="seo-icon">⚡</div>
+                <h3>Lightning Fast</h3>
+                <p>Convert files in seconds with our optimized engine. No waiting, no delays - instant results every time.</p>
+            </div>
+            
+            <div class="seo-card">
+                <div class="seo-icon">🔒</div>
+                <h3>100% Secure</h3>
+                <p>Your files are processed securely and never stored on our servers. Complete privacy guaranteed.</p>
+            </div>
+            
+            <div class="seo-card">
+                <div class="seo-icon">💎</div>
+                <h3>Premium Quality</h3>
+                <p>Industry-standard conversion with no quality loss. Professional results for every file type.</p>
+            </div>
+            
+            <div class="seo-card">
+                <div class="seo-icon">🌐</div>
+                <h3>Universal Support</h3>
+                <p>Convert between PDF, Word, Excel, PowerPoint, Text, and Images. All major formats supported.</p>
+            </div>
+            
+            <div class="seo-card">
+                <div class="seo-icon">💰</div>
+                <h3>Completely Free</h3>
+                <p>No registration, no hidden fees, unlimited conversions. Forever free for everyone.</p>
+            </div>
+            
+            <div class="seo-card">
+                <div class="seo-icon">📱</div>
+                <h3>Works Everywhere</h3>
+                <p>Perfect on desktop, tablet, and mobile. Responsive design for seamless experience on any device.</p>
+            </div>
+        </div>
+    </section>
 
     <!-- Footer -->
-    <div class="footer">
-        © 2025 ASCIIFIX - File Conversion Made Simple
-    </div>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-main">
+                <div class="footer-brand">
+                    <img src="../images/ASCIIFIX-Tool-LOGO.png" alt="ASCIIFIX" class="footer-logo" onerror="this.style.display='none';">
 
-    <!-- JavaScript -->
+                    <p>Professional file conversion tools for everyone. Convert between PDF, Word, Excel, PowerPoint, Text, and Images instantly.</p>
+                </div>
+                <div class="footer-links-group">
+                    <div class="footer-column">
+                        <h4>Tools</h4>
+                        <a href="/plagiarism_check/">Plagiarism Checker</a>
+                        <a href="/image_converter/">Image Converter</a>
+                        <a href="/file_converter/">File Converter</a>
+                        <a href="/plagiarism_check/">AI Detector</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Company</h4>
+                        <a href="#Footer">About Us</a>
+                        <a href="contact.html">Contact</a>
+                        <a href="blog.html">Blog</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <a href="privacy.html">Privacy Policy</a>
+                        <a href="terms.html">Terms of Service</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 ASCIIFIX. All rights reserved.</p>
+                <div class="footer-social">
+                    <a href="#">Twitter</a>
+                    <span>•</span>
+                    <a href="#">Facebook</a>
+                    <span>•</span>
+                    <a href="#">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop">↑</button>
+
     <script src="script.js"></script>
 </body>
 </html>

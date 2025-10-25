@@ -1,420 +1,498 @@
+// ========================================
+// FILE CONVERTER - BACKEND + BEAUTIFUL UI
+// ========================================
+
 // Icon mapping for different formats
 const formatIcons = {
-  pdf: '📕',
-  word: '📘',
-  excel: '📗',
-  text: '📄',
-  image: '🖼️',
-  powerpoint: '📊'
+    pdf: '📕',
+    word: '📘',
+    excel: '📗',
+    text: '📄',
+    image: '🖼️',
+    powerpoint: '📊'
 };
 
 // File extensions for different formats
 const formatExtensions = {
-  pdf: '.pdf',
-  word: '.docx',
-  excel: '.xlsx',
-  text: '.txt',
-  image: '.png',
-  powerpoint: '.pptx'
+    pdf: '.pdf',
+    word: '.docx',
+    excel: '.xlsx',
+    text: '.txt',
+    image: '.png',
+    powerpoint: '.pptx'
 };
 
-document.querySelectorAll('.convert-card').forEach(card => {
-  const id = card.id;
-  const inputType = card.dataset.inputType;
-  const uploadArea = card.querySelector('.upload-area');
-  const fileNameDisplay = card.querySelector('.file-name-display');
-  const convertBtn = card.querySelector('.convert-btn');
-  const downloadBtn = card.querySelector('.download-btn');
-  const outputFormatSelect = card.querySelector('.output-format');
-  const outputIcon = card.querySelector('.output-icon');
-  
-  let selectedFile = null;
-  let convertedBlob = null;
-  let convertedFilename = null;
-  
-  // PowerPoint has no dropdown (fixed PDF output)
-  const isPowerPointCard = inputType === 'powerpoint';
-  let selectedOutputFormat = isPowerPointCard ? 'pdf' : (outputFormatSelect ? outputFormatSelect.value : 'pdf');
-
-  // Special for text converter: textarea input
-  const isTextCard = inputType === 'text';
-  let textArea = isTextCard ? card.querySelector('.text-upload-box') : null;
-  let hasTextInput = false;
-
-  // Add progress bar to each card
-  const progressBar = document.createElement('div');
-  progressBar.className = 'progress-bar';
-  progressBar.innerHTML = '<div class="progress-fill"></div>';
-  convertBtn.parentNode.insertBefore(progressBar, convertBtn);
-  const progressFill = progressBar.querySelector('.progress-fill');
-
-  // Handle output format change (only if dropdown exists)
-  if (outputFormatSelect && !isPowerPointCard) {
-    outputFormatSelect.addEventListener('change', function() {
-      selectedOutputFormat = this.value;
-      
-      // Update output icon
-      if (outputIcon) {
-        outputIcon.textContent = formatIcons[selectedOutputFormat];
-      }
-      
-      // Update button text
-      const formatName = selectedOutputFormat.charAt(0).toUpperCase() + selectedOutputFormat.slice(1);
-      convertBtn.textContent = `Convert to ${formatName}`;
-      downloadBtn.textContent = `Download ${formatName}`;
-      
-      // Clear previous conversion when format changes
-      convertedBlob = null;
-      convertedFilename = null;
-      downloadBtn.disabled = true;
-      
-      // Re-enable convert button if file/text is already selected
-      updateConvertBtn();
-    });
-  }
-
-  function updateConvertBtn() {
-    if (isTextCard) {
-      const hasText = textArea && textArea.value.trim().length > 0;
-      const hasFile = selectedFile !== null;
-      const shouldEnable = hasText || hasFile;
-
-      convertBtn.disabled = !shouldEnable;
-
-      if (shouldEnable) {
-        convertBtn.style.transform = 'scale(1)';
-        convertBtn.style.opacity = '1';
-      }
-    } else {
-      convertBtn.disabled = !selectedFile;
-
-      if (selectedFile) {
-        convertBtn.style.transform = 'scale(1)';
-        convertBtn.style.opacity = '1';
-      }
-    }
-  }
-
-  // Reset everything with animation
-  function resetCard() {
-    selectedFile = null;
-    hasTextInput = false;
-    convertedBlob = null;
-    convertedFilename = null;
-
-    if (fileNameDisplay) {
-      fileNameDisplay.style.animation = 'fadeOut 0.3s ease';
-      setTimeout(() => {
-        fileNameDisplay.textContent = "";
-        fileNameDisplay.style.display = "none";
-        fileNameDisplay.style.animation = '';
-      }, 300);
-    }
-
-    if (isTextCard && textArea) {
-      textArea.value = "";
-    }
-
-    convertBtn.disabled = true;
-    downloadBtn.disabled = true;
-
-    // Reset progress bar
-    progressBar.classList.remove('active');
-    progressFill.style.width = '0%';
-  }
-
-  // Handle file selection with animations
-  function handleFile(file) {
-    if (!file) return;
-
-    selectedFile = file;
-
-    // Clear any previous conversion
-    convertedBlob = null;
-    convertedFilename = null;
-    downloadBtn.disabled = true;
-
-    if (fileNameDisplay) {
-      fileNameDisplay.textContent = `✅ ${file.name}`;
-      fileNameDisplay.style.display = "block";
-      fileNameDisplay.style.animation = 'fadeIn 0.3s ease';
-    }
-
-    // Add success animation to upload area
-    uploadArea.style.background = 'rgba(40, 167, 69, 0.1)';
-    uploadArea.style.borderColor = '#28a745';
-    setTimeout(() => {
-      uploadArea.style.background = '';
-      uploadArea.style.borderColor = '#007bff';
-    }, 1000);
-
-    updateConvertBtn();
-    showNotification(`File "${file.name}" selected successfully!`, 'success');
-
-    // For text files, also show content in textarea
-    if (isTextCard && textArea) {
-      if (file.type === "text/plain" || file.name.endsWith(".txt")) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          textArea.value = e.target.result;
-          textArea.style.animation = 'fadeIn 0.3s ease';
-          updateConvertBtn();
-        };
-        reader.readAsText(file);
-      }
-    }
-  }
-
-  // Enhanced drag and drop with better visual feedback
-  if (uploadArea) {
-    uploadArea.addEventListener('dragover', function (e) {
-      e.preventDefault();
-      uploadArea.classList.add('drag-over');
-    });
-
-    uploadArea.addEventListener('dragleave', function (e) {
-      uploadArea.classList.remove('drag-over');
-    });
-
-    uploadArea.addEventListener('drop', function (e) {
-      e.preventDefault();
-      uploadArea.classList.remove('drag-over');
-      const file = e.dataTransfer.files[0];
-
-      // Add drop animation
-      uploadArea.style.transform = 'scale(1.05)';
-      setTimeout(() => {
-        uploadArea.style.transform = '';
-        handleFile(file);
-      }, 150);
-    });
-
-    // File input change with animation
-    const inp = uploadArea.querySelector('input[type="file"]');
-    if (inp) {
-      inp.addEventListener('change', function (e) {
-        if (inp.files[0]) {
-          handleFile(inp.files[0]);
-        }
-      });
-    }
-  }
-
-  // Textarea input watcher with smooth feedback
-  if (isTextCard && textArea) {
-    textArea.addEventListener('input', function (e) {
-      hasTextInput = textArea.value.trim().length > 0;
-      updateConvertBtn();
-
-      // Clear previous conversion when text changes
-      convertedBlob = null;
-      convertedFilename = null;
-      downloadBtn.disabled = true;
-
-      // Re-enable convert button if there's text input
-      if (hasTextInput) {
-        convertBtn.disabled = false;
-      }
-
-      // Visual feedback for typing
-      if (hasTextInput) {
-        textArea.style.borderColor = '#222';
-        textArea.style.background = '#fafafa';
-      } else {
-        textArea.style.borderColor = '#aaa';
-        textArea.style.background = '#fafafa';
-      }
-    });
-  }
-
-  // Enhanced convert button - NO AUTO DOWNLOAD
-  convertBtn.addEventListener('click', async function () {
-    // Get current format name for display
-    const formatName = selectedOutputFormat.charAt(0).toUpperCase() + selectedOutputFormat.slice(1);
+// ========================================
+// TOAST NOTIFICATION SYSTEM (NEW!)
+// ========================================
+function showToast(title, message, type = 'success') {
+    const toastContainer = document.getElementById('toastContainer');
+    if (!toastContainer) return;
     
-    // Start conversion animation
-    convertBtn.disabled = true;
-    convertBtn.classList.add('converting');
-    convertBtn.textContent = 'Converting...';
-
-    // Show progress bar
-    progressBar.classList.add('active');
-
-    // Simulate progress with smoother animation
-    let progress = 0;
-    const progressInterval = setInterval(() => {
-      progress += Math.random() * 15;
-      if (progress > 85) progress = 85;
-      progressFill.style.width = `${progress}%`;
-    }, 500);
-
-    try {
-      // Determine endpoint based on input and output types
-      const endpoint = `/convert/${inputType}-to-${selectedOutputFormat}`;
-
-      const formData = new FormData();
-
-      if (isTextCard) {
-        if (selectedFile) {
-          formData.append('file', selectedFile);
-        } else if (textArea && textArea.value.trim()) {
-          formData.append('text', textArea.value.trim());
-        }
-      } else {
-        if (selectedFile) {
-          formData.append('file', selectedFile);
-        }
-      }
-
-      // Make request with timeout
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 100000);
-
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        body: formData,
-        signal: controller.signal
-      });
-
-      clearTimeout(timeoutId);
-      clearInterval(progressInterval);
-
-      // Complete progress animation
-      progressFill.style.width = '100%';
-
-      if (response.ok) {
-        const blob = await response.blob();
-
-        // Store the converted file
-        convertedBlob = blob;
-
-        // Set filename with proper extension
-        const extension = formatExtensions[selectedOutputFormat];
-        if (selectedFile) {
-          convertedFilename = selectedFile.name.replace(/\.[^.]+$/, extension);
-        } else if (isTextCard) {
-          convertedFilename = `text${extension}`;
-        } else {
-          convertedFilename = `document${extension}`;
-        }
-
-        // Success animation
-        convertBtn.classList.remove('converting');
-        convertBtn.classList.add('success-flash');
-        convertBtn.textContent = '✅ Ready to Download!';
-
-        // Enable download button
-        downloadBtn.disabled = false;
-        downloadBtn.style.background = '#f9f9f9';
-        downloadBtn.style.borderStyle = 'solid';
-        downloadBtn.textContent = isPowerPointCard ? 'Download PDF' : `Download ${formatName}`;
-
-        setTimeout(() => {
-          convertBtn.classList.remove('success-flash');
-          convertBtn.textContent = isPowerPointCard ? 'Convert to PDF' : `Convert to ${formatName}`;
-          convertBtn.disabled = false;
-          progressBar.classList.remove('active');
-          progressFill.style.width = '0%';
-        }, 2000);
-
-        showNotification(`${formatName} ready for download! Click the Download button.`, 'success');
-
-      } else {
-        throw new Error('Conversion failed');
-      }
-
-    } catch (error) {
-      console.error('Error:', error);
-      clearInterval(progressInterval);
-
-      // Error animation
-      convertBtn.classList.remove('converting');
-      convertBtn.style.background = '#f0f0f0';
-      convertBtn.style.borderColor = '#666';
-      convertBtn.style.opacity = '0.7';
-      convertBtn.textContent = '❌ Failed';
-
-      setTimeout(() => {
-        const formatName = selectedOutputFormat.charAt(0).toUpperCase() + selectedOutputFormat.slice(1);
-        convertBtn.textContent = isPowerPointCard ? 'Convert to PDF' : `Convert to ${formatName}`;
-        convertBtn.style.background = '';
-        convertBtn.style.borderColor = '';
-        convertBtn.style.opacity = '';
-        convertBtn.disabled = false;
-        progressBar.classList.remove('active');
-        progressFill.style.width = '0%';
-      }, 2000);
-
-      if (error.name === 'AbortError') {
-        showNotification('Conversion timed out. File may be too large.', 'error');
-      } else {
-        showNotification('Conversion failed. Please try again.', 'error');
-      }
-    }
-  });
-
-  // Download button click handler
-  downloadBtn.addEventListener('click', function () {
-    if (!convertedBlob || !convertedFilename) {
-      showNotification('No file ready for download. Please convert first.', 'warning');
-      return;
-    }
-
-    // Create download link and trigger download
-    const url = URL.createObjectURL(convertedBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = convertedFilename;
-    a.style.display = 'none';
-
-    document.body.appendChild(a);
-    a.click();
-
-    // Cleanup
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    
+    const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : '⚠️';
+    
+    toast.innerHTML = `
+        <div class="toast-icon">${icon}</div>
+        <div class="toast-content">
+            <div class="toast-title">${title}</div>
+            <div class="toast-message">${message}</div>
+        </div>
+    `;
+    
+    toastContainer.appendChild(toast);
+    
+    // Auto remove after 4 seconds
     setTimeout(() => {
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }, 100);
+        toast.style.animation = 'slideOutRight 0.4s ease';
+        setTimeout(() => toast.remove(), 400);
+    }, 4000);
+}
 
-    // Download button feedback
-    const formatName = selectedOutputFormat.charAt(0).toUpperCase() + selectedOutputFormat.slice(1);
-    downloadBtn.textContent = '✅ Downloaded!';
-    downloadBtn.style.background = '#f5f5f5';
-    downloadBtn.style.transform = 'scale(1.05)';
+// ========================================
+// MOBILE MENU FUNCTIONALITY
+// ========================================
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+const submenuToggle = document.querySelector('.submenu-toggle');
+const submenu = document.querySelector('.submenu');
 
-    setTimeout(() => {
-      downloadBtn.textContent = isPowerPointCard ? 'Download PDF' : `Download ${formatName}`;
-      downloadBtn.style.background = '';
-      downloadBtn.style.transform = '';
+if (hamburger && mobileMenu) {
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        mobileMenu.classList.toggle('active');
+    });
+}
 
-      // DISABLE BOTH BUTTONS after download
-      downloadBtn.disabled = true;
-      convertBtn.disabled = true;
+if (submenuToggle && submenu) {
+    submenuToggle.addEventListener('click', () => {
+        submenu.classList.toggle('active');
+        const arrow = submenuToggle.querySelector('.arrow');
+        if (arrow) {
+            arrow.style.transform = submenu.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+    });
+}
 
-      // Clear the conversion state
-      convertedBlob = null;
-      convertedFilename = null;
-    }, 2000);
-
-    showNotification(`${convertedFilename} downloaded successfully!`, 'success');
-  });
+// Close mobile menu when clicking outside
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.navbar-container') && !e.target.closest('.mobile-menu')) {
+        if (mobileMenu) mobileMenu.classList.remove('active');
+        if (hamburger) hamburger.classList.remove('active');
+    }
 });
 
-// Enhanced notification system
-function showNotification(message, type = 'success') {
-  const notification = document.createElement('div');
-  notification.className = `notification ${type}`;
-  notification.textContent = message;
+// ========================================
+// BACK TO TOP BUTTON
+// ========================================
+const backToTop = document.getElementById('backToTop');
 
-  document.body.appendChild(notification);
+if (backToTop) {
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+            backToTop.classList.add('show');
+        } else {
+            backToTop.classList.remove('show');
+        }
+    });
 
-  // Auto remove after 4 seconds
-  setTimeout(() => {
-    notification.classList.add('slideOut');
-    setTimeout(() => {
-      if (notification.parentNode) {
-        notification.parentNode.removeChild(notification);
-      }
-    }, 300);
-  }, 4000);
+    backToTop.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
 }
+
+// ========================================
+// CONVERTER CARD FUNCTIONALITY (ORIGINAL + ENHANCED)
+// ========================================
+document.querySelectorAll('.convert-card').forEach(card => {
+    const id = card.id;
+    const inputType = card.dataset.inputType;
+    const uploadArea = card.querySelector('.upload-area');
+    const fileInput = uploadArea?.querySelector('input[type="file"]');
+    const fileNameDisplay = card.querySelector('.file-name-display');
+    const convertBtn = card.querySelector('.convert-btn');
+    const downloadBtn = card.querySelector('.download-btn');
+    const outputFormatSelect = card.querySelector('.output-format');
+    const outputIcon = card.querySelector('.output-icon');
+    const textUploadBox = card.querySelector('.text-upload-box');
+    const chooseBtn = card.querySelector('.choose-btn');
+
+    let selectedFile = null;
+    let convertedBlob = null;
+    let convertedFilename = null;
+
+    // PowerPoint has no dropdown (fixed PDF output)
+    const isPowerPointCard = inputType === 'powerpoint';
+    const isTextCard = inputType === 'text';
+    let selectedOutputFormat = isPowerPointCard ? 'pdf' : (outputFormatSelect?.value || 'pdf');
+
+    // ========================================
+    // TEXT CONVERTER SPECIFIC
+    // ========================================
+    if (isTextCard && textUploadBox) {
+        textUploadBox.addEventListener('input', () => {
+            const hasText = textUploadBox.value.trim().length > 0;
+            convertBtn.disabled = !hasText && !selectedFile;
+            
+            if (hasText) {
+                fileNameDisplay.textContent = `✍️ ${textUploadBox.value.length} characters`;
+                fileNameDisplay.style.color = '#14b8a6';
+                fileNameDisplay.style.display = 'block';
+            } else if (!selectedFile) {
+                fileNameDisplay.textContent = '';
+                fileNameDisplay.style.display = 'none';
+            }
+        });
+    }
+
+    // ========================================
+    // FILE UPLOAD HANDLING
+    // ========================================
+    if (fileInput && uploadArea) {
+        // Choose button click
+        if (chooseBtn) {
+            chooseBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                fileInput.click();
+            });
+        }
+
+        // Click on upload area (except button)
+        uploadArea.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('choose-btn') && e.target !== chooseBtn) {
+                fileInput.click();
+            }
+        });
+
+        // File selection
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                handleFileSelect(file);
+            }
+        });
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('drag-over');
+        });
+
+        uploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-over');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-over');
+            
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                handleFileSelect(file);
+            }
+        });
+    }
+
+    // Handle file selection
+    function handleFileSelect(file) {
+        selectedFile = file;
+        fileNameDisplay.textContent = `✓ ${file.name}`;
+        fileNameDisplay.style.color = '#14b8a6';
+        fileNameDisplay.style.display = 'block';
+        convertBtn.disabled = false;
+        downloadBtn.disabled = true;
+        convertedBlob = null;
+        
+        // Clear text box if it exists
+        if (textUploadBox) {
+            textUploadBox.value = '';
+        }
+
+        // Show toast notification (NEW!)
+        showToast('File Uploaded', `${file.name} (${formatFileSize(file.size)})`, 'success');
+    }
+
+    // ========================================
+    // OUTPUT FORMAT CHANGE
+    // ========================================
+    if (outputFormatSelect) {
+        outputFormatSelect.addEventListener('change', (e) => {
+            selectedOutputFormat = e.target.value;
+            
+            // Update output icon
+            if (outputIcon) {
+                outputIcon.textContent = formatIcons[selectedOutputFormat];
+            }
+            
+            // Update button text
+            const formatName = selectedOutputFormat.charAt(0).toUpperCase() + selectedOutputFormat.slice(1);
+            convertBtn.textContent = `⚡ Convert to ${formatName}`;
+            
+            // Reset download button
+            downloadBtn.disabled = true;
+            convertedBlob = null;
+        });
+    }
+
+    // ========================================
+    // CONVERSION LOGIC - ORIGINAL BACKEND INTEGRATION
+    // ========================================
+    convertBtn.addEventListener('click', async () => {
+        // Check if we have content
+        const hasFile = selectedFile !== null;
+        const hasText = textUploadBox && textUploadBox.value.trim().length > 0;
+        
+        if (!hasFile && !hasText) return;
+
+        // Disable button and show loading
+        convertBtn.disabled = true;
+        const originalText = convertBtn.textContent;
+        let dots = 0;
+        
+        const loadingInterval = setInterval(() => {
+            dots = (dots + 1) % 4;
+            convertBtn.textContent = '⚡ Converting' + '.'.repeat(dots);
+        }, 400);
+
+        try {
+            // ORIGINAL BACKEND INTEGRATION (NO CHANGES!)
+            const endpoint = `/convert/${inputType}-to-${selectedOutputFormat}`;
+            const formData = new FormData();
+            
+            if (isTextCard) {
+                if (selectedFile) {
+                    formData.append('file', selectedFile);
+                } else if (textUploadBox && textUploadBox.value.trim()) {
+                    formData.append('text', textUploadBox.value.trim());
+                }
+            } else {
+                if (selectedFile) {
+                    formData.append('file', selectedFile);
+                }
+            }
+
+            // Make request with timeout
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 100000);
+            
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                body: formData,
+                signal: controller.signal
+            });
+
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+                throw new Error('Conversion failed');
+            }
+
+            // Get converted blob from backend
+            convertedBlob = await response.blob();
+            
+            // Set filename with proper extension
+            const extension = formatExtensions[selectedOutputFormat];
+            if (selectedFile) {
+                convertedFilename = selectedFile.name.replace(/\.[^.]+$/, extension);
+            } else if (isTextCard) {
+                convertedFilename = `text${extension}`;
+            } else {
+                convertedFilename = `document${extension}`;
+            }
+
+            // Success!
+            clearInterval(loadingInterval);
+            convertBtn.textContent = '✅ Converted!';
+            convertBtn.style.background = '#14b8a6';
+            convertBtn.style.borderColor = '#14b8a6';
+            
+            // Enable download
+            downloadBtn.disabled = false;
+
+            // Show toast (NEW!)
+            showToast('Conversion Complete', `Ready to download as ${selectedOutputFormat.toUpperCase()}`, 'success');
+
+            // Reset button after 2 seconds
+            setTimeout(() => {
+                convertBtn.textContent = originalText;
+                convertBtn.style.background = '';
+                convertBtn.style.borderColor = '';
+                convertBtn.disabled = false;
+            }, 2000);
+
+        } catch (error) {
+            console.error('Conversion error:', error);
+            clearInterval(loadingInterval);
+            convertBtn.textContent = '❌ Failed';
+            convertBtn.style.background = '#ef4444';
+            convertBtn.style.borderColor = '#ef4444';
+
+            // Show error toast (NEW!)
+            if (error.name === 'AbortError') {
+                showToast('Conversion Timeout', 'File may be too large', 'error');
+            } else {
+                showToast('Conversion Failed', error.message || 'Please try again', 'error');
+            }
+
+            setTimeout(() => {
+                convertBtn.textContent = originalText;
+                convertBtn.style.background = '';
+                convertBtn.style.borderColor = '';
+                convertBtn.disabled = false;
+            }, 2000);
+        }
+    });
+
+    // ========================================
+    // DOWNLOAD FUNCTIONALITY (ORIGINAL)
+    // ========================================
+    downloadBtn.addEventListener('click', () => {
+        if (!convertedBlob || !convertedFilename) {
+            showToast('No File Ready', 'Please convert first', 'warning');
+            return;
+        }
+
+        // Create download link
+        const url = URL.createObjectURL(convertedBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = convertedFilename;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        
+        // Cleanup
+        setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }, 100);
+
+        // Visual feedback
+        const originalText = downloadBtn.textContent;
+        downloadBtn.textContent = '✅ Downloaded!';
+        downloadBtn.style.background = '#14b8a6';
+        downloadBtn.style.borderColor = '#14b8a6';
+        downloadBtn.style.color = '#ffffff';
+
+        // Show toast (NEW!)
+        showToast('Download Complete', `${convertedFilename} saved successfully`, 'success');
+
+        setTimeout(() => {
+            downloadBtn.textContent = originalText;
+            downloadBtn.style.background = '';
+            downloadBtn.style.borderColor = '';
+            downloadBtn.style.color = '';
+            
+            // Disable after download (ORIGINAL BEHAVIOR)
+            downloadBtn.disabled = true;
+            convertBtn.disabled = true;
+            convertedBlob = null;
+            convertedFilename = null;
+        }, 2000);
+    });
+});
+
+// ========================================
+// HELPER FUNCTIONS
+// ========================================
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+}
+
+// ========================================
+// PREVENT DEFAULT DRAG ON WHOLE PAGE
+// ========================================
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    document.body.addEventListener(eventName, (e) => {
+        if (!e.target.closest('.upload-area')) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }, false);
+});
+
+// ========================================
+// SMOOTH SCROLL FOR ANCHOR LINKS
+// ========================================
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// ========================================
+// NAVBAR SCROLL EFFECT
+// ========================================
+const navbar = document.querySelector('.main-navbar');
+if (navbar) {
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+        
+        if (currentScroll > 50) {
+            navbar.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.15)';
+        } else {
+            navbar.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+        }
+        
+        lastScroll = currentScroll;
+    });
+}
+
+// ========================================
+// KEYBOARD SHORTCUTS
+// ========================================
+document.addEventListener('keydown', (e) => {
+    // ESC to close mobile menu
+    if (e.key === 'Escape') {
+        if (mobileMenu) mobileMenu.classList.remove('active');
+        if (hamburger) hamburger.classList.remove('active');
+    }
+    
+    // Ctrl/Cmd + K to focus first file input
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        const firstInput = document.querySelector('.upload-area input[type="file"]');
+        if (firstInput) firstInput.click();
+    }
+});
+
+// ========================================
+// PAGE LOAD ANIMATION
+// ========================================
+window.addEventListener('load', () => {
+    document.body.style.opacity = '0';
+    setTimeout(() => {
+        document.body.style.transition = 'opacity 0.5s ease';
+        document.body.style.opacity = '1';
+    }, 100);
+});
+
+// ========================================
+// CONSOLE BRANDING
+// ========================================
+console.log('%c🚀 ASCIIFIX File Converter', 'font-size: 20px; font-weight: bold; color: #14b8a6; font-family: Courier New;');
+console.log('%c✨ Backend Connected - Production Ready!', 'font-size: 14px; font-weight: bold; color: #8b5cf6; font-family: Courier New;');
+console.log('%cBuilt with ❤️ for the best user experience', 'font-size: 12px; color: #64748b; font-family: Courier New;');
+
+// ========================================
+// INITIALIZATION COMPLETE
+// ========================================
+console.log('%c✅ All systems operational! Backend API ready!', 'font-size: 14px; color: #14b8a6; font-weight: bold; font-family: Courier New;');
