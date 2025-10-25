@@ -2,6 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const PDFDocument = require('pdfkit');
 const sharp = require('sharp');
+const pdfjsLib = require('pdfjs-dist/legacy/build/pdf.js');
+const { PDFDocument: PDFLib } = require('pdf-lib');
+const archiver = require('archiver');
 const mammoth = require('mammoth');
 const XLSX = require('xlsx');
 const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, BorderStyle } = require('docx');
@@ -768,10 +771,10 @@ exports.pdfToWord = async (req, res) => {
 
     // Platform-specific Python command
     const pythonCmd = (process.platform === 'win32') ? 'python' : 'python3';
-    
+
     // Path to Python script
     const scriptPath = path.join(__dirname, 'pdf_to_word.py');
-    
+
     // Build command
     const command = `${pythonCmd} "${scriptPath}" "${inPath}" "${expectedOutput}"`;
 
@@ -785,7 +788,7 @@ exports.pdfToWord = async (req, res) => {
       const { stdout, stderr } = await execPromise(command, {
         timeout: 120000 // 2 minute timeout for large files
       });
-      
+
       if (stdout) console.log('✅ Python output:', stdout);
       if (stderr) console.log('⚠️ Python stderr:', stderr);
 
@@ -815,7 +818,7 @@ exports.pdfToWord = async (req, res) => {
 
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-    
+
     const docxBuffer = fs.readFileSync(expectedOutput);
     res.end(docxBuffer);
 
@@ -824,9 +827,9 @@ exports.pdfToWord = async (req, res) => {
 
   } catch (error) {
     console.log('❌ Error:', error.message);
-    
+
     logConversion('FAIL', 'PDF-TO-WORD', ip, req.file.originalname, error.message);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Failed to convert PDF to Word.',
       details: error.message
     });
@@ -869,52 +872,181 @@ exports.pdfToExcel = async (req, res) => {
 
 exports.pdfToImage = async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file' });
-  console.log('📕 PDF → IMAGE');
+
+  console.log('📄 PDF → IMAGE (Smart extraction)');
   const ip = req.ip;
   const inPath = req.file.path;
   let browser;
 
   try {
+    // ========================================
+    // METHOD 1: Try to extract embedded images first
+    // ========================================
+    console.log('🔍 Step 1: Trying to extract embedded images...');
+
     const pdfBuffer = fs.readFileSync(inPath);
-    const base64Pdf = pdfBuffer.toString('base64');
+    const data = new Uint8Array(pdfBuffer);
+
+    const loadingTask = pdfjsLib.getDocument({ data });
+    const pdfDocument = await loadingTask.promise;
+
+    const extractedImages = [];
+
+    // Try to extract images from all pages
+    for (let pageNum = 1; pageNum <= Math.min(pdfDocument.numPages, 10); pageNum++) {
+      const page = await pdfDocument.getPage(pageNum);
+      const operatorList = await page.getOperatorList();
+
+      for (let i = 0; i < operatorList.fnArray.length; i++) {
+        if (operatorList.fnArray[i] === pdfjsLib.OPS.paintImageXObject) {
+          const imageName = operatorList.argsArray[i][0];
+
+          try {
+            const image = await page.objs.get(imageName);
+
+            if (image && image.width && image.height && image.data) {
+              // Filter out very small images (likely icons/decorations)
+              if (image.width > 50 && image.height > 50) {
+                console.log(`✅ Found image: ${image.width}x${image.height}`);
+
+                let imageBuffer;
+
+                if (image.kind === 1) {
+                  imageBuffer = await sharp(Buffer.from(image.data), {
+                    raw: { width: image.width, height: image.height, channels: 1 }
+                  }).png().toBuffer();
+                } else if (image.kind === 2) {
+                  imageBuffer = await sharp(Buffer.from(image.data), {
+                    raw: { width: image.width, height: image.height, channels: 3 }
+                  }).png().toBuffer();
+                } else if (image.kind === 3) {
+                  imageBuffer = await sharp(Buffer.from(image.data), {
+                    raw: { width: image.width, height: image.height, channels: 4 }
+                  }).png().toBuffer();
+                }
+
+                if (imageBuffer) {
+                  extractedImages.push(imageBuffer);
+                }
+              }
+            }
+          } catch (err) {
+            // Ignore errors for individual images
+          }
+        }
+      }
+    }
+
+    // ========================================
+    // If we found embedded images, return them!
+    // ========================================
+    if (extractedImages.length > 0) {
+      console.log(`✅ Extracted ${extractedImages.length} embedded images`);
+
+      if (extractedImages.length === 1) {
+        const filename = `${path.parse(req.file.originalname).name}_extracted.png`;
+        logConversion('OK', 'PDF-TO-IMAGE', ip, req.file.originalname, '1 embedded image');
+
+        res.setHeader('Content-Type', 'image/png');
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        return res.end(extractedImages[0]);
+      }
+
+      // Multiple images: ZIP
+      const filename = `${path.parse(req.file.originalname).name}_extracted.zip`;
+      res.setHeader('Content-Type', 'application/zip');
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+
+      const archive = archiver('zip', { zlib: { level: 9 } });
+      archive.pipe(res);
+
+      for (let i = 0; i < extractedImages.length; i++) {
+        archive.append(extractedImages[i], { name: `image_${i + 1}.png` });
+      }
+
+      await archive.finalize();
+      logConversion('OK', 'PDF-TO-IMAGE', ip, req.file.originalname, `${extractedImages.length} images`);
+      return;
+    }
+
+    // ========================================
+    // METHOD 2: No embedded images found - Convert page to image
+    // ========================================
+    console.log('⚠️  No embedded images found. Converting PDF page to image...');
+
+    const base64PDF = pdfBuffer.toString('base64');
 
     browser = await launchBrowser();
     const page = await browser.newPage();
 
-    await page.setContent(`
-      <html><body style="margin:0;padding:0;background:white;">
-        <iframe src="data:application/pdf;base64,${base64Pdf}" 
-                style="width:100vw;height:100vh;border:none;"></iframe>
-      </body></html>
-    `);
+    await page.setViewport({
+      width: 1200,
+      height: 1600,
+      deviceScaleFactor: 2
+    });
 
-    await page.setViewport({ width: 850, height: 1100 });
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <style>
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { 
+            width: 100vw; 
+            height: 100vh; 
+            background: white;
+            overflow: hidden;
+          }
+          iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+          }
+        </style>
+      </head>
+      <body>
+        <iframe src="data:application/pdf;base64,${base64PDF}"></iframe>
+      </body>
+      </html>
+    `;
 
-    const imageBuffer = await page.screenshot({
+    await page.setContent(htmlContent, {
+      waitUntil: 'networkidle0',
+      timeout: 30000
+    });
+
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
+    const screenshot = await page.screenshot({
       type: 'png',
-      clip: { x: 0, y: 0, width: 850, height: 1100 }
+      fullPage: false,
+      omitBackground: false
     });
 
     await browser.close();
+    browser = null;
 
     const filename = `${path.parse(req.file.originalname).name}.png`;
-    logConversion('OK', 'PDF-TO-IMAGE', ip, req.file.originalname);
+    logConversion('OK', 'PDF-TO-IMAGE', ip, req.file.originalname, 'page converted');
+
     res.setHeader('Content-Type', 'image/png');
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-    res.end(imageBuffer);
+    res.end(screenshot);
+
   } catch (error) {
     console.log('❌ Error:', error.message);
     if (browser) await browser.close();
-    res.status(500).json({ error: 'Conversion failed' });
+    res.status(500).json({
+      error: 'PDF to image conversion failed',
+      details: error.message
+    });
   } finally {
     if (fs.existsSync(inPath)) fs.unlinkSync(inPath);
   }
 };
 
-// ==========================================
-// POWERPOINT TO PDF
-// ==========================================
+
 // POWERPOINT TO PDF
 exports.powerpointToPdf = async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file' });
