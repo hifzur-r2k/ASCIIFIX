@@ -28,12 +28,12 @@ const formatExtensions = {
 function showToast(title, message, type = 'success') {
     const toastContainer = document.getElementById('toastContainer');
     if (!toastContainer) return;
-    
+
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
-    
+
     const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : '⚠️';
-    
+
     toast.innerHTML = `
         <div class="toast-icon">${icon}</div>
         <div class="toast-content">
@@ -41,9 +41,9 @@ function showToast(title, message, type = 'success') {
             <div class="toast-message">${message}</div>
         </div>
     `;
-    
+
     toastContainer.appendChild(toast);
-    
+
     // Auto remove after 4 seconds
     setTimeout(() => {
         toast.style.animation = 'slideOutRight 0.4s ease';
@@ -138,7 +138,7 @@ document.querySelectorAll('.convert-card').forEach(card => {
         textUploadBox.addEventListener('input', () => {
             const hasText = textUploadBox.value.trim().length > 0;
             convertBtn.disabled = !hasText && !selectedFile;
-            
+
             if (hasText) {
                 fileNameDisplay.textContent = `✍️ ${textUploadBox.value.length} characters`;
                 fileNameDisplay.style.color = '#14b8a6';
@@ -191,7 +191,7 @@ document.querySelectorAll('.convert-card').forEach(card => {
         uploadArea.addEventListener('drop', (e) => {
             e.preventDefault();
             uploadArea.classList.remove('drag-over');
-            
+
             const file = e.dataTransfer.files[0];
             if (file) {
                 handleFileSelect(file);
@@ -208,7 +208,7 @@ document.querySelectorAll('.convert-card').forEach(card => {
         convertBtn.disabled = false;
         downloadBtn.disabled = true;
         convertedBlob = null;
-        
+
         // Clear text box if it exists
         if (textUploadBox) {
             textUploadBox.value = '';
@@ -224,16 +224,16 @@ document.querySelectorAll('.convert-card').forEach(card => {
     if (outputFormatSelect) {
         outputFormatSelect.addEventListener('change', (e) => {
             selectedOutputFormat = e.target.value;
-            
+
             // Update output icon
             if (outputIcon) {
                 outputIcon.textContent = formatIcons[selectedOutputFormat];
             }
-            
+
             // Update button text
             const formatName = selectedOutputFormat.charAt(0).toUpperCase() + selectedOutputFormat.slice(1);
             convertBtn.textContent = `⚡ Convert to ${formatName}`;
-            
+
             // Reset download button
             downloadBtn.disabled = true;
             convertedBlob = null;
@@ -247,14 +247,14 @@ document.querySelectorAll('.convert-card').forEach(card => {
         // Check if we have content
         const hasFile = selectedFile !== null;
         const hasText = textUploadBox && textUploadBox.value.trim().length > 0;
-        
+
         if (!hasFile && !hasText) return;
 
         // Disable button and show loading
         convertBtn.disabled = true;
         const originalText = convertBtn.textContent;
         let dots = 0;
-        
+
         const loadingInterval = setInterval(() => {
             dots = (dots + 1) % 4;
             convertBtn.textContent = '⚡ Converting' + '.'.repeat(dots);
@@ -264,7 +264,7 @@ document.querySelectorAll('.convert-card').forEach(card => {
             // ORIGINAL BACKEND INTEGRATION (NO CHANGES!)
             const endpoint = `/convert/${inputType}-to-${selectedOutputFormat}`;
             const formData = new FormData();
-            
+
             if (isTextCard) {
                 if (selectedFile) {
                     formData.append('file', selectedFile);
@@ -280,7 +280,7 @@ document.querySelectorAll('.convert-card').forEach(card => {
             // Make request with timeout
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 100000);
-            
+
             const response = await fetch(endpoint, {
                 method: 'POST',
                 body: formData,
@@ -294,8 +294,8 @@ document.querySelectorAll('.convert-card').forEach(card => {
             }
 
             // Get converted blob from backend
-            convertedBlob = await response.blob();
-            
+            // convertedBlob = await response.blob();
+
             // Set filename with proper extension
             const extension = formatExtensions[selectedOutputFormat];
             if (selectedFile) {
@@ -307,24 +307,85 @@ document.querySelectorAll('.convert-card').forEach(card => {
             }
 
             // Success!
+            // Success!
             clearInterval(loadingInterval);
-            convertBtn.textContent = '✅ Converted!';
-            convertBtn.style.background = '#14b8a6';
-            convertBtn.style.borderColor = '#14b8a6';
-            
-            // Enable download
-            downloadBtn.disabled = false;
 
-            // Show toast (NEW!)
-            showToast('Conversion Complete', `Ready to download as ${selectedOutputFormat.toUpperCase()}`, 'success');
+            // Check if it's a ZIP file (multi-page PDF)
+            const contentType = response.headers.get('Content-Type');
+            const fileType = response.headers.get('X-File-Type');
 
-            // Reset button after 2 seconds
-            setTimeout(() => {
-                convertBtn.textContent = originalText;
-                convertBtn.style.background = '';
-                convertBtn.style.borderColor = '';
-                convertBtn.disabled = false;
-            }, 2000);
+            if (contentType === 'application/zip' || fileType === 'zip') {
+                // Multi-page PDF - Download ZIP immediately
+                convertedBlob = await response.blob();
+
+                // Get filename
+                const disposition = response.headers.get('Content-Disposition');
+                if (disposition && disposition.includes('filename=')) {
+                    convertedFilename = disposition.split('filename=')[1].replace(/"/g, '');
+                } else {
+                    convertedFilename = 'pages.zip';
+                }
+
+                // Auto-download ZIP
+                const url = URL.createObjectURL(convertedBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = convertedFilename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                convertBtn.textContent = 'ZIP Downloaded!';
+                convertBtn.style.background = '#14b8a6';
+                convertBtn.style.borderColor = '#14b8a6';
+
+                showToast('Multi-Page Converted', 'ZIP file downloaded automatically', 'success');
+
+                // Reset everything
+                setTimeout(() => {
+                    convertBtn.textContent = originalText;
+                    convertBtn.style.background = '';
+                    convertBtn.style.borderColor = '';
+                    convertBtn.disabled = false;
+                    selectedFile = null;
+                    fileNameDisplay.textContent = '';
+                    fileNameDisplay.style.display = 'none';
+                    if (textUploadBox) textUploadBox.value = '';
+                }, 2000);
+
+            } else {
+                // Single page - normal flow (KEEP ORIGINAL)
+                convertedBlob = await response.blob();
+
+                // Set filename
+                const extension = formatExtensions[selectedOutputFormat];
+                if (selectedFile) {
+                    convertedFilename = selectedFile.name.replace(/\.[^.]*$/, extension);
+                } else if (isTextCard) {
+                    convertedFilename = `text${extension}`;
+                } else {
+                    convertedFilename = `document${extension}`;
+                }
+
+                convertBtn.textContent = 'Converted!';
+                convertBtn.style.background = '#14b8a6';
+                convertBtn.style.borderColor = '#14b8a6';
+
+                // Enable download button
+                downloadBtn.disabled = false;
+
+                showToast('Conversion Complete', `Ready to download as ${selectedOutputFormat.toUpperCase()}`, 'success');
+
+                // Reset button
+                setTimeout(() => {
+                    convertBtn.textContent = originalText;
+                    convertBtn.style.background = '';
+                    convertBtn.style.borderColor = '';
+                    convertBtn.disabled = false;
+                }, 2000);
+            }
+
 
         } catch (error) {
             console.error('Conversion error:', error);
@@ -366,7 +427,7 @@ document.querySelectorAll('.convert-card').forEach(card => {
         a.style.display = 'none';
         document.body.appendChild(a);
         a.click();
-        
+
         // Cleanup
         setTimeout(() => {
             document.body.removeChild(a);
@@ -388,7 +449,7 @@ document.querySelectorAll('.convert-card').forEach(card => {
             downloadBtn.style.background = '';
             downloadBtn.style.borderColor = '';
             downloadBtn.style.color = '';
-            
+
             // Disable after download (ORIGINAL BEHAVIOR)
             downloadBtn.disabled = true;
             convertBtn.disabled = true;
@@ -445,13 +506,13 @@ if (navbar) {
     let lastScroll = 0;
     window.addEventListener('scroll', () => {
         const currentScroll = window.pageYOffset;
-        
+
         if (currentScroll > 50) {
             navbar.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.15)';
         } else {
             navbar.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
         }
-        
+
         lastScroll = currentScroll;
     });
 }
@@ -465,7 +526,7 @@ document.addEventListener('keydown', (e) => {
         if (mobileMenu) mobileMenu.classList.remove('active');
         if (hamburger) hamburger.classList.remove('active');
     }
-    
+
     // Ctrl/Cmd + K to focus first file input
     if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
         e.preventDefault();

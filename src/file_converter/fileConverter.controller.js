@@ -11,6 +11,8 @@ const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthT
 const ExcelJS = require('exceljs');
 const Tesseract = require('tesseract.js');
 const { execSync } = require('child_process');
+const { fromPath } = require('pdf2pic');
+
 
 // Platform detection
 const isWindows = process.platform === 'win32';
@@ -873,174 +875,231 @@ exports.pdfToExcel = async (req, res) => {
 exports.pdfToImage = async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file' });
 
-  console.log('📄 PDF → IMAGE (Smart extraction)');
+  console.log('📄 PDF → IMAGE');
   const ip = req.ip;
   const inPath = req.file.path;
   let browser;
 
   try {
-    // ========================================
-    // METHOD 1: Try to extract embedded images first
-    // ========================================
-    console.log('🔍 Step 1: Trying to extract embedded images...');
-
     const pdfBuffer = fs.readFileSync(inPath);
     const data = new Uint8Array(pdfBuffer);
 
     const loadingTask = pdfjsLib.getDocument({ data });
     const pdfDocument = await loadingTask.promise;
+    const pageCount = pdfDocument.numPages;
 
-    const extractedImages = [];
-
-    // Try to extract images from all pages
-    for (let pageNum = 1; pageNum <= Math.min(pdfDocument.numPages, 10); pageNum++) {
-      const page = await pdfDocument.getPage(pageNum);
-      const operatorList = await page.getOperatorList();
-
-      for (let i = 0; i < operatorList.fnArray.length; i++) {
-        if (operatorList.fnArray[i] === pdfjsLib.OPS.paintImageXObject) {
-          const imageName = operatorList.argsArray[i][0];
-
-          try {
-            const image = await page.objs.get(imageName);
-
-            if (image && image.width && image.height && image.data) {
-              // Filter out very small images (likely icons/decorations)
-              if (image.width > 50 && image.height > 50) {
-                console.log(`✅ Found image: ${image.width}x${image.height}`);
-
-                let imageBuffer;
-
-                if (image.kind === 1) {
-                  imageBuffer = await sharp(Buffer.from(image.data), {
-                    raw: { width: image.width, height: image.height, channels: 1 }
-                  }).png().toBuffer();
-                } else if (image.kind === 2) {
-                  imageBuffer = await sharp(Buffer.from(image.data), {
-                    raw: { width: image.width, height: image.height, channels: 3 }
-                  }).png().toBuffer();
-                } else if (image.kind === 3) {
-                  imageBuffer = await sharp(Buffer.from(image.data), {
-                    raw: { width: image.width, height: image.height, channels: 4 }
-                  }).png().toBuffer();
-                }
-
-                if (imageBuffer) {
-                  extractedImages.push(imageBuffer);
-                }
-              }
-            }
-          } catch (err) {
-            // Ignore errors for individual images
-          }
-        }
-      }
-    }
-
-    // ========================================
-    // If we found embedded images, return them!
-    // ========================================
-    if (extractedImages.length > 0) {
-      console.log(`✅ Extracted ${extractedImages.length} embedded images`);
-
-      if (extractedImages.length === 1) {
-        const filename = `${path.parse(req.file.originalname).name}_extracted.png`;
-        logConversion('OK', 'PDF-TO-IMAGE', ip, req.file.originalname, '1 embedded image');
-
-        res.setHeader('Content-Type', 'image/png');
-        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-        return res.end(extractedImages[0]);
-      }
-
-      // Multiple images: ZIP
-      const filename = `${path.parse(req.file.originalname).name}_extracted.zip`;
-      res.setHeader('Content-Type', 'application/zip');
-      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-
-      const archive = archiver('zip', { zlib: { level: 9 } });
-      archive.pipe(res);
-
-      for (let i = 0; i < extractedImages.length; i++) {
-        archive.append(extractedImages[i], { name: `image_${i + 1}.png` });
-      }
-
-      await archive.finalize();
-      logConversion('OK', 'PDF-TO-IMAGE', ip, req.file.originalname, `${extractedImages.length} images`);
-      return;
-    }
-
-    // ========================================
-    // METHOD 2: No embedded images found - Convert page to image
-    // ========================================
-    console.log('⚠️  No embedded images found. Converting PDF page to image...');
-
-    const base64PDF = pdfBuffer.toString('base64');
+    console.log(`📄 PDF has ${pageCount} pages`);
 
     browser = await launchBrowser();
-    const page = await browser.newPage();
 
-    await page.setViewport({
-      width: 1200,
-      height: 1600,
-      deviceScaleFactor: 2
-    });
+    // SINGLE PAGE
+    if (pageCount === 1) {
+      console.log('📸 Converting single page...');
 
-    const htmlContent = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="UTF-8">
-        <style>
-          * { margin: 0; padding: 0; box-sizing: border-box; }
-          body { 
-            width: 100vw; 
-            height: 100vh; 
-            background: white;
-            overflow: hidden;
-          }
-          iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-          }
-        </style>
-      </head>
-      <body>
-        <iframe src="data:application/pdf;base64,${base64PDF}"></iframe>
-      </body>
-      </html>
-    `;
+      const browserPage = await browser.newPage();
+      const page = await pdfDocument.getPage(1);
+      const viewport = page.getViewport({ scale: 2.0 });
 
-    await page.setContent(htmlContent, {
-      waitUntil: 'networkidle0',
-      timeout: 30000
-    });
+      await browserPage.setViewport({
+        width: Math.ceil(viewport.width),
+        height: Math.ceil(viewport.height)
+      });
 
-    await new Promise(resolve => setTimeout(resolve, 3000));
+      const base64PDF = pdfBuffer.toString('base64');
 
-    const screenshot = await page.screenshot({
-      type: 'png',
-      fullPage: false,
-      omitBackground: false
-    });
+      await browserPage.setContent(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+          <style>
+            body { margin: 0; padding: 0; overflow: hidden; background: white; }
+            canvas { display: block; }
+          </style>
+        </head>
+        <body>
+          <canvas id="canvas"></canvas>
+          <script>
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            const base64 = '${base64PDF}';
+            const binary = atob(base64);
+            const len = binary.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) bytes[i] = binary.charCodeAt(i);
+            
+            pdfjsLib.getDocument(bytes).promise.then(pdf => {
+              pdf.getPage(1).then(page => {
+                const scale = 2.0;
+                const viewport = page.getViewport({ scale });
+                const canvas = document.getElementById('canvas');
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                const context = canvas.getContext('2d');
+                page.render({ canvasContext: context, viewport }).promise.then(() => {
+                  document.body.setAttribute('data-ready', 'true');
+                });
+              });
+            });
+          </script>
+        </body>
+        </html>
+      `, { waitUntil: 'domcontentloaded' });
+
+      await browserPage.waitForFunction(() => {
+        return document.body.getAttribute('data-ready') === 'true';
+      }, { timeout: 10000 });
+
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      let screenshot = await browserPage.screenshot({ type: 'png' });
+
+      await browser.close();
+      browser = null;
+
+      // Trim white borders
+      screenshot = await sharp(screenshot).png().toBuffer();
+
+      const filename = `${path.parse(req.file.originalname).name}.png`;
+      logConversion('OK', 'PDF-TO-IMAGE', ip, req.file.originalname, '1 page');
+
+      res.setHeader('Content-Type', 'image/png');
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+      return res.end(screenshot);
+    }
+
+    // MULTI-PAGE
+    console.log('📦 Multi-page PDF detected...');
+
+    const tempDir = path.join(__dirname, '../../temp', `pdf_${Date.now()}`);
+    fs.mkdirSync(tempDir, { recursive: true });
+
+    const imageFiles = [];
+    const maxPages = Math.min(pageCount, 10);
+
+    for (let i = 1; i <= maxPages; i++) {
+      console.log(`📸 Converting page ${i}/${maxPages}...`);
+
+      try {
+        // CREATE NEW PAGE FOR EACH PDF PAGE ✅
+        const browserPage = await browser.newPage();
+        
+        const page = await pdfDocument.getPage(i);
+        const viewport = page.getViewport({ scale: 2.0 });
+
+        await browserPage.setViewport({
+          width: Math.ceil(viewport.width),
+          height: Math.ceil(viewport.height)
+        });
+
+        const pdfLibDoc = await PDFLib.load(pdfBuffer);
+        const singlePagePdf = await PDFLib.create();
+        const [copiedPage] = await singlePagePdf.copyPages(pdfLibDoc, [i - 1]);
+        singlePagePdf.addPage(copiedPage);
+        const singlePageBytes = await singlePagePdf.save();
+        const base64PDF = Buffer.from(singlePageBytes).toString('base64');
+
+        await browserPage.setContent(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+            <style>
+              body { margin: 0; padding: 0; overflow: hidden; background: white; }
+              canvas { display: block; }
+            </style>
+          </head>
+          <body>
+            <canvas id="canvas"></canvas>
+            <script>
+              pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+              const base64 = '${base64PDF}';
+              const binary = atob(base64);
+              const len = binary.length;
+              const bytes = new Uint8Array(len);
+              for (let i = 0; i < len; i++) bytes[i] = binary.charCodeAt(i);
+              
+              pdfjsLib.getDocument(bytes).promise.then(pdf => {
+                pdf.getPage(1).then(page => {
+                  const scale = 2.0;
+                  const viewport = page.getViewport({ scale });
+                  const canvas = document.getElementById('canvas');
+                  canvas.width = viewport.width;
+                  canvas.height = viewport.height;
+                  const context = canvas.getContext('2d');
+                  page.render({ canvasContext: context, viewport }).promise.then(() => {
+                    document.body.setAttribute('data-ready', 'true');
+                  });
+                });
+              });
+            </script>
+          </body>
+          </html>
+        `, { waitUntil: 'domcontentloaded' });
+
+        // Wait for canvas to finish rendering
+        await browserPage.waitForFunction(() => {
+          return document.body.getAttribute('data-ready') === 'true';
+        }, { timeout: 10000 });
+
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        let screenshot = await browserPage.screenshot({ type: 'png' });
+
+        // CLOSE PAGE AFTER SCREENSHOT ✅
+        await browserPage.close();
+
+        // Trim borders
+        screenshot = await sharp(screenshot).trim().png().toBuffer();
+
+        const imagePath = path.join(tempDir, `page_${i}.png`);
+        fs.writeFileSync(imagePath, screenshot);
+        imageFiles.push({ path: imagePath, name: `page_${i}.png` });
+
+        console.log(`  ✅ Page ${i} saved`);
+
+      } catch (pageError) {
+        console.error(`  ❌ Error on page ${i}:`, pageError.message);
+      }
+    }
 
     await browser.close();
     browser = null;
 
-    const filename = `${path.parse(req.file.originalname).name}.png`;
-    logConversion('OK', 'PDF-TO-IMAGE', ip, req.file.originalname, 'page converted');
+    if (imageFiles.length === 0) {
+      throw new Error('No pages could be converted');
+    }
 
-    res.setHeader('Content-Type', 'image/png');
+    console.log(`✅ Successfully converted ${imageFiles.length} pages`);
+
+    const filename = `${path.parse(req.file.originalname).name}_pages.zip`;
+
+    res.setHeader('Content-Type', 'application/zip');
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-    res.end(screenshot);
+    res.setHeader('X-File-Type', 'zip');
+
+    const archive = archiver('zip', { zlib: { level: 9 } });
+    archive.on('error', (err) => { throw err; });
+    archive.on('end', () => {
+      setTimeout(() => {
+        if (fs.existsSync(tempDir)) fs.rmSync(tempDir, { recursive: true, force: true });
+      }, 2000);
+    });
+
+    archive.pipe(res);
+    for (const file of imageFiles) {
+      archive.file(file.path, { name: file.name });
+      console.log(`  ✅ Added ${file.name} to ZIP`);
+    }
+    await archive.finalize();
+
+    logConversion('OK', 'PDF-TO-IMAGE', ip, req.file.originalname, `${imageFiles.length} pages`);
 
   } catch (error) {
-    console.log('❌ Error:', error.message);
+    console.error('❌ ERROR:', error.message);
     if (browser) await browser.close();
-    res.status(500).json({
-      error: 'PDF to image conversion failed',
-      details: error.message
-    });
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'PDF to image conversion failed', details: error.message });
+    }
   } finally {
     if (fs.existsSync(inPath)) fs.unlinkSync(inPath);
   }
