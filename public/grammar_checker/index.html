@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammar Checker - ASCIIFIX</title>
+    <meta name="description"
+        content="Free AI-powered grammar and spelling checker. Check your text for errors instantly.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-cube"></i>
+                <span>ASCIIFIX</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Tools ▼</a>
+                </li>
+                <li><a href="/about">About</a></li>
+            </ul>
+            <a href="/login" class="login-btn">Login / Signup</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Header Badge -->
+        <div class="header-badge">
+            ✍️ FREE GRAMMAR CHECKER
+        </div>
+
+        <!-- Title Section -->
+        <div class="title-section">
+            <h1>Check Your Grammar & Spelling</h1>
+            <p>Analyze your text for grammar errors, spelling mistakes, and punctuation issues. Fast, secure, and
+                completely free with professional-grade quality.</p>
+        </div>
+
+        <!-- Main Content Card -->
+        <div class="main-card">
+            <!-- Language Selector -->
+            <div class="language-selector">
+                <button class="toggle-btn" id="languageToggle">
+                    🌐 Language: <strong id="currentLang">English (US)</strong>
+                </button>
+                <div class="language-dropdown" id="languageDropdown">
+                    <div class="lang-option" data-lang="en-US">English (US)</div>
+                    <div class="lang-option" data-lang="en-GB">English (UK)</div>
+                    <div class="lang-option" data-lang="en-CA">English (Canada)</div>
+                    <div class="lang-option" data-lang="en-AU">English (Australia)</div>
+                </div>
+            </div>
+
+            <!-- Two Column Layout -->
+            <div class="content-grid">
+                <!-- Left Column - Text Input -->
+                <div class="input-section">
+                    <div class="input-header">
+                        <span class="section-title">📝 Your Text</span>
+                        <span class="word-count"><span id="wordCount">0</span> words</span>
+                    </div>
+
+                    <div class="text-area-wrapper">
+                        <div id="textEditor" class="text-editor-div" contenteditable="true"
+                            placeholder="Type or paste your text here..." spellcheck="false"></div>
+                    </div>
+
+
+                    <!-- Upload Options -->
+                    <div class="upload-options">
+                        <button class="upload-btn" id="pasteBtn">
+                            <i class="fas fa-paste"></i> Paste Text
+                        </button>
+                        <span class="divider">or</span>
+                        <button class="upload-btn" id="uploadBtn">
+                            <i class="fas fa-upload"></i> Choose Files
+                        </button>
+                        <input type="file" id="fileInput" accept=".txt,.doc,.docx,.pdf,.ppt,.pptx"
+                            style="display: none;">
+                    </div>
+                    <p class="file-support">Supported: TXT, DOC, DOCX, PDF, PPT, PPTX</p>
+
+                    <!-- Check Button -->
+                    <button class="check-btn" id="checkBtn">
+                        <i class="fas fa-check-circle"></i> Check Grammar
+                    </button>
+                </div>
+
+                <!-- Right Column - Results -->
+                <div class="results-section">
+                    <div class="results-header">
+                        <span class="section-title">🎯 Results</span>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div class="empty-state" id="emptyState">
+                        <div class="empty-icon">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 24 24' fill='none' stroke='%23d0d0d0' stroke-width='1.5'%3E%3Cpath d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'/%3E%3C/svg%3E"
+                                alt="Document icon">
+                        </div>
+                        <p class="empty-text">No errors checked yet</p>
+                        <p class="empty-subtext">Upload or paste text to see results</p>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div class="loading-state" id="loadingState" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Analyzing your text...</p>
+                    </div>
+
+                    <!-- Success State -->
+                    <div class="success-state" id="successState" style="display: none;">
+                        <div class="success-icon">✓</div>
+                        <h3>Perfect! No errors found</h3>
+                        <p>Your text looks great!</p>
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <div class="stat-value" id="statsWords">0</div>
+                                <div class="stat-label">Words</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value" id="statsSentences">0</div>
+                                <div class="stat-label">Sentences</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Errors List -->
+                    <div class="errors-container" id="errorsContainer" style="display: none;">
+                        <!-- Error Stats -->
+                        <div class="error-stats">
+                            <div class="stat-item">
+                                <span class="stat-number" id="totalErrors">0</span>
+                                <span class="stat-text">Total Issues</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number grammar-color" id="grammarCount">0</span>
+                                <span class="stat-text">Grammar</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number spelling-color" id="spellingCount">0</span>
+                                <span class="stat-text">Spelling</span>
+                            </div>
+                        </div>
+
+                        <!-- Fix All Button -->
+                        <button class="fix-all-btn" id="fixAllBtn">
+                            <i class="fas fa-magic"></i> Fix All Errors
+                        </button>
+
+                        <!-- Errors List -->
+                        <div class="errors-list" id="errorsList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons at Bottom -->
+        <div class="bottom-actions">
+            <button class="action-btn secondary" id="clearBtn">
+                <i class="fas fa-eraser"></i> Clear
+            </button>
+            <button class="action-btn secondary" id="copyBtn">
+                <i class="fas fa-copy"></i> Copy Text
+            </button>
+            <button class="action-btn secondary" id="downloadBtn">
+                <i class="fas fa-download"></i> Download
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
