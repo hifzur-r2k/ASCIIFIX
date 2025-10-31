@@ -6,7 +6,7 @@ const path = require('path');
 const fs = require('fs').promises;
 const mammoth = require('mammoth');
 const pdfParse = require('pdf-parse');
-const textract = require('textract');
+// const textract = require('textract');
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -203,7 +203,7 @@ const extractText = (req, res) => {
                 case '.doc':
                 case '.ppt':
                 case '.pptx':
-                    extractedText = await extractWithTextract(filePath);
+                    throw new Error('DOC, PPT, PPTX formats coming soon. Please use DOCX or PDF for now.');
                     break;
 
 
@@ -277,17 +277,17 @@ const extractFromPdf = async (filePath) => {
 /**
  * Extract text from DOC/PPT/PPTX files
  */
-const extractWithTextract = (filePath) => {
-    return new Promise((resolve, reject) => {
-        textract.fromFileWithPath(filePath, (error, text) => {
-            if (error) {
-                reject(error);
-            } else {
-                resolve(text);
-            }
-        });
-    });
-};
+// const extractWithTextract = (filePath) => {
+//     return new Promise((resolve, reject) => {
+//         textract.fromFileWithPath(filePath, (error, text) => {
+//             if (error) {
+//                 reject(error);
+//             } else {
+//                 resolve(text);
+//             }
+//         });
+//     });
+// };
 
 /**
  * Get supported languages
