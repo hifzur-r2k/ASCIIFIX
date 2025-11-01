@@ -6,7 +6,12 @@ const path = require('path');
 const fs = require('fs').promises;
 const mammoth = require('mammoth');
 const pdfParse = require('pdf-parse');
-// const textract = require('textract');
+// const { calculateStatistics } = require('./utils/textStatistics');
+const { checkHomophones } = require('./utils/homophoneChecker');
+const { applyCustomRules } = require('./utils/customRules');
+const { filterByConfidence, addSeverityLevels, mergeDuplicateErrors } = require('./utils/confidenceFilter');
+const { groupErrorsByCategory, createErrorSummary, enhanceErrorForDisplay, sortErrorsByImportance } = require('./utils/errorClassifier');
+
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -104,20 +109,91 @@ const checkGrammar = async (req, res) => {
         console.log('✅ LanguageTool API responded successfully');
         console.log('Found errors:', response.data.matches.length);
 
-        // ✅ REPLACE with this - Create result object
+        // ✅ ADD: Apply custom rules
+        const customErrors = applyCustomRules(text);
+        console.log('🔧 Custom rules found:', customErrors.length, 'additional errors');
+
+        // ✅ ADD: Check homophones
+        const homophoneErrors = checkHomophones(text);
+        console.log('📝 Homophone check found:', homophoneErrors.length, 'potential issues');
+
+        // ✅ ADD: Combine all errors
+        // ✅ IMPROVED: Combine all errors from all sources
+        let allMatches = [
+            ...response.data.matches,      // From LanguageTool API
+            ...customErrors,               // From custom rules
+            ...homophoneErrors             // From homophone checker
+        ];
+
+        console.log('🔗 Combined errors:', allMatches.length);
+
+        // ✅ IMPROVED: Filter by confidence (remove uncertain errors)
+        allMatches = filterByConfidence(allMatches, 70);
+        console.log('✨ After confidence filter:', allMatches.length, 'errors');
+
+        // ✅ IMPROVED: Merge duplicate errors (same position)
+        allMatches = mergeDuplicateErrors(allMatches);
+        console.log('🔀 After merging duplicates:', allMatches.length, 'unique errors');
+
+        // ✅ IMPROVED: Add severity levels (Critical/Warning/Suggestion)
+        allMatches = addSeverityLevels(allMatches);
+        console.log('🎯 Severity levels added');
+
+        const uniqueMatches = allMatches;
+
+
+        // ✅ ADD: Calculate text statistics
+        const words = text.split(/\s+/).filter(w => w.length > 0);
+        const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+        const statistics = {
+            wordCount: words.length,
+            sentenceCount: sentences.length,
+            characterCount: text.length,
+            readingTime: Math.ceil(words.length / 225)
+        };
+        console.log('📈 Basic statistics calculated:', statistics.wordCount, 'words');
+
+
+        // ✅ NEW: Enhanced result object
+        // ✅ ENHANCED: Classify and organize errors
+        const groupedErrors = groupErrorsByCategory(uniqueMatches);
+        const errorSummary = createErrorSummary(groupedErrors);
+
+        // ✅ ENHANCED: Enhance each error for frontend display
+        const enhancedErrors = uniqueMatches.map(error => enhanceErrorForDisplay(error));
+
+        // ✅ ENHANCED: Sort by importance (critical first)
+        const sortedErrors = sortErrorsByImportance(enhancedErrors);
+
+        // ✅ NEW: Enhanced result object with categories
         const result = {
             success: true,
-            matches: response.data.matches || [],
+            matches: sortedErrors,
+            groupedByCategory: groupedErrors,
+            summary: errorSummary,
             language: response.data.language || {},
-            software: response.data.software || {}
+            software: response.data.software || {},
+            statistics: statistics,
+            errorCounts: {
+                total: sortedErrors.length,
+                critical: errorSummary.bySeverity.critical.length,
+                warning: errorSummary.bySeverity.warning.length,
+                suggestion: errorSummary.bySeverity.suggestion.length,
+                languageTool: response.data.matches.length,
+                customRules: customErrors.length,
+                homophones: homophoneErrors.length,
+                byType: Object.fromEntries(
+                    Object.entries(groupedErrors).map(([type, errors]) => [type, errors.length])
+                )
+            }
         };
 
-        // ✅ ADD - Save to cache
+        // Cache the enhanced result
         resultCache.set(cacheKey, result);
         setTimeout(() => resultCache.delete(cacheKey), CACHE_DURATION);
-        console.log('💾 Result cached for 5 minutes');
+        console.log('💾 Enhanced result cached');
 
-        // Return matches (errors)
+        // Return enhanced result
         return res.status(200).json(result);
 
 
@@ -315,9 +391,24 @@ const getSupportedLanguages = async (req, res) => {
         });
     }
 };
+/**
+ * Remove duplicate errors based on offset position
+ */
+function removeDuplicateErrors(errors) {
+    const seen = new Set();
+    return errors.filter(error => {
+        const key = `${error.offset}-${error.length}`;
+        if (seen.has(key)) {
+            return false;
+        }
+        seen.add(key);
+        return true;
+    });
+}
 
 module.exports = {
     checkGrammar,
     extractText,
     getSupportedLanguages
 };
+

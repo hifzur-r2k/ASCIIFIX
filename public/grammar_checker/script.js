@@ -207,26 +207,65 @@ async function checkGrammar(text) {
         }
 
         const data = await response.json();
-        errors = data.matches || [];
 
-        loadingState.style.display = 'none';
-        checkBtn.disabled = false;
+        // ✅ FIX #1 & #2: Store full response and show results
+        if (data.success) {
+            // ✅ Store all responses and errors
+            errors = data.matches || [];
+            window.lastCheckResponse = data;
 
-        if (errors.length === 0) {
-            showSuccessState(text);
-            showToast('Perfect! No errors found', 'success');
+            console.log('✅ Check complete:', {
+                total: errors.length,
+                critical: data.errorCounts?.critical || 0,
+                warning: data.errorCounts?.warning || 0,
+                suggestion: data.errorCounts?.suggestion || 0,
+                grouped: data.groupedByCategory ? 'Yes' : 'No'
+            });
+
+            // Hide loading, show results
+            loadingState.style.display = 'none';
+            emptyState.style.display = 'none';
+            successState.style.display = 'block';
+            errorsContainer.style.display = 'block';
+
+            // ✅ FIX #2: Update top statistics CORRECTLY
+            if (data.errorCounts) {
+                if (totalErrorsEl) totalErrorsEl.textContent = data.errorCounts.total || 0;
+                if (grammarCountEl) grammarCountEl.textContent = data.errorCounts.byType?.Grammar || 0;
+                if (spellingCountEl) spellingCountEl.textContent = data.errorCounts.byType?.Spelling || 0;
+            } else {
+                if (totalErrorsEl) totalErrorsEl.textContent = errors.length;
+                if (grammarCountEl) grammarCountEl.textContent = 0;
+                if (spellingCountEl) spellingCountEl.textContent = 0;
+            }
+
+            // Display all errors (critical, warning, suggestion)
+            if (errors.length > 0) {
+                displayErrors();
+                if (toast) showToast(`Found ${errors.length} issue${errors.length > 1 ? 's' : ''}`, 'error');
+            } else {
+                if (errorsList) {
+                    errorsList.innerHTML = '<div class="success-message">✅ No errors found! Your text looks great!</div>';
+                }
+                if (toast) showToast('Perfect! No errors found', 'success');
+            }
+
+            checkBtn.disabled = false;
         } else {
-            displayErrors();
-            highlightErrorsInText();
-            showToast(`Found ${errors.length} issue${errors.length > 1 ? 's' : ''}`, 'error');
+            throw new Error(data.message || 'Failed to check grammar');
         }
 
+
     } catch (error) {
-        console.error('Error checking grammar:', error);
+        console.error('❌ Error checking grammar:', error);
+
+        // ✅ FIX #5: Better error handling
         loadingState.style.display = 'none';
         emptyState.style.display = 'flex';
         checkBtn.disabled = false;
-        showToast('Failed to check grammar. Please try again.', 'error');
+
+        if (toast) showToast('Failed to check grammar. Please try again.', 'error');
+        console.error('Full error:', error);
     }
 }
 
@@ -308,7 +347,138 @@ function sortErrorsBySeverity(errorsList) {
 function displayErrors() {
     errorsContainer.style.display = 'block';
     errorsList.innerHTML = '';
-    errors = sortErrorsBySeverity(errors);
+
+    // Check if we have grouped data from backend
+    const hasGroupedData = window.lastCheckResponse && window.lastCheckResponse.groupedByCategory;
+    const hasSummary = window.lastCheckResponse && window.lastCheckResponse.summary;
+
+    if (hasGroupedData && hasSummary) {
+        // ✅ FIX #3: Use grouped data
+        displayGroupedErrors(window.lastCheckResponse.groupedByCategory, window.lastCheckResponse.summary);
+    } else {
+        // Fallback
+        displaySimpleErrors();
+    }
+}
+
+// ✅ COMPLETE: Display ALL errors (critical, warning, suggestion)
+function displayGroupedErrors(groupedErrors, errorSummary) {
+    errorsList.innerHTML = '';
+
+    if (errorSummary.total === 0) {
+        errorsList.innerHTML = '<div class="success-message">✅ No errors found! Your text looks great!</div>';
+        return;
+    }
+
+    // Show summary badges at top
+    const summaryHtml = `
+    <div class="error-summary">
+      <span class="total-badge">📊 Total: ${errorSummary.total}</span>
+      <span class="critical-badge">🔴 Critical: ${errorSummary.bySeverity.critical.length}</span>
+      <span class="warning-badge">🟡 Warning: ${errorSummary.bySeverity.warning.length}</span>
+      <span class="suggestion-badge">💡 Suggestions: ${errorSummary.bySeverity.suggestion.length}</span>
+    </div>
+  `;
+    errorsList.innerHTML += summaryHtml;
+
+    // Display ALL severity levels
+    const severityOrder = [
+        { level: 'critical', label: '🔴 CRITICAL ISSUES', errors: errorSummary.bySeverity.critical },
+        { level: 'warning', label: '🟡 WARNINGS', errors: errorSummary.bySeverity.warning },
+        { level: 'suggestion', label: '💡 SUGGESTIONS', errors: errorSummary.bySeverity.suggestion }
+    ];
+
+    severityOrder.forEach(({ level, label, errors: errorsAtLevel }) => {
+        let sectionHtml = `
+      <div class="error-section severity-${level}">
+        <h3 class="section-title">${label} (${errorsAtLevel.length})</h3>
+    `;
+
+        if (errorsAtLevel.length > 0) {
+            sectionHtml += '<div class="error-group">';
+
+            errorsAtLevel.forEach((error, index) => {
+                // Get error text from input
+                const errorText = getErrorTextFromOffset(error.offset, error.length);
+                const suggestion = error.replacements && error.replacements.length > 0
+                    ? error.replacements[0].value
+                    : '';
+                const globalIndex = errors.findIndex(e =>
+                    e.offset === error.offset && e.length === error.length
+                );
+
+                sectionHtml += `
+          <div class="error-item severity-${level}" data-offset="${error.offset}" data-length="${error.length}">
+            <div class="error-header">
+              <span class="error-number">#${index + 1}</span>
+              <span class="error-type">${error.category || 'Other'}</span>
+            </div>
+            <div class="error-message">${error.message}</div>
+            <div class="error-context">
+              <strong>Found:</strong> <span class="error-highlight">"${escapeHtml(errorText)}"</span>
+
+            </div>
+            ${suggestion ? `
+              <div class="error-suggestions">
+                <strong>Suggestion:</strong> <span class="suggestion-highlight">"${escapeHtml(suggestion)}"</span>
+              </div>
+            ` : ''}
+            <div class="error-actions">
+              ${suggestion ? `<button class="btn-accept" onclick="acceptError(${globalIndex})">✓ Accept</button>` : ''}
+              <button class="btn-ignore" onclick="ignoreError(${globalIndex})">✕ Ignore</button>
+            </div>
+          </div>
+        `;
+            });
+
+            sectionHtml += '</div>';
+        } else {
+            sectionHtml += '<p class="no-errors-message">✓ No issues in this category</p>';
+        }
+
+        sectionHtml += '</div>';
+        errorsList.innerHTML += sectionHtml;
+    });
+
+    // Show category breakdown
+    errorsList.innerHTML += `
+    <div class="category-breakdown">
+      <h4>📊 By Category:</h4>
+      ${Object.entries(groupedErrors)
+            .filter(([_, errors]) => errors.length > 0)
+            .map(([category, errors]) =>
+                `<p><strong>${category}:</strong> ${errors.length} error(s)</p>`
+            ).join('') || '<p>No errors found</p>'}
+    </div>
+  `;
+
+    // Update top stats
+    totalErrorsEl.textContent = errorSummary.total;
+    grammarCountEl.textContent = errorSummary.byType?.Grammar || 0;
+    spellingCountEl.textContent = errorSummary.byType?.Spelling || 0;
+}
+
+// Helper function to get error text
+function getErrorTextFromOffset(offset, length) {
+    const text = getPlainText();
+    return text.substring(offset, offset + length) || '(error text)';
+}
+
+
+// FALLBACK: Simple error display (old way)
+function displaySimpleErrors() {
+    if (!errors || errors.length === 0) return;
+
+    try {
+        errors = errors.sort((a, b) => {
+            const catA = a.rule?.category?.id || 'MISC';
+            const catB = b.rule?.category?.id || 'MISC';
+            return catA.localeCompare(catB);
+        });
+    } catch (e) {
+        console.warn('Could not sort errors:', e);
+    }
+
 
     const grammarErrors = errors.filter(e => getErrorType(e) === 'grammar').length;
     const spellingErrors = errors.filter(e => getErrorType(e) === 'spelling').length;
@@ -323,33 +493,45 @@ function displayErrors() {
     });
 }
 
+
 function getErrorType(error) {
-    const issueType = error.rule.issueType.toLowerCase();
-    if (issueType.includes('spell') || issueType.includes('typo')) {
-        return 'spelling';
-    } else if (issueType.includes('style') || issueType.includes('clarity')) {
-        return 'style';
+    // Safety check - make sure properties exist
+    if (!error || !error.rule || !error.rule.category) {
+        return 'other';
     }
-    return 'grammar';
+
+    const category = (error.rule.category.id || '').toLowerCase();
+
+    if (category.includes('grammar') || category.includes('confusion')) {
+        return 'grammar';
+    } else if (category.includes('typo') || category.includes('spelling') || category.includes('misspelling')) {
+        return 'spelling';
+    }
+
+    return 'other';
 }
+
 
 function createErrorItem(error, index) {
     const div = document.createElement('div');
     const errorType = getErrorType(error);
     div.className = `error-item ${errorType}`;
 
-    const context = error.context.text;
-    const errorText = context.substring(error.context.offset, error.context.offset + error.context.length);
-    const suggestion = error.replacements && error.replacements.length > 0 ? error.replacements[0].value : '';
+    // ✅ Safe property access
+    const context = error.context?.text || getPlainText();
+    const offset = error.context?.offset || error.offset || 0;
+    const length = error.context?.length || error.length || 0;
+    const errorText = context.substring(offset, offset + length) || '(error)';
+    const suggestion = error.replacements?.[0]?.value || '';
 
     div.innerHTML = `
         <span class="error-type-badge ${errorType}">${errorType}</span>
-        <div class="error-text">"${errorText}"</div>
+        <div class="error-text">"${escapeHtml(errorText)}"</div>
         <div class="error-message">${error.message}</div>
         ${suggestion ? `
             <div class="suggestion">
                 <span class="suggestion-label">Suggested correction:</span>
-                <div class="suggestion-text">"${suggestion}"</div>
+                <div class="suggestion-text">"${escapeHtml(suggestion)}"</div>
             </div>
         ` : ''}
         <div class="error-actions">
@@ -366,6 +548,7 @@ function createErrorItem(error, index) {
 
     return div;
 }
+
 // Auto-recheck function - keeps checking until no errors found
 async function autoCheckUntilClean(text, maxAttempts = 5) {
     let attempt = 0;
@@ -416,7 +599,7 @@ async function autoCheckUntilClean(text, maxAttempts = 5) {
             });
 
             // Small delay to avoid rate limiting
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(resolve => setTimeout(resolve, 1500));
 
         } catch (error) {
             console.error('Error in auto-check:', error);
@@ -611,6 +794,49 @@ function showToast(message, type = 'success') {
         toast.classList.remove('show');
     }, 3000);
 }
+
+// ✅ FIX #4: Highlight errors in the input text with colors
+function highlightErrorsInText() {
+    const text = getPlainText();
+    let highlightedHTML = '';
+    let lastIndex = 0;
+
+    // Sort errors by offset
+    const sortedErrors = [...errors].sort((a, b) => a.offset - b.offset);
+
+    sortedErrors.forEach(error => {
+        const offset = error.offset;
+        const length = error.length;
+        const severity = error.severity || 'suggestion';
+
+        // Add text before error
+        highlightedHTML += escapeHtml(text.substring(lastIndex, offset));
+
+        // Add highlighted error text
+        const errorText = text.substring(offset, offset + length);
+        const colorClass = `highlight-${severity}`;
+        highlightedHTML += `<span class="${colorClass}" title="${error.message}">${escapeHtml(errorText)}</span>`;
+
+        lastIndex = offset + length;
+    });
+
+    // Add remaining text
+    highlightedHTML += escapeHtml(text.substring(lastIndex));
+
+    // Add data attributes for styling
+    sortedErrors.forEach(error => {
+        const severity = error.severity || 'suggestion';
+        textEditor.setAttribute(`data-error-${error.offset}`, severity);
+    });
+}
+
+// ✅ Helper: Escape HTML to prevent problems
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
 
 // Keyboard Shortcuts
 document.addEventListener('keydown', (e) => {
